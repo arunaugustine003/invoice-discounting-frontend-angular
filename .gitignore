@@ -7,6 +7,9 @@
 /node_modules
 
 # IDEs and editors
+.angular
+.github
+.vscode
 /.idea
 .project
 .classpath
