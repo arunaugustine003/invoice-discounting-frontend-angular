@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="text-center">
+                    <h1>Login</h1>
+                </div>
+                <form [formGroup]="loginForm" (ngSubmit)="login()">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Email address</label>
+                      <input formControlName="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Email">
+                      <div class="error-message" *ngIf="email.invalid && (email.dirty || email.touched)">
+                          <div *ngIf="email.errors.required">Email is required.</div>
+                          <div *ngIf="email.errors.email">Email must be a valid email address.</div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary login-btn">Login</button>
+                  </form>
+            </div>
+        </div>
+    </div>
+</div>

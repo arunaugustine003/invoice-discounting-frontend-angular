@@ -1,0 +1,36 @@
+.card {
+  border: none;
+  width: 500px;
+  padding: 40px;
+  position: absolute;
+  left: 50%;
+  transform: translate(15%, 65%);
+  background: hsla(205, 46%, 30%, 1);
+  background: linear-gradient(
+    90deg,
+    hsla(205, 46%, 30%, 1) 0%,
+    hsla(260, 29%, 36%, 1) 100%
+  );
+}
+.card h1,
+h6 {
+  color: #fff;
+}
+label {
+  color: #fff;
+}
+.error-message {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+.login-btn {
+  width: 100%;
+}
+.login-page {
+    overflow: hidden;
+    background-color: #004e95 !important;
+    border-bottom: 8px solid #faa519 !important;
+    width: 100% !important;
+  }
+  

@@ -17,13 +17,14 @@ export class IconsComponent {
 
     iconsLibrary.registerFontPack('fa', { packClass: 'fa', iconClassPrefix: 'fa' });
     iconsLibrary.registerFontPack('far', { packClass: 'far', iconClassPrefix: 'fa' });
+    iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
     iconsLibrary.registerFontPack('ion', { iconClassPrefix: 'ion' });
   }
 
   icons = {
 
     ionicons: [
-      'ionic', 'arrow-right-b', 'arrow-down-b', 'arrow-left-b', 'arrow-up-c', 'arrow-right-c',
+      'cafe-outline','business-outline','ionic', 'arrow-right-b', 'arrow-down-b', 'arrow-left-b', 'arrow-up-c', 'arrow-right-c',
       'arrow-down-c', 'arrow-left-c', 'arrow-return-right', 'arrow-return-left', 'arrow-swap',
       'arrow-shrink', 'arrow-expand', 'arrow-move', 'arrow-resize', 'chevron-up',
       'chevron-right', 'chevron-down', 'chevron-left', 'navicon-round', 'navicon',

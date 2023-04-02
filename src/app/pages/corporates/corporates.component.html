@@ -1,0 +1,13 @@
+<p>corporates works!</p>
+<button *ngIf="!isadmin" nbButton shape="rectangle" status="primary">Rectangle Hero</button>
+<button nbButton shape="semi-round" status="info">Semi-round Outline</button>
+<button nbButton shape="round" size="small" status="success">Round Small</button>
+
+  <div class="buttons-row">
+    <button *ngFor="let status of statuses" nbButton [status]="status" hero>
+      {{ status }}
+    </button>
+    <button disabled nbButton hero>
+      disabled
+    </button>
+  </div>

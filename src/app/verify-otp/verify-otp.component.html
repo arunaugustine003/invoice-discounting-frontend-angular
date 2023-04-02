@@ -1,0 +1,31 @@
+<div class="container" *ngIf="!otpVerified">
+  <div class="container height-100 d-flex justify-content-center align-items-center">
+    <div class="position-relative width-100 height-100 d-flex justify-content-center align-items-center">
+      <div class="card p-2 text-center">
+        <h6>Please enter the One Time Password <br> to verify your account</h6>
+        <div>
+          <span style="color:white">A code has been sent to your Email Address</span> 
+        </div>
+        <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
+          <ng-otp-input [formCtrl]="otpFormControl" [config]="{length:6}"></ng-otp-input>
+        </div>
+        <div class="mt-5" class="btn-main">
+          <button class="btn btn-success px-4 validate" (click)="verifyOTP()" [disabled] = "showOTPLoader">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf = "showOTPLoader" ></span>
+            {{otpBtnText}}         
+          </button>
+          <br>
+          <span class="otp-message" *ngIf="!showResendOTP">
+            <a class="otp-message">OTP can be resend in {{remainingTimeGlobal}} seconds</a>
+          </span>            
+          <br>
+          <span *ngIf="showResendOTP">
+            <button class="btn btn-primary px-4 validate" (click)="resendOTP()">
+              Resend OTP        
+            </button>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { NbDialogService } from '@nebular/theme';
 import { ShowcaseDialogComponent } from './showcase-dialog/showcase-dialog.component';
 import { DialogNamePromptComponent } from './dialog-name-prompt/dialog-name-prompt.component';
@@ -8,11 +8,15 @@ import { DialogNamePromptComponent } from './dialog-name-prompt/dialog-name-prom
   templateUrl: 'dialog.component.html',
   styleUrls: ['dialog.component.scss'],
 })
-export class DialogComponent {
+export class DialogComponent implements OnInit{
 
   names: string[] = [];
 
   constructor(private dialogService: NbDialogService) {}
+
+  ngOnInit(): void {
+    this.open();
+  }
 
   open() {
     this.dialogService.open(ShowcaseDialogComponent, {

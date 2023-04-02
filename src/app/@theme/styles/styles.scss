@@ -31,3 +31,15 @@
 
   @include nb-overrides();
 };
+.login-page {
+  overflow: hidden;
+  background-color: #004e95;
+  border-bottom: 8px solid #faa519;
+  width: 100%;
+}
+.verify-otp-page {
+  overflow: hidden;
+  background-color: #004e95;
+  border-top: 8px solid #faa519;
+  width: 100%;
+}
