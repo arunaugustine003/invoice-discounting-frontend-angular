@@ -13,6 +13,7 @@ import { ReportsComponent } from './reports/reports.component';
 import { SettingsComponent } from './settings/settings.component';
 import { LogoutComponent } from './logout/logout.component';
 import { FormsModule as AppFormsModule } from './forms/forms.module';
+import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { FormsModule as AppFormsModule } from './forms/forms.module';
     DashboardModule,
     ECommerceModule,
     MiscellaneousModule,
-    AppFormsModule
+    AppFormsModule,
+    MatSliderModule,
   ],
   declarations: [
     PagesComponent,
@@ -32,6 +34,7 @@ import { FormsModule as AppFormsModule } from './forms/forms.module';
     SettingsComponent,
     LogoutComponent,
   ],
+  exports:[]
 })
 export class PagesModule {
 }

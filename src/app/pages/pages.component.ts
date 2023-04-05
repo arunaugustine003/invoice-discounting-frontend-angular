@@ -11,9 +11,7 @@ import { MENU_ITEMS } from "./pages-menu";
     </ngx-one-column-layout>
   `,
 })
-export class PagesComponent implements OnInit {
-  
-  ngOnInit(): void {
-  }
+export class PagesComponent {
+
   menu = MENU_ITEMS;
 }

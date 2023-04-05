@@ -10,6 +10,9 @@ import { SettingsComponent } from "./settings/settings.component";
 import { LogoutComponent } from "./logout/logout.component";
 import { LoginComponent } from "../login/login.component";
 import { IconsComponent } from "./ui-features/icons/icons.component";
+import { TablesComponent } from "./tables/tables.component";
+import { SmartTableComponent } from "./tables/smart-table/smart-table.component";
+import { ButtonsComponent } from "./forms/buttons/buttons.component";
 
 const routes: Routes = [
   {
@@ -37,7 +40,11 @@ const routes: Routes = [
         component: SettingsComponent,
       },
       {
-        path: 'icons',
+        path: "smart-table",
+        component: SmartTableComponent,
+      },
+      {
+        path: "icons",
         component: IconsComponent,
       },
       {
@@ -47,6 +54,10 @@ const routes: Routes = [
       {
         path: "login",
         component: LoginComponent,
+      },
+      {
+        path: "buttons",
+        component: ButtonsComponent,
       },
       {
         path: "layout",

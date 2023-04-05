@@ -37,4 +37,9 @@ export class AuthService {
   IsLoggedIn(){
     return sessionStorage.getItem('usermail')!=null;
   }
+  getCorporateData(apiURL: string) {
+    const url = `${this.baseURL}${apiURL}`;
+    return this.http.get(url);
+  }
+  
 }
