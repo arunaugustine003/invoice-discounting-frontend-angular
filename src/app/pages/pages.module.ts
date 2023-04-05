@@ -13,7 +13,6 @@ import { ReportsComponent } from './reports/reports.component';
 import { SettingsComponent } from './settings/settings.component';
 import { LogoutComponent } from './logout/logout.component';
 import { FormsModule as AppFormsModule } from './forms/forms.module';
-import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
   imports: [
@@ -24,7 +23,6 @@ import { MatSliderModule } from '@angular/material/slider';
     ECommerceModule,
     MiscellaneousModule,
     AppFormsModule,
-    MatSliderModule,
   ],
   declarations: [
     PagesComponent,
