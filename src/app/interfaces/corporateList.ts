@@ -18,3 +18,27 @@ export interface Corporate {
     corporateLastUpdatedOn:   string;
     otp:                      string;
 }
+export interface CorporateFormData {
+    corporateName: string;
+    corporateAddress: string;
+    corporateEmail: string;
+    corporateContact: string;
+    corporateUserGroupLevels: number;
+    corporateUserGroupNames: string[];
+  }
+  export interface CorporateUpdationData {
+    corporateID: number;
+    corporateName: string;
+    corporateAddress: string;
+    corporateEmail: string;
+    corporateContact: string;
+    corporateUserGroupLevels: number;
+    corporateUserGroupNames: string[];
+  }
+
+export interface CorporateUser {
+  corporateUserGroupID: number;
+  userName:             string;
+  userContact:          string;
+  userEmail:            string;
+}

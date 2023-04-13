@@ -24,6 +24,8 @@ import { NgOtpInputModule } from "ng-otp-input";
 import { FormatTimePipe } from "./pipes/time-format";
 import { PagesModule } from "./pages/pages.module";
 import { FormsModule as AppFormsModule } from '../app/pages/forms/forms.module';
+import { CorporateUsersComponent } from './pages/corporate-users/corporate-users.component';
+import { AddCorporateUserComponent } from './pages/add-corporate-user/add-corporate-user.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { FormsModule as AppFormsModule } from '../app/pages/forms/forms.module';
     LoginComponent,
     VerifyOtpComponent,
     FormatTimePipe,
+    CorporateUsersComponent,
+    AddCorporateUserComponent, 
   ],
   imports: [
     BrowserModule,

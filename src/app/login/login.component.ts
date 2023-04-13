@@ -6,7 +6,7 @@ import {
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
-import { IVerifyLoginResponse} from "../interfaces/verifyLoginResponse";
+import { IVerifyLoginResponse} from "../interfaces/verifyResponse";
 import { AuthService } from "../services/auth.service";
 @Component({
   selector: "ngx-login",

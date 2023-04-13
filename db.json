@@ -1,0 +1,23 @@
+{
+  "corporateList": [
+    {
+      "name": "Smaba",
+      "email": "ddbj",
+      "address": "bbk",
+      "contactNo": "knkdnd",
+      "userGroupNames": "ndndoo",
+      "id": 1
+    },
+    {
+      "name": "mango",
+      "email": "sjdjjk",
+      "address": "isksk",
+      "contactNo": "ksksk",
+      "userGroupNames": "dhdh",
+      "id": 2
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}

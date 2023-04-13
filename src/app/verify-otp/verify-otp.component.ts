@@ -4,8 +4,8 @@ import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { timer } from "rxjs";
 import { switchMap } from "rxjs/operators";
-import { IVerifyLoginResponse } from "../interfaces/verifyLoginResponse";
-import { IVerifyOtpResponse } from "../interfaces/verifyOtpResponse";
+import { IVerifyLoginResponse } from "../interfaces/verifyResponse";
+import { IVerifyOtpResponse } from "../interfaces/verifyResponse";
 import { AuthService } from "../services/auth.service";
 
 @Component({

@@ -13,6 +13,10 @@ import { IconsComponent } from "./ui-features/icons/icons.component";
 import { TablesComponent } from "./tables/tables.component";
 import { SmartTableComponent } from "./tables/smart-table/smart-table.component";
 import { ButtonsComponent } from "./forms/buttons/buttons.component";
+import { AddCorporateComponent } from "./add-corporate/add-corporate.component";
+import { AddVendorComponent } from "./add-vendor/add-vendor.component";
+import { CorporateUsersComponent } from "./corporate-users/corporate-users.component";
+import { AddCorporateUserComponent } from "./add-corporate-user/add-corporate-user.component";
 
 const routes: Routes = [
   {
@@ -38,6 +42,26 @@ const routes: Routes = [
       {
         path: "settings",
         component: SettingsComponent,
+      },
+      {
+        path: "add-corporate",
+        component: AddCorporateComponent,
+      },
+      {
+        path: "update-corporate/:id",
+        component: AddCorporateComponent,
+      },
+      {
+        path: "corporate-users/:id",
+        component: CorporateUsersComponent,
+      },
+      {
+        path: "add-corporate-user",
+        component: AddCorporateUserComponent,
+      },
+      {
+        path: "add-vendor",
+        component: AddVendorComponent,
       },
       {
         path: "smart-table",
