@@ -84,6 +84,9 @@ export class VerifyOtpComponent implements OnInit,OnDestroy {
             if (response.code === "200") {
               this.showOTPLoader = false;
               this.otpVerified = true;
+              const token1 = response.data.token;
+              console.log("token1=",token1);
+              sessionStorage.setItem("token", token1);
               this.router.navigate(["pages/dashboard"]);
             } 
             else if (response.code === "500") {

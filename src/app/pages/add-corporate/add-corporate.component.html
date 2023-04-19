@@ -1,10 +1,11 @@
 <div class="wrapper">
-    <h1>Add Corporate</h1>
+    <h1 *ngIf="!isUpdateActive">Add Corporate</h1>
+    <h1 *ngIf="isUpdateActive">Edit Corporate</h1>
     <div>
     <form [formGroup]="corporateForm">
         <mat-form-field appearance="outline">
         <mat-label>Name</mat-label>
-        <input formControlName="name" matInput type="text" placeholder="Name" />
+        <input formControlName="fullname" matInput type="text" placeholder="Name" />
         </mat-form-field>
         <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>

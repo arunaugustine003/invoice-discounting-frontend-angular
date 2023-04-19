@@ -1,18 +1,22 @@
-import { Component, DoCheck, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import {
-  NbMenuService,
-} from "@nebular/theme";
+  Component,
+  DoCheck,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
+import { NbMenuService } from "@nebular/theme";
 import { ToastrService } from "ngx-toastr";
 import { Subject } from "rxjs";
 import { AuthService } from "../../services/auth.service";
 import { Corporate, CorporateData } from "../../interfaces/corporateList";
 import { MatDialog } from "@angular/material/dialog";
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
 import { Router } from "@angular/router";
-import Swal from 'sweetalert2';
-import {TooltipPosition} from '@angular/material/tooltip';
+import Swal from "sweetalert2";
+import { TooltipPosition } from "@angular/material/tooltip";
 import { FormControl } from "@angular/forms";
 @Component({
   selector: "ngx-corporates",
@@ -20,9 +24,18 @@ import { FormControl } from "@angular/forms";
   styleUrls: ["./corporates.component.scss"],
 })
 export class CorporatesComponent implements OnInit, DoCheck, OnDestroy {
-  displayedColumns: string[] = ['corporateID','corporateName','corporateEmail', 'corporateAddress','corporateContact','corporateUserGroupLevels','corporateUserGroupNames','action'];
+  displayedColumns: string[] = [
+    "corporateID",
+    "FullName",
+    "corporateEmail",
+    "corporateAddress",
+    "corporateContact",
+    "corporateUserGroupLevels",
+    "corporateUserGroupNames",
+    "action",
+  ];
   dataSource: MatTableDataSource<any>;
-  positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
+  positionOptions: TooltipPosition[] = ["below", "above", "left", "right"];
   position = new FormControl(this.positionOptions[1]);
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -44,21 +57,33 @@ export class CorporatesComponent implements OnInit, DoCheck, OnDestroy {
   }
   ngOnInit(): void {
     this.getAllCorporates();
-
+    const token2 = sessionStorage.getItem("token");
+    console.log("token 2=", token2);
     // if(!this.isadmin){
     //   this.toastr.warning("User not authorized to view this Page", "Warning");
     //   this.navigateHome();
     // }
   }
-  getAllCorporates(){
+  
+  getAllCorporates() {
     this.service.getCorporateData("/v1/corporate/list_corporates/").subscribe(
       (data: CorporateData) => {
         if (data.code === "200") {
           this.corporateData = data.data;
-          console.log("this.corporateData=",this.corporateData); 
-          this.dataSource=new MatTableDataSource(this.corporateData);
-          this.dataSource.paginator=this.paginator;
-          this.dataSource.sort=this.sort;
+          const activeCorporates: any[] = [];
+          const inActiveCorporates: any[] = [];
+          this.corporateData.map((x: Corporate) => {
+            if (x.corporateStatus == 1) {
+              activeCorporates.push(x);
+            } else if (x.corporateStatus == 0) {
+              inActiveCorporates.push(x);
+            }
+          });
+          console.log("activeCorporates", activeCorporates);
+          console.log("InActiveCorporates", inActiveCorporates);
+          this.dataSource = new MatTableDataSource(activeCorporates);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
         }
       },
       (error) => {
@@ -66,11 +91,6 @@ export class CorporatesComponent implements OnInit, DoCheck, OnDestroy {
       }
     );
   }
-
-  // ngAfterViewInit() {
-  //   this.dataSource.paginator = this.paginator;
-  //   this.dataSource.sort = this.sort;
-  // }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -80,56 +100,51 @@ export class CorporatesComponent implements OnInit, DoCheck, OnDestroy {
       this.dataSource.paginator.firstPage();
     }
   }
-  routeAddCorporate(){
-    this.router.navigate(['/pages/add-corporate']);
+  routeAddCorporate() {
+    this.router.navigate(["/pages/add-corporate"]);
   }
-  // editCorporate(row:any): void {
-  //   const url = `/pages/update/${id}`;
-  //   this.router.navigateByUrl(url);
-  // }
-  viewCorporateUsers(id: number){
-    console.log("Clicked on Corporate Users",id);
-      this.router.navigate(['/pages/corporate-users', id])
+  viewCorporateUsers(id: number) {
+    console.log("Clicked on Corporate Users", id);
+    this.router.navigate(["/pages/corporate-users", id]);
   }
   editCorporate(id: number) {
-    console.log("Clicked on Edit Corporate",id);
-      this.router.navigate(['/pages/update-corporate', id])
-
+    console.log("Clicked on Edit Corporate", id);
+    this.router.navigate(["/pages/update-corporate", id]);
   }
 
   deleteCorporate(id: number) {
     Swal.fire({
-      title: 'Are you sure want to Delete?',
+      title: "Are you sure want to Delete?",
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-             //your logic if Yes clicked
-             this.service.deleteRegistered(id,"/v1/corporate/change_status_corporate/")
-             .subscribe({
-               next: (res) => {
-                Swal.fire(
-                  'Deleted!',
-                  'Corporate Record has now been deleted',
-                  'success'
-                )
-                console.log("response=",res);
-                 this.getAllCorporates();
-               },
-               error: (err) => {
-                this.toastr.error(err, "Error ❌");
-               }
-             })       
-      }
-      else{
+        //your logic if Yes clicked
+        this.service
+          .deleteCorporate(id, "/v1/corporate/change_status_corporate/")
+          .subscribe({
+            next: (res) => {
+              Swal.fire(
+                "Deleted!",
+                "Corporate Record has now been deleted",
+                "success"
+              );
+              console.log("response=", res);
+              this.getAllCorporates();
+            },
+            error: (err) => {
+              this.toastr.error(err, "Error ❌");
+            },
+          });
+      } else {
         console.log("You Clicked No");
         this.router.navigate(["/pages/corporates"]);
       }
-    })
+    });
   }
   ngOnDestroy() {
     this.destroy$.next();

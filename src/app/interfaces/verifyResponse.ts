@@ -3,16 +3,19 @@ export interface IVerifyLoginResponse {
   txt: string;
   code: string;
 }
+
 export interface IVerifyOtpResponse {
-  msg: string;
+  msg:   string;
   login: string;
-  code: string;
-  data: {
-    ID: number;
-    USERNAME: string;
-    TYPE: string;
-  };
+  code:  string;
+  data:  IVerifyOtpResponseData;
 }
+
+export interface IVerifyOtpResponseData {
+  token:     string;
+  user_type: string;
+}
+
 export interface IVerifyCreateCorporateResponse {
     msg:              string;
     create_corporate: string;
@@ -22,6 +25,28 @@ export interface IVerifyCreateCorporateResponse {
 
 export interface CreateCorporateData {
 }
+export interface IVerifyCreateCorporateUserResponse {
+  msg:         string;
+  create_user: string;
+  code:        string;
+  data:        CreateCorporateUserData;
+}
+
+export interface CreateCorporateUserData {
+  userID:               number;
+  userName:             string;
+  userEmail:            string;
+  token:                string;
+  userCreatedOn:        string;
+  userStatus:           number;
+  userContact:          string;
+  corporateID:          string;
+  corporateUserGroupID: number;
+  userPassword:         string;
+  exp:                  string;
+  userLastUpdatedOn:    string;
+}
+
 export interface IVerifyGetCorporateByIDResponse {
   corporateID: number;
   corporateName: string;

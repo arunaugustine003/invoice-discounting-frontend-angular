@@ -1,22 +1,36 @@
 export interface CorporateData {
-    msg:             string;
-    list_corporates: string;
-    code:            string;
-    count:           number;
-    data:            Corporate[];
+  msg:             string;
+  list_corporates: string;
+  code:            string;
+  count:           number;
+  data:            Corporate[];
 }
+
 export interface Corporate {
-    corporateEmail:           string;
-    corporateID:              number;
-    corporateUserGroupLevels: number;
-    corporateCreatedOn:       string;
-    corporateStatus:          number;
-    corporateName:            string;
-    corporateAddress:         string;
-    corporateContact:         string;
-    corporateUserGroupNames:  string[];
-    corporateLastUpdatedOn:   string;
-    otp:                      string;
+  corporateID:                  number;
+  FullName:                     string;
+  corporateEmail:               string;
+  corporateContact:             string;
+  corporateAddress:             string;
+  corporateUserGroupLevels:     number;
+  corporateUserGroupNames:      CorporateUserGroupName[];
+  RiskCategory:                 string;
+  IndustryClassification:       string;
+  otp:                          string;
+  DateOfCommencementOfBusiness: string;
+  PanNo:                        string;
+  exp:                          string;
+  Constitution:                 string;
+  corporateCreatedOn:           string;
+  ShortName:                    string;
+  DateOfIncorporation:          string;
+  corporateLastUpdatedOn:       string;
+  CbsCifId:                     string;
+  corporateStatus:              number;
+}
+
+export interface CorporateUserGroupName {
+  name: string;
 }
 export interface CorporateFormData {
     corporateName: string;
@@ -41,4 +55,26 @@ export interface CorporateUser {
   userName:             string;
   userContact:          string;
   userEmail:            string;
+}
+export interface CorporateUserList {
+  msg:       string;
+  get_users: string;
+  code:      string;
+  count:     number;
+  data:      CorporateUserDetails[];
+}
+
+export interface CorporateUserDetails {
+  userID:               number;
+  userName:             string;
+  userEmail:            string;
+  token:                string;
+  userCreatedOn:        string;
+  userStatus:           number;
+  userContact:          string;
+  corporateID:          string;
+  corporateUserGroupID: number;
+  userPassword:         string;
+  exp:                  string;
+  userLastUpdatedOn:    string;
 }

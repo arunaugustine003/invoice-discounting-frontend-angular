@@ -52,11 +52,20 @@ const routes: Routes = [
         component: AddCorporateComponent,
       },
       {
+        path: "corporate-users",
+        redirectTo: "corporate-users/1",
+        pathMatch: "full",
+      },
+      {
         path: "corporate-users/:id",
         component: CorporateUsersComponent,
       },
       {
-        path: "add-corporate-user",
+        path: "add-corporate-user/:id",
+        component: AddCorporateUserComponent,
+      },
+      {
+        path: "update-corporate-user/:id",
         component: AddCorporateUserComponent,
       },
       {

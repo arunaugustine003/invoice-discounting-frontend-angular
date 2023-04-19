@@ -33,7 +33,7 @@ export class AddCorporateComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.corporateForm = this.formBuilder.group({
-      name: ["", Validators.required],
+      fullname: ["", Validators.required],
       email: ["", [Validators.required, Validators.email]],
       address: ["", Validators.required],
       contactNo: ["", Validators.required],
@@ -61,7 +61,8 @@ export class AddCorporateComponent implements OnInit {
           )
           .subscribe({
             next: (res) => {
-              this.fillFormToUpdate(res.data);
+              console.log("res.data[0]=", res.data[0]);
+              this.fillFormToUpdate(res.data[0]);
             },
             error: (err) => {
               console.log(err);
@@ -71,23 +72,33 @@ export class AddCorporateComponent implements OnInit {
     });
   }
   fillFormToUpdate(corporate: Corporate) {
-    const userGroupNames = Array.isArray(corporate.corporateUserGroupNames)
-    ? corporate.corporateUserGroupNames
-    : [];
-    this.corporateForm.setValue({
-      name:corporate.corporateName,
-      email:corporate.corporateEmail,
-      address:corporate.corporateAddress,
-      contactNo:corporate.corporateContact,
-      userGroupLevels:corporate.corporateUserGroupLevels,
-      userGroupNames:userGroupNames,
-    })
+    setTimeout(() => {
+      const userGroupNames = Array.isArray(corporate.corporateUserGroupNames)
+        ? corporate.corporateUserGroupNames
+        : [];
+      this.corporateForm.setValue({
+        fullname: corporate.FullName,
+        email: corporate.corporateEmail,
+        address: corporate.corporateAddress,
+        contactNo: corporate.corporateContact,
+        userGroupLevels: corporate.corporateUserGroupLevels,
+        userGroupNames: userGroupNames,
+      });
+    }, 1000);
   }
   addCorporate() {
     this.userGroupNamesGlobal.push(...this.corporateForm.value.userGroupNames);
     this.levels.clear();
     const data = {
-      corporateName: this.corporateForm.value.name,
+      ShortName: "",
+      IndustryClassification: "",
+      DateOfCommencementOfBusiness: "",
+      PanNo: "",
+      RiskCategory: "",
+      Constitution: "",
+      DateOfIncorporation: "",
+      CbsCifId: "",
+      FullName: this.corporateForm.value.fullname,
       corporateAddress: this.corporateForm.value.address,
       corporateEmail: this.corporateForm.value.email,
       corporateContact: this.corporateForm.value.contactNo,
@@ -117,12 +128,21 @@ export class AddCorporateComponent implements OnInit {
     } else {
       this.toastr.warning("Please enter Valid Data", "Warning");
     }
-  }  
+  }
   updateCorporate() {
     this.userGroupNamesGlobal.push(...this.corporateForm.value.userGroupNames);
     this.levels.clear();
     const data = {
-      corporateName: this.corporateForm.value.name,
+      corporateID: this.userIdToUpdate,
+      ShortName: "",
+      IndustryClassification: "",
+      DateOfCommencementOfBusiness: "",
+      PanNo: "",
+      RiskCategory: "",
+      Constitution: "",
+      DateOfIncorporation: "",
+      CbsCifId: "",
+      FullName: this.corporateForm.value.fullname,
       corporateAddress: this.corporateForm.value.address,
       corporateEmail: this.corporateForm.value.email,
       corporateContact: this.corporateForm.value.contactNo,
@@ -131,24 +151,29 @@ export class AddCorporateComponent implements OnInit {
     };
     if (this.corporateForm.valid) {
       console.log("Data=", data);
-      this.service.updateCorporate(data, "/v1/corporate/update_corporates",this.userIdToUpdate).subscribe({
-        next: (response: IVerifyCreateCorporateResponse) => {
-          console.log("Response:", response);
-          if (response.code === "200") {
-            this.toastr.success("Corporate Added Successfully", "Success 🐱‍🏍");
-            this.corporateForm.reset();
-            this.router.navigate(["/pages/corporates"]);
-          } else if (response.code === "500") {
-            this.toastr.error(response.create_corporate, "Error ❌");
-          } else {
-            this.toastr.error("Contact Admin for more Info", "Error ❌");
-          }
-        },
-        error: (error) => {
-          console.error("error:", error);
-          this.toastr.error("Something went down", "Error ❌");
-        },
-      });
+      this.service
+        .updateCorporate(data, "/v1/corporate/update_corporates")
+        .subscribe({
+          next: (response: IVerifyCreateCorporateResponse) => {
+            console.log("Response:", response);
+            if (response.code === "200") {
+              this.toastr.success(
+                "Corporate Added Successfully",
+                "Success 🐱‍🏍"
+              );
+              this.corporateForm.reset();
+              this.router.navigate(["/pages/corporates"]);
+            } else if (response.code === "500") {
+              this.toastr.error(response.create_corporate, "Error ❌");
+            } else {
+              this.toastr.error("Contact Admin for more Info", "Error ❌");
+            }
+          },
+          error: (error) => {
+            console.error("error:", error);
+            this.toastr.error("Something went down", "Error ❌");
+          },
+        });
     } else {
       this.toastr.warning("Please enter Valid Data", "Warning");
     }

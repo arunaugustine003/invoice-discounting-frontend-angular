@@ -28,6 +28,7 @@ export class LogoutComponent implements OnInit {
         },
       })
       .onClose.subscribe(() => {
+        sessionStorage.clear();
         this.router.navigate(["/dashboard"]);
       });
   }

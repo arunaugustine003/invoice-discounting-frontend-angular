@@ -1,19 +1,17 @@
-import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { catchError, tap } from "rxjs/operators";
-import { CorporateUpdationData } from "../interfaces/corporateList";
-import { IVerifyGetCorporateByIDResponse } from "../interfaces/verifyResponse";
+import { tap } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthService {
-  constructor(
-    private http: HttpClient
-  ) {}
+  constructor(private http: HttpClient) {}
+
   email: string = "";
   baseURL = "http://localhost:8000";
+  // baseURL = "http://54.254.242.153:8000";
   post(data: any, apiURL) {
     const headers = new HttpHeaders({
       "Content-Type": "application/json",
@@ -36,56 +34,47 @@ export class AuthService {
   getEmail() {
     return this.email;
   }
-  IsLoggedIn(){
-    return sessionStorage.getItem('usermail')!=null;
+  IsLoggedIn() {
+    return sessionStorage.getItem("usermail") != null;
+  }
+  getToken() {
+    return sessionStorage.getItem("token") || "";
   }
   getCorporateData(apiURL: string) {
     const url = `${this.baseURL}${apiURL}`;
     return this.http.get(url);
   }
-  getCorporateByID(corporateID: number,apiURL: string): Observable<any> {
-    const url = `${this.baseURL}${apiURL}${corporateID}`;
-    return this.http.get<any>(url).pipe(
-      catchError((error) => {
-        console.error(`Error getting corporate with ID ${corporateID}: `, error);
-        throw error;
-      })
-    );
-  }
-  // getRegisteredUserId(id: number) {
-  //   return this.http.get<any>(`${this.baseUrl}/${id}`)
-  // }
-  getProduct(){
-    return this.http.get<any>("http://localhost:3000/corporateList/");
-  }
-  postProduct(data:any){
-    return this.http.post<any>("http://localhost:3000/corporateList/",data);
-  }
-  updateCorporate(corporate: any,apiURL: string,id: number) {
-    return this.http.put<any>(`${this.baseURL}${apiURL}/${id}`, corporate);
-  }
-  deleteRegistered(id: number,apiURL: string) {
-    // return this.http.delete<User>(`${this.baseUrl}/${id}`)
-    // return this.http.put<any>(`${this.baseURL}${apiURL}`, id);
-    // const url = `${this.baseURL}${apiURL}`;
-    // const body = {
-    //   corporateID: id
-    // };
-    // return this.http.put(url, body);
-    // return this.http.put<any>(`${this.baseURL}${apiURL}`, id);
-
+  getListCorporateUserGroup(corporateID: number, apiURL: string) {
+    const requestBody = { corporateID: corporateID };
     const url = `${this.baseURL}${apiURL}`;
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    });
-    const body = {
-      "corporateID": id
-    };
-    return this.http.put(url, body, { headers });
-  
+    return this.http.post<any>(url, requestBody);
   }
-  // updateRegisterUser(registerObj: User, id: number) {
-  //   return this.http.put<User>(`${this.baseUrl}/${id}`, registerObj)
-  // }
+  getCorporateByID(corporateID: number, apiURL: string) {
+    const requestBody = { corporateID: corporateID };
+    const url = `${this.baseURL}${apiURL}`;
+    return this.http.post<any>(url, requestBody);
+  }
+  updateCorporate(corporate: any, apiURL: string) {
+    return this.http.put<any>(`${this.baseURL}${apiURL}`, corporate);
+  }
+  deleteCorporate(id: number, apiURL: string) {
+    const url = `${this.baseURL}${apiURL}`;
+    const body = { corporateID: id };
+    return this.http.put(url, body);
+  }
+  deleteCorporateUser(id: number, apiURL: string) {
+    const url = `${this.baseURL}${apiURL}`;
+    const body = { userID: id };
+    return this.http.put(url, body);
+  }
+  getUsers(id: number, apiURL: string) {
+    const body = { corporateID: id };
+    const url = `${this.baseURL}${apiURL}`;
+    return this.http.post<any>(url, body);
+  }
+  getUserByID(id: number, apiURL: string) {
+    const body = { userID: id };
+    const url = `${this.baseURL}${apiURL}`;
+    return this.http.post<any>(url, body);
+  }
 }

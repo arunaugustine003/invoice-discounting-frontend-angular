@@ -1,29 +1,53 @@
 <div class="wrapper">
-    <h1>Add Corporate User</h1>
+    <h1 *ngIf="!isUpdateActive">Add Corporate User</h1>
+    <h1 *ngIf="isUpdateActive">Edit Corporate User</h1>
     <div>
-    <form [formGroup]="corporateForm">
-        <mat-form-field appearance="outline">
+    <form [formGroup]="corporateUserForm">
+        <!-- <mat-form-field appearance="outline">
         <mat-label>Corporate User Group ID</mat-label>
-        <input formControlName="corporateUserGroupID" matInput type="number" placeholder="Name" />
+        <mat-select formControlName="corporateUserGroupID">
+        <mat-option *ngFor="let corporateUserGroupID of corporateUserGroupIDs" [value]="corporateUserGroupID">
+          {{corporateUserGroupID}}
+        </mat-option>
+        </mat-select>
+        </mat-form-field> -->
+        <mat-form-field appearance="outline">
+          <mat-label>Favorite food</mat-label>
+          <mat-select formControlName="selectedValue" name="food">
+            <mat-option *ngFor="let food of foods" [value]="food.corporateUserGroupName">
+              {{food.corporateUserGroupName}}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
+        <!-- <mat-form-field appearance="outline">
+          <mat-label>Corporate User Group ID</mat-label>
+          <mat-select formControlName="corporateUserGroupID" name="corporateUserGroupIDArray">
+            <mat-option *ngFor="let corporateUserGroupIDArray of corporateUserGroupIDArrays" [value]="corporateUserGroupIDArray.name">
+              {{corporateUserGroupIDArray.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field> -->
         <mat-form-field appearance="outline">
         <mat-label>Name</mat-label>
         <input formControlName="name" matInput type="text" placeholder="Name" />
         </mat-form-field>
         <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input formControlName="email" matInput type="text" placeholder="Email" />
-        </mat-form-field>
-        <mat-form-field appearance="outline">
         <mat-label>Contact Number</mat-label>
         <input formControlName="contactNo" matInput type="text" placeholder="Contact Number" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input formControlName="email" matInput type="text" placeholder="Email" />
         </mat-form-field>
     </form>
     </div>
     <div class="btn-parent">
-    <button mat-raised-button color="warn" (click)="closeCorporateUser()">Close</button>
-    <button style="margin-left: 8px" (click)="addCorporateUser()" mat-raised-button color="primary">
-        Save
+    <button mat-raised-button color="warn" (click)="closeCorporateUser()">Close</button> 
+    <button *ngIf="!isUpdateActive" style="margin-left: 8px" (click)="addCorporateUser()" mat-raised-button color="primary">
+      Save
     </button>    
+    <button *ngIf="isUpdateActive" style="margin-left: 8px" (click)="updateCorporateUser()" mat-raised-button color="primary">
+      Update
+    </button>
     </div>
 </div>

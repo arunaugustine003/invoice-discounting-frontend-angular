@@ -1,7 +1,7 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule } from "@angular/core";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { CoreModule } from "./@core/core.module";
 import { ThemeModule } from "./@theme/theme.module";
 import { AppComponent } from "./app.component";
@@ -23,9 +23,11 @@ import { VerifyOtpComponent } from "./verify-otp/verify-otp.component";
 import { NgOtpInputModule } from "ng-otp-input";
 import { FormatTimePipe } from "./pipes/time-format";
 import { PagesModule } from "./pages/pages.module";
-import { FormsModule as AppFormsModule } from '../app/pages/forms/forms.module';
-import { CorporateUsersComponent } from './pages/corporate-users/corporate-users.component';
-import { AddCorporateUserComponent } from './pages/add-corporate-user/add-corporate-user.component';
+import { FormsModule as AppFormsModule } from "../app/pages/forms/forms.module";
+import { CorporateUsersComponent } from "./pages/corporate-users/corporate-users.component";
+import { AddCorporateUserComponent } from "./pages/add-corporate-user/add-corporate-user.component";
+import { AuthService } from "./services/auth.service";
+import { TokenInterceptorService } from "./services/token-interceptor.service";
 
 @NgModule({
   declarations: [
@@ -34,7 +36,7 @@ import { AddCorporateUserComponent } from './pages/add-corporate-user/add-corpor
     VerifyOtpComponent,
     FormatTimePipe,
     CorporateUsersComponent,
-    AddCorporateUserComponent, 
+    AddCorporateUserComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,6 +64,13 @@ import { AddCorporateUserComponent } from './pages/add-corporate-user/add-corpor
     ToastrModule.forRoot(),
   ],
   exports: [FormatTimePipe],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
