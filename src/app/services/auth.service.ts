@@ -86,4 +86,8 @@ export class AuthService {
     return this.http.post<any>(url, body);
   }
   
+  getVendorData(apiURL: string) {
+    const url = `${this.baseURL}${apiURL}`;
+    return this.http.get(url);
+  }
 }
