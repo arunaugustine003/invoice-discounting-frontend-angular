@@ -1,32 +1,15 @@
 <div class="wrapper">
-    <h1 *ngIf="!isUpdateActive">Add Corporate User</h1>
-    <h1 *ngIf="isUpdateActive">Edit Corporate User</h1>
+    <h1>{{message}}</h1>
     <div>
     <form [formGroup]="corporateUserForm">
-        <!-- <mat-form-field appearance="outline">
-        <mat-label>Corporate User Group ID</mat-label>
-        <mat-select formControlName="corporateUserGroupID">
-        <mat-option *ngFor="let corporateUserGroupID of corporateUserGroupIDs" [value]="corporateUserGroupID">
-          {{corporateUserGroupID}}
-        </mat-option>
-        </mat-select>
-        </mat-form-field> -->
         <mat-form-field appearance="outline">
-          <mat-label>Favorite food</mat-label>
-          <mat-select formControlName="selectedValue" name="food">
-            <mat-option *ngFor="let food of foods" [value]="food.corporateUserGroupName">
-              {{food.corporateUserGroupName}}
-            </mat-option>
+        <mat-label>Corporate User Group ID</mat-label>
+          <mat-select formControlName="corporateUserGroupID" name="select">
+          <mat-option *ngFor="let select of corporateUserGroupIDArrays" [value]="select.corporateUserGroupName">
+            {{select.corporateUserGroupName}}
+          </mat-option>
           </mat-select>
         </mat-form-field>
-        <!-- <mat-form-field appearance="outline">
-          <mat-label>Corporate User Group ID</mat-label>
-          <mat-select formControlName="corporateUserGroupID" name="corporateUserGroupIDArray">
-            <mat-option *ngFor="let corporateUserGroupIDArray of corporateUserGroupIDArrays" [value]="corporateUserGroupIDArray.name">
-              {{corporateUserGroupIDArray.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field> -->
         <mat-form-field appearance="outline">
         <mat-label>Name</mat-label>
         <input formControlName="name" matInput type="text" placeholder="Name" />

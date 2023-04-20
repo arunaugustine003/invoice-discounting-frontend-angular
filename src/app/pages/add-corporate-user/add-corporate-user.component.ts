@@ -16,10 +16,8 @@ import {
 import {
   Corporate,
   CorporateUserDetails,
+  ListCorporateUserGroupBynameResponse,
 } from "../../interfaces/corporateList";
-interface Food {
-  name: string;
-}
 
 @Component({
   selector: "ngx-add-corporate-user",
@@ -28,32 +26,16 @@ interface Food {
 })
 export class AddCorporateUserComponent implements OnInit {
   corporateUserForm!: FormGroup;
+  corporateForm!: FormGroup;
+
+  message: string;
   private userIdToUpdate!: number;
-  corporateUserGroupIDArrays: [];
   public isUpdateActive: boolean = false;
-
-  selectedValue: string;
-  selectedCar: string;
-
-  // foods: Food[] = [{ name: "one" }, { name: "two" }];
-  foods = [
-    {
-        "corporateID": 1,
-        "corporateUserGroupLevel": 1,
-        "corporateUserGroupCreatedOn": "18-04-2023, 11:42:48 AM",
-        "corporateUserGroupName": "one",
-        "corporateUserGroupID": 1,
-        "corporateUserGroupStatus": 1
-    },
-    {
-        "corporateID": 1,
-        "corporateUserGroupLevel": 2,
-        "corporateUserGroupCreatedOn": "18-04-2023, 11:42:48 AM",
-        "corporateUserGroupName": "two",
-        "corporateUserGroupID": 2,
-        "corporateUserGroupStatus": 1
-    }
-];
+  corporateGlobal;
+  corporateIDGlobal;
+  corporateUserGroupID: string;
+  corporateUserGroupIDArrays: [];
+  corporateUserGroupIDResData;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -63,154 +45,181 @@ export class AddCorporateUserComponent implements OnInit {
     private toastr: ToastrService
   ) {}
 
-  ngOnInit(): void {
-    console.log("Selected food: ", this.selectedValue);
+  async ngOnInit(): Promise<void> {
     this.corporateUserForm = this.formBuilder.group({
-      selectedValue: ["", Validators.required],
       corporateUserGroupID: ["", Validators.required],
       name: ["", Validators.required],
       contactNo: ["", Validators.required],
       email: ["", [Validators.required, Validators.email]],
     });
-    this.activatedRoute.params.subscribe((val) => {
+
+    await this.activatedRoute.params.subscribe(async (val) => {
       this.userIdToUpdate = val["id"];
       console.log("this.userIdToUpdate=", this.userIdToUpdate);
       if (this.userIdToUpdate) {
-        this.service
+        const res = await this.service
           .getUserByID(
             this.userIdToUpdate,
             "/v1/users/get_single_user/?userID="
           )
-          .subscribe({
-            next: (res) => {
-              console.log("get_single_user res.data[0]=", res.data[0]);
-              this.getCorporateUserGroupNames(res.data[0].corporateID);
-              this.fillFormToUpdate(
-                res.data[0],
-                this.getCorporateUserGroupNames(res.data[0].corporateID)
-              );
-            },
-            error: (err) => {
-              console.log(err);
-            },
-          });
+          .toPromise();
+        this.corporateGlobal = res.data[0];
+        this.corporateIDGlobal = res.data[0].corporateID;
+        console.log(
+          "get_single_user this.corporateIDGlobal=",
+          this.corporateIDGlobal
+        );
+      }
+      await this.getCorporateUserGroupNames(this.corporateIDGlobal);
+      if (this.service.isEditClicked) {
+        this.message = "Edit Corporate User";
+        this.fillFormToUpdate(
+          this.corporateGlobal,
+          this.corporateUserGroupIDArrays
+        );
+      } else {
+        this.message = "Add Corporate User";
       }
     });
   }
-  getCorporateUserGroupNames(corporateID: number) {
-    this.service
-      .getListCorporateUserGroup(
-        corporateID,
-        "/v1/corporate/list_corporate_user_group/"
-      )
-      .subscribe({
-        next: (res) => {
-          // console.log(
-          //   "list_corporate_individual Group Names res.data[0]=",
-          //   res.data[0].corporateUserGroupNames
-          // );
-          console.log("res.data=",res.data);
-          return res.data;
-        },
-        error: (err) => {
-          console.log(err);
-          return;
-        },
-      });
+
+  async getCorporateUserGroupNames(corporateID: number): Promise<void> {
+    try {
+      const res = await this.service
+        .getListCorporateUserGroup(
+          corporateID,
+          "/v1/corporate/list_corporate_user_group/"
+        )
+        .toPromise();
+      console.log("res.data=", res.data);
+      this.corporateUserGroupIDArrays = res.data;
+    } catch (error) {
+      console.log("Error loading albums", error);
+    }
   }
+
   fillFormToUpdate(
     corporate: CorporateUserDetails,
     corporateUserGroupIDArrays
   ) {
-    console.log("corporateUserGroupIDArrays=", corporateUserGroupIDArrays);
-    setTimeout(() => {
-      this.corporateUserForm.setValue({
-        // corporateUserGroupID: corporateUserGroupIDArrays,
-        corporateUserGroupID: this.foods["corporateID"],
-        selectedValue: "steak-0",
-        name: corporate.userName,
-        contactNo: corporate.userContact,
-        email: corporate.userEmail,
-      });
-    }, 1000);
+    console.log(
+      "corporateUserGroupIDArrays[0].corporateUserGroupName=",
+      corporateUserGroupIDArrays[0].corporateUserGroupName
+    );
+    this.corporateUserForm.setValue({
+      corporateUserGroupID:
+        corporateUserGroupIDArrays[0].corporateUserGroupName,
+      name: corporate.userName,
+      contactNo: corporate.userContact,
+      email: corporate.userEmail,
+    });
   }
-  addCorporateUser() {
+  async getCorporateUserIDByCorporateUserName(id: number, name: string) {
     const data = {
-      selectedValue: this.corporateUserForm.value.selectedValue,
-      corporateUserGroupID: this.corporateUserForm.value.corporateUserGroupID,
+      corporateID: id,
+      name: name,
+    };
+    try {
+      const response = (await this.service
+        .post(data, "/v1/corporate/list_corporate_user_group_byname/")
+        .toPromise()) as ListCorporateUserGroupBynameResponse;
+      console.log("Response Data:", response.data);
+      if (response.code === "200") {
+        this.toastr.success(
+          "Corporate User ID Got Successfully",
+          "Success 🐱‍🏍"
+        );
+        this.corporateUserGroupIDResData = response.data.corporateUserGroupID;
+      } else if (response.code === "500") {
+        this.toastr.error(response.list_corporate_user_group, "Error ❌");
+      } else {
+        this.toastr.error("Contact Admin for more Info", "Error ❌");
+      }
+    } catch (error) {
+      console.error("error:", error);
+      this.toastr.error("Something went down", "Error ❌");
+    }
+  }
+
+  async addCorporateUser() {
+    await this.getCorporateUserIDByCorporateUserName(
+      this.corporateIDGlobal,
+      this.corporateUserForm.value.corporateUserGroupID
+    );
+    const data = {
+      corporateUserGroupID: this.corporateUserGroupIDResData,
       userName: this.corporateUserForm.value.name,
       userContact: this.corporateUserForm.value.contactNo,
       userEmail: this.corporateUserForm.value.email,
     };
     if (this.corporateUserForm.valid) {
       console.log("Data=", data);
-      this.service.post(data, "/v1/users/create_user/").subscribe({
-        next: (response: IVerifyCreateCorporateUserResponse) => {
-          console.log("Response:", response);
-          if (response.code === "200") {
-            this.toastr.success(
-              "Corporate User Added Successfully",
-              "Success 🐱‍🏍"
-            );
-            this.corporateUserForm.reset();
-            this.router.navigate([
-              "/pages/corporate-users",
-              this.userIdToUpdate,
-            ]);
-          } else if (response.code === "500") {
-            this.toastr.error(response.create_user, "Error ❌");
-          } else {
-            this.toastr.error("Contact Admin for more Info", "Error ❌");
-          }
-        },
-        error: (error) => {
-          console.error("error:", error);
-          this.toastr.error("Something went down", "Error ❌");
-        },
-      });
+      try {
+        const response = (await this.service
+          .post(data, "/v1/users/create_user/")
+          .toPromise()) as IVerifyCreateCorporateUserResponse;
+        console.log("Response:", response);
+        if (response.code === "200") {
+          this.toastr.success(
+            "Corporate User Added Successfully",
+            "Success 🐱‍🏍"
+          );
+          this.corporateUserForm.reset();
+          this.router.navigate(["/pages/corporate-users", this.userIdToUpdate]);
+        } else if (response.code === "500") {
+          this.toastr.error(response.create_user, "Error ❌");
+        } else {
+          this.toastr.error("Contact Admin for more Info", "Error ❌");
+        }
+      } catch (error) {
+        console.error("error:", error);
+        this.toastr.error("Something went down", "Error ❌");
+      }
     } else {
       this.toastr.warning("Please enter Valid Data", "Warning");
     }
   }
-  updateCorporateUser() {
+
+  async updateCorporateUser() {
+    await this.getCorporateUserIDByCorporateUserName(
+      this.corporateIDGlobal,
+      this.corporateUserForm.value.corporateUserGroupID
+    );
     const data = {
-      corporateUserGroupID: "hello",
+      corporateUserGroupID: this.corporateUserGroupIDResData,
       userName: this.corporateUserForm.value.name,
       userContact: this.corporateUserForm.value.contactNo,
       userEmail: this.corporateUserForm.value.email,
     };
     if (this.corporateUserForm.valid) {
       console.log("Data=", data);
-      this.service
-        .updateCorporate(data, "/v1/users/update_single_user")
-        .subscribe({
-          next: (response: IVerifyCreateCorporateResponse) => {
-            console.log("Response:", response);
-            if (response.code === "200") {
-              this.toastr.success(
-                "Corporate User Added Successfully",
-                "Success 🐱‍🏍"
-              );
-              this.corporateUserForm.reset();
-              this.router.navigate([
-                "/pages/corporate-users",
-                this.userIdToUpdate,
-              ]);
-            } else if (response.code === "500") {
-              this.toastr.error(response.create_corporate, "Error ❌");
-            } else {
-              this.toastr.error("Contact Admin for more Info", "Error ❌");
-            }
-          },
-          error: (error) => {
-            console.error("error:", error);
-            this.toastr.error("Something went down", "Error ❌");
-          },
-        });
+      try {
+        const response = (await this.service
+          .updateCorporate(data, "/v1/users/update_single_user/")
+          .toPromise()) as IVerifyCreateCorporateUserResponse;
+        console.log("Response:", response);
+        if (response.code === "200") {
+          this.toastr.success(
+            "Corporate User Updated Successfully",
+            "Success 🐱‍🏍"
+          );
+          this.corporateUserForm.reset();
+          console.log("this.corporateIDGlobal=",this.corporateIDGlobal);
+          this.router.navigate(["/pages/corporate-users", this.corporateIDGlobal]);
+        } else if (response.code === "500") {
+          this.toastr.error(response.create_user, "Error ❌");
+        } else {
+          this.toastr.error("Contact Admin for more Info", "Error ❌");
+        }
+      } catch (error) {
+        console.error("error:", error);
+        this.toastr.error("Something went down", "Error ❌");
+      }
     } else {
       this.toastr.warning("Please enter Valid Data", "Warning");
     }
   }
+
   closeCorporateUser() {
     this.router.navigate(["/pages/corporate-users"]);
   }

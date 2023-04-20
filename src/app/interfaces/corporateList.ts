@@ -78,3 +78,18 @@ export interface CorporateUserDetails {
   exp:                  string;
   userLastUpdatedOn:    string;
 }
+export interface ListCorporateUserGroupBynameResponse {
+  msg:                       string;
+  list_corporate_user_group: string;
+  code:                      string;
+  data:                      ListCorporateUserGroupData;
+}
+
+export interface ListCorporateUserGroupData {
+  corporateID:                 number;
+  corporateUserGroupLevel:     number;
+  corporateUserGroupCreatedOn: string;
+  corporateUserGroupName:      string;
+  corporateUserGroupID:        number;
+  corporateUserGroupStatus:    number;
+}

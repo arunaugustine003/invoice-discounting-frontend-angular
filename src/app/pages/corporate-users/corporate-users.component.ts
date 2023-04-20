@@ -105,10 +105,12 @@ export class CorporateUsersComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
   routeAddCorporateUser() {
+    this.service.isEditClicked = false;
     this.router.navigate(["/pages/add-corporate-user", this.userIdToUpdate]);
   }
   editCorporateUser(id: number) {
     console.log("Clicked on Edit Corporate User", id);
+    this.service.isEditClicked = true;
     this.router.navigate(["/pages/update-corporate-user", id]);
   }
 

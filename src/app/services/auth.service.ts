@@ -8,7 +8,7 @@ import { tap } from "rxjs/operators";
 })
 export class AuthService {
   constructor(private http: HttpClient) {}
-
+  isEditClicked: boolean = false;
   email: string = "";
   baseURL = "http://localhost:8000";
   // baseURL = "http://54.254.242.153:8000";
@@ -77,4 +77,13 @@ export class AuthService {
     const url = `${this.baseURL}${apiURL}`;
     return this.http.post<any>(url, body);
   }
+  getCorporateUserIDByName(id: number,username:string, apiURL: string) {
+    const body = {
+      corporateID: id,
+      name: username
+    };
+    const url = `${this.baseURL}${apiURL}`;
+    return this.http.post<any>(url, body);
+  }
+  
 }
