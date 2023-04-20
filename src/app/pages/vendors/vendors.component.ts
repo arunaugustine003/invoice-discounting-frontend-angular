@@ -5,7 +5,7 @@ import {
 import { ToastrService } from "ngx-toastr";
 import { Subject } from "rxjs";
 import { AuthService } from "../../services/auth.service";
-import { Corporate, CorporateData } from "../../interfaces/corporateList";
+import { Vendor, VendorData } from "../../interfaces/vendorList";
 import { MatDialog } from "@angular/material/dialog";
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -25,7 +25,7 @@ export class VendorsComponent implements OnInit, DoCheck, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
 
   private destroy$: Subject<void> = new Subject<void>();
-  corporateData: Corporate[];
+  VendorData: Vendor[];
   isadmin = false;
   constructor(
     private menuService: NbMenuService,
@@ -48,12 +48,12 @@ export class VendorsComponent implements OnInit, DoCheck, OnDestroy {
     // }
   }
   getAllVendors(){
-    this.service.getCorporateData("/v1/corporate/list_vendors/").subscribe(
-      (data: CorporateData) => {
+    this.service.getVendorData("/v1/vendor/list_vendors/").subscribe(
+      (data: VendorData) => {
         if (data.code === "200") {
-          this.corporateData = data.data;
-          console.log("this.corporateData=",this.corporateData); 
-          this.dataSource=new MatTableDataSource(this.corporateData);
+          this.VendorData = data.data;
+          console.log("this.VendorData=",this.VendorData); 
+          this.dataSource=new MatTableDataSource(this.VendorData);
           this.dataSource.paginator=this.paginator;
           this.dataSource.sort=this.sort;
         }
