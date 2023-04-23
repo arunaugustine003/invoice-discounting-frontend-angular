@@ -6,11 +6,11 @@ import {
   FormControl,
   Validators,
 } from "@angular/forms";
-import { AuthService } from "../../services/auth.service";
+import { AuthService } from "../../../services/auth.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
-import { IVerifyCreateCorporateResponse } from "../../interfaces/verifyResponse";
-import { Corporate } from "../../interfaces/corporateList";
+import { IVerifyCreateCorporateResponse } from "../../../interfaces/verifyResponse";
+import { Corporate } from "../../../interfaces/corporateList";
 
 @Component({
   selector: "ngx-add-corporate",

@@ -66,7 +66,7 @@ export class CorporatesComponent implements OnInit, DoCheck, OnDestroy {
   }
   
   getAllCorporates() {
-    this.service.getCorporateData("/v1/corporate/list_corporates/").subscribe(
+    this.service.get("/v1/corporate/list_corporates/").subscribe(
       (data: CorporateData) => {
         if (data.code === "200") {
           this.corporateData = data.data;

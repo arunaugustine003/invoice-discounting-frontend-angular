@@ -6,11 +6,11 @@ import {
   FormControl,
   Validators,
 } from "@angular/forms";
-import { AuthService } from "../../services/auth.service";
+import { AuthService } from "../../../services/auth.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
-import { IVerifyCreateVendorResponse } from "../../interfaces/verifyResponse";
-import { Vendor } from "../../interfaces/vendorList";
+import { IVerifyCreateVendorResponse } from "../../../interfaces/verifyResponse";
+import { Vendor } from "../../../interfaces/vendorList";
 @Component({
   selector: 'ngx-add-vendor',
   templateUrl: './add-vendor.component.html',

@@ -63,7 +63,7 @@ export class CorporateUsersComponent implements OnInit, DoCheck, OnDestroy {
 
   getAllCorporateUsers() {
     this.service
-      .getUsers(this.userIdToUpdate, "/v1/users/get_users/")
+      .getCorporateByID(this.userIdToUpdate, "/v1/users/get_users/")
       .subscribe(
         (data: CorporateUserList) => {
           if (data.code === "200") {
