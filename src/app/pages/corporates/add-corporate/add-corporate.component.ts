@@ -10,7 +10,10 @@ import { AuthService } from "../../../services/auth.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { IVerifyCreateCorporateResponse } from "../../../interfaces/verifyResponse";
-import { Corporate } from "../../../interfaces/corporateList";
+import {
+  Corporate,
+  CorporateUserGroupName,
+} from "../../../interfaces/corporateList";
 
 @Component({
   selector: "ngx-add-corporate",
@@ -20,6 +23,7 @@ import { Corporate } from "../../../interfaces/corporateList";
 export class AddCorporateComponent implements OnInit {
   corporateForm!: FormGroup;
   levelsForm: FormGroup;
+  existingUserGroupLevelsGlobal: number;
   userGroupNamesGlobal: string[] = [];
   private userIdToUpdate!: number;
   public isUpdateActive: boolean = false;
@@ -71,21 +75,6 @@ export class AddCorporateComponent implements OnInit {
       }
     });
   }
-  fillFormToUpdate(corporate: Corporate) {
-    setTimeout(() => {
-      const userGroupNames = Array.isArray(corporate.corporateUserGroupNames)
-        ? corporate.corporateUserGroupNames
-        : [];
-      this.corporateForm.setValue({
-        fullname: corporate.FullName,
-        email: corporate.corporateEmail,
-        address: corporate.corporateAddress,
-        contactNo: corporate.corporateContact,
-        userGroupLevels: corporate.corporateUserGroupLevels,
-        userGroupNames: userGroupNames,
-      });
-    }, 1000);
-  }
   addCorporate() {
     this.userGroupNamesGlobal.push(...this.corporateForm.value.userGroupNames);
     this.levels.clear();
@@ -129,9 +118,36 @@ export class AddCorporateComponent implements OnInit {
       this.toastr.warning("Please enter Valid Data", "Warning");
     }
   }
+  fillFormToUpdate(corporate: Corporate) {
+    this.existingUserGroupLevelsGlobal = corporate.corporateUserGroupLevels;
+    this.corporateForm.patchValue({
+      fullname: corporate.FullName,
+      email: corporate.corporateEmail,
+      address: corporate.corporateAddress,
+      contactNo: corporate.corporateContact,
+      userGroupLevels: corporate.corporateUserGroupLevels,
+    });
+    this.corporateForm.setControl(
+      "userGroupNames",
+      this.setExistingUserGroupNames(corporate.corporateUserGroupNames)
+    );
+  }
+  setExistingUserGroupNames(
+    corporateUserGroupNames: CorporateUserGroupName[]
+  ): FormArray {
+    const formArray = new FormArray([]);
+    corporateUserGroupNames.forEach((obj) => {
+      formArray.push(
+        this.formBuilder.group({
+          name: obj.name,
+        })
+      );
+    });
+    return formArray;
+  }
   updateCorporate() {
     this.userGroupNamesGlobal.push(...this.corporateForm.value.userGroupNames);
-    this.levels.clear();
+    const userGroupLevelsControl = this.corporateForm.get('userGroupLevels');
     const data = {
       corporateID: this.userIdToUpdate,
       ShortName: "",
@@ -146,7 +162,7 @@ export class AddCorporateComponent implements OnInit {
       corporateAddress: this.corporateForm.value.address,
       corporateEmail: this.corporateForm.value.email,
       corporateContact: this.corporateForm.value.contactNo,
-      corporateUserGroupLevels: this.corporateForm.value.userGroupLevels,
+      corporateUserGroupLevels: userGroupLevelsControl.value,
       corporateUserGroupNames: this.userGroupNamesGlobal,
     };
     if (this.corporateForm.valid) {
@@ -158,7 +174,7 @@ export class AddCorporateComponent implements OnInit {
             console.log("Response:", response);
             if (response.code === "200") {
               this.toastr.success(
-                "Corporate Added Successfully",
+                "Corporate Updated Successfully",
                 "Success 🐱‍🏍"
               );
               this.corporateForm.reset();
@@ -185,13 +201,70 @@ export class AddCorporateComponent implements OnInit {
     return this.corporateForm.controls["userGroupNames"] as FormArray;
   }
   createLevelInputs() {
-    const numberOfLevels = this.corporateForm.get("userGroupLevels").value;
-    for (let i = 0; i < numberOfLevels; i++) {
-      this.levels.push(
-        this.formBuilder.group({
-          name: new FormControl("", [Validators.required]),
-        })
-      );
+    const currentNumberOfLevels =
+      this.corporateForm.get("userGroupLevels").value;
+    console.log(
+      "Currently Entered Levels currentNumberOfLevels=",
+      currentNumberOfLevels
+    );
+    console.log(
+      "Existing Levels this.existingUserGroupLevelsGlobal=",
+      this.existingUserGroupLevelsGlobal
+    );
+    this.corporateForm.get('userGroupLevels').disable();
+    if (this.existingUserGroupLevelsGlobal !== undefined) {
+      if (currentNumberOfLevels === 0) {
+        this.toastr.warning("Please enter atleast one Level", "Warning");
+        this.levels.clear();
+        this.router.navigate(["/pages/corporates"]);
+      } else if (currentNumberOfLevels < this.existingUserGroupLevelsGlobal) {
+        const levelsToRemove =
+          (this.existingUserGroupLevelsGlobal as number) -
+          (currentNumberOfLevels as number);
+        if (levelsToRemove > this.levels.length) {
+          this.toastr.error(
+            "Negative Values are strictly not Accepted",
+            "Error ❌"
+          );
+          this.levels.clear();
+          this.router.navigate(["/pages/corporates"]);
+          return;
+        }
+        for (let i = 0; i < levelsToRemove; i++) {
+          this.levels.removeAt(this.levels.length - 1);
+        }
+      } else {
+        const levelsToAdd =
+          currentNumberOfLevels - this.existingUserGroupLevelsGlobal;
+        for (let i = 0; i < levelsToAdd; i++) {
+          this.levels.push(
+            this.formBuilder.group({
+              name: new FormControl("", [Validators.required]),
+            })
+          );
+        }
+      }
+    } else {
+      if (currentNumberOfLevels > 0) {
+        for (let i = 0; i < currentNumberOfLevels; i++) {
+          this.levels.push(
+            this.formBuilder.group({
+              name: new FormControl("", [Validators.required]),
+            })
+          );
+        }
+      } else if (currentNumberOfLevels < 0) {
+        this.toastr.error(
+          "Negative Values are strictly not Accepted",
+          "Error ❌"
+        );
+        this.levels.clear();
+        this.router.navigate(["/pages/corporates"]);
+      } else {
+        this.toastr.warning("Please enter atleast one Level", "Warning");
+        this.levels.clear();
+        this.router.navigate(["/pages/corporates"]);
+      }
     }
   }
 }
