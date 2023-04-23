@@ -13,10 +13,16 @@ import { IconsComponent } from "./ui-features/icons/icons.component";
 import { TablesComponent } from "./tables/tables.component";
 import { SmartTableComponent } from "./tables/smart-table/smart-table.component";
 import { ButtonsComponent } from "./forms/buttons/buttons.component";
-import { AddCorporateComponent } from "./add-corporate/add-corporate.component";
-import { AddVendorComponent } from "./add-vendor/add-vendor.component";
+import { AddCorporateComponent } from "./corporates/add-corporate/add-corporate.component";
+import { AddVendorComponent } from "./vendors/add-vendor/add-vendor.component";
 import { CorporateUsersComponent } from "./corporate-users/corporate-users.component";
-import { AddCorporateUserComponent } from "./add-corporate-user/add-corporate-user.component";
+import { AddCorporateUserComponent } from "./corporate-users/add-corporate-user/add-corporate-user.component";
+import { OrdersComponent } from "./orders/orders.component";
+import { AddOrderComponent } from "./orders/add-order/add-order.component";
+import { PlaceOrderComponent } from "./orders/place-order/place-order.component";
+import { InvoicesL1Component } from "./invoices/invoices-l1/invoices-l1.component";
+import { InvoicesL2Component } from "./invoices/invoices-l2/invoices-l2.component";
+import { InvoicesL3Component } from "./invoices/invoices-l3/invoices-l3.component";
 
 const routes: Routes = [
   {
@@ -71,6 +77,34 @@ const routes: Routes = [
       {
         path: "add-vendor",
         component: AddVendorComponent,
+      },
+      {
+        path: "orders",
+        component: OrdersComponent,
+      },
+      {
+        path: "place-order",
+        component: PlaceOrderComponent,
+      },
+      {
+        path: "invoices-l1/:id",
+        component: InvoicesL1Component,
+      },
+      {
+        path: "add-invoice/:id",
+        component: AddOrderComponent,
+      },
+      {
+        path: "invoices-l2/:id",
+        component: InvoicesL2Component,
+      },
+      {
+        path: "invoices-l3/:id",
+        component: InvoicesL3Component,
+      },
+      {
+        path: "add-order/:id",
+        component: AddOrderComponent,
       },
       {
         path: "smart-table",

@@ -15,8 +15,8 @@ import { LogoutComponent } from './logout/logout.component';
 import { FormsModule as AppFormsModule } from './forms/forms.module';
 import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AddCorporateComponent } from './add-corporate/add-corporate.component';
-import { AddVendorComponent } from './add-vendor/add-vendor.component';
+import { AddCorporateComponent } from './corporates/add-corporate/add-corporate.component';
+import { AddVendorComponent } from './vendors/add-vendor/add-vendor.component';
 @NgModule({
   imports: [
     PagesRoutingModule,

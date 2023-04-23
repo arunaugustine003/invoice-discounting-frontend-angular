@@ -56,3 +56,9 @@ export interface IVerifyGetCorporateByIDResponse {
   corporateUserGroupLevels: number;
   corporateUserGroupNames: string[];
 }
+export interface IVerifyCreateVendorResponse {
+  msg:              string;
+  create_vendor: string;
+  code:             string;
+  data:             string[];
+}

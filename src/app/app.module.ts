@@ -25,18 +25,34 @@ import { FormatTimePipe } from "./pipes/time-format";
 import { PagesModule } from "./pages/pages.module";
 import { FormsModule as AppFormsModule } from "../app/pages/forms/forms.module";
 import { CorporateUsersComponent } from "./pages/corporate-users/corporate-users.component";
-import { AddCorporateUserComponent } from "./pages/add-corporate-user/add-corporate-user.component";
+import { AddCorporateUserComponent } from "./pages/corporate-users/add-corporate-user/add-corporate-user.component";
 import { AuthService } from "./services/auth.service";
 import { TokenInterceptorService } from "./services/token-interceptor.service";
+import { OrdersComponent } from './pages/orders/orders.component';
+import { AddOrderComponent } from './pages/orders/add-order/add-order.component';
+import { DndDirective } from "./directives/dnd.directive";
+import { PlaceOrderComponent } from './pages/orders/place-order/place-order.component';
+import { InvoicesL1Component } from './pages/invoices/invoices-l1/invoices-l1.component';
+import { InvoicesL2Component } from './pages/invoices/invoices-l2/invoices-l2.component';
+import { InvoicesComponent } from './pages/invoices/invoices.component';
+import { InvoicesL3Component } from './pages/invoices/invoices-l3/invoices-l3.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    DndDirective,
     LoginComponent,
     VerifyOtpComponent,
     FormatTimePipe,
     CorporateUsersComponent,
     AddCorporateUserComponent,
+    OrdersComponent,
+    AddOrderComponent,
+    PlaceOrderComponent,
+    InvoicesL1Component,
+    InvoicesL2Component,
+    InvoicesComponent,
+    InvoicesL3Component,
   ],
   imports: [
     BrowserModule,
@@ -63,7 +79,7 @@ import { TokenInterceptorService } from "./services/token-interceptor.service";
     ThemeModule.forRoot(),
     ToastrModule.forRoot(),
   ],
-  exports: [FormatTimePipe],
+  exports: [FormatTimePipe,DndDirective],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

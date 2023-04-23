@@ -4,8 +4,8 @@ import {
 } from "@nebular/theme";
 import { ToastrService } from "ngx-toastr";
 import { Subject } from "rxjs";
-import { AuthService } from "../../services/auth.service";
-import { Vendor, VendorData } from "../../interfaces/vendorList";
+import { AuthService } from "../../../services/auth.service";
+import { Vendor, VendorData } from "../../../interfaces/vendorList";
 import { MatDialog } from "@angular/material/dialog";
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -13,12 +13,12 @@ import {MatTableDataSource} from '@angular/material/table';
 import { Router } from "@angular/router";
 
 @Component({
-  selector: 'ngx-vendors',
-  templateUrl: './vendors.component.html',
-  styleUrls: ['./vendors.component.scss']
+  selector: 'ngx-place-order',
+  templateUrl: './place-order.component.html',
+  styleUrls: ['./place-order.component.scss']
 })
-export class VendorsComponent implements OnInit, DoCheck, OnDestroy {
-  displayedColumns: string[] = ['vendorID','vendorName','vendorAddress','vendorEmail','vendorContact'];
+export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
+  displayedColumns: string[] = ['vendorID','vendorName','vendorAddress','vendorEmail','vendorContact','action'];
   dataSource: MatTableDataSource<any>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -77,8 +77,9 @@ export class VendorsComponent implements OnInit, DoCheck, OnDestroy {
       this.dataSource.paginator.firstPage();
     }
   }
-  routeAddVendor(){
-    this.router.navigate(['/pages/add-vendor']);
+  placeOrder(id:number){
+    console.log("Clicked on Place Order", id);
+    this.router.navigate(["/pages/add-order", id]);
   }
   ngOnDestroy() {
     this.destroy$.next();

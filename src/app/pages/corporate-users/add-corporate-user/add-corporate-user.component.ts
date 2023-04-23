@@ -6,18 +6,18 @@ import {
   FormControl,
   Validators,
 } from "@angular/forms";
-import { AuthService } from "../../services/auth.service";
+import { AuthService } from "../../../services/auth.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import {
   IVerifyCreateCorporateResponse,
   IVerifyCreateCorporateUserResponse,
-} from "../../interfaces/verifyResponse";
+} from "../../../interfaces/verifyResponse";
 import {
   Corporate,
   CorporateUserDetails,
   ListCorporateUserGroupBynameResponse,
-} from "../../interfaces/corporateList";
+} from "../../../interfaces/corporateList";
 
 @Component({
   selector: "ngx-add-corporate-user",
@@ -86,7 +86,7 @@ export class AddCorporateUserComponent implements OnInit {
   async getCorporateUserGroupNames(corporateID: number): Promise<void> {
     try {
       const res = await this.service
-        .getListCorporateUserGroup(
+        .getCorporateByID(
           corporateID,
           "/v1/corporate/list_corporate_user_group/"
         )
