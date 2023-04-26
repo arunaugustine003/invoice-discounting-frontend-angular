@@ -12,10 +12,12 @@ export interface IVerifyOtpResponse {
 }
 
 export interface IVerifyOtpResponseData {
-  token:     string;
-  user_type: string;
+  token:                  string;
+  user_type:              string;
+  user_id:                number;
+  user_level:             number;
+  corporateUserGroupName: string;
 }
-
 export interface IVerifyCreateCorporateResponse {
     msg:              string;
     create_corporate: string;

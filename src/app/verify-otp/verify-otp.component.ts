@@ -1,4 +1,11 @@
-import { Component, HostListener, Inject, OnDestroy, OnInit, Renderer2 } from "@angular/core";
+import {
+  Component,
+  HostListener,
+  Inject,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+} from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
@@ -13,7 +20,7 @@ import { AuthService } from "../services/auth.service";
   templateUrl: "./verify-otp.component.html",
   styleUrls: ["./verify-otp.component.scss"],
 })
-export class VerifyOtpComponent implements OnInit,OnDestroy {
+export class VerifyOtpComponent implements OnInit, OnDestroy {
   otpFormControl = new FormControl();
   otpVerified: boolean = false;
   otpBtnText = "Verify OTP";
@@ -28,9 +35,8 @@ export class VerifyOtpComponent implements OnInit,OnDestroy {
     private service: AuthService,
     private router: Router,
     private toastr: ToastrService,
-    private renderer: Renderer2,
-    ){
-    } 
+    private renderer: Renderer2
+  ) {}
 
   ngOnInit(): void {
     this.email = this.service.getEmail();
@@ -52,20 +58,18 @@ export class VerifyOtpComponent implements OnInit,OnDestroy {
     setInterval(() => {
       this.displayRemainingTime();
     }, 1000); // update every second
-    this.renderer.addClass(document.body, 'verify-otp-page');
-
+    this.renderer.addClass(document.body, "verify-otp-page");
   }
   ngOnDestroy() {
-    this.renderer.removeClass(document.body, 'verify-otp-page');
+    this.renderer.removeClass(document.body, "verify-otp-page");
   }
   // function to calculate and display the remaining time
   private displayRemainingTime() {
     const remainingTime = this.otpResendTime - Date.now(); // calculate remaining time in milliseconds
     if (remainingTime > 0) {
       this.remainingTimeGlobal = Math.round(remainingTime / 1000);
-    }
-    else{
-      this.showResendOTP=true;
+    } else {
+      this.showResendOTP = true;
     }
   }
   verifyOTP() {
@@ -87,19 +91,23 @@ export class VerifyOtpComponent implements OnInit,OnDestroy {
               const token = response.data.token;
               sessionStorage.setItem("token", token);
               sessionStorage.setItem("role", response.data.user_type);
-              // sessionStorage.setItem("user_level", response.data.user_level);
+              let user_level: number = 0;
+              if (response.data.user_level === null) {
+                user_level = 0;
+              } else {
+                user_level = response.data.user_level;
+              }
+              sessionStorage.setItem("user_level", user_level.toString());
               this.router.navigate(["pages/dashboard"]);
-            } 
-            else if (response.code === "500") {
+            } else if (response.code === "500") {
               this.showOTPLoader = false;
               this.otpBtnText = "Verify OTP";
               this.toastr.error(response.msg, "Error ❌");
-            }
-            else{
+            } else {
               this.showOTPLoader = false;
               this.otpBtnText = "Verify OTP";
               this.toastr.error("Contact Admin for more Info", "Error ❌");
-              }
+            }
           },
           (error) => {
             this.showOTPLoader = false;
@@ -128,14 +136,14 @@ export class VerifyOtpComponent implements OnInit,OnDestroy {
     };
     console.log("Data = ", data);
     this.service.post(data, "/v1/security/login").subscribe({
-      next: (response:IVerifyLoginResponse) => {
+      next: (response: IVerifyLoginResponse) => {
         console.log("Login response:", response);
         if (response.code === "200") {
           this.toastr.success("OTP resent successfully", "Success 🐱‍🏍");
-        this.otpBtnText = "Verify OTP";
+          this.otpBtnText = "Verify OTP";
         }
         if (response.code === "500") {
-        this.toastr.error(response.txt, "Error ❌");
+          this.toastr.error(response.txt, "Error ❌");
         }
       },
       error: (error) => {

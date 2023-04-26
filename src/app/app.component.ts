@@ -9,27 +9,13 @@ import { SeoService } from './@core/utils/seo.service';
   <router-outlet></router-outlet>
   `,
 })
-export class AppComponent implements OnInit,DoCheck {
-  isadmin=false;
-
+export class AppComponent implements OnInit {
   constructor(private analytics: AnalyticsService, private seoService: SeoService,private router: Router) {
-    let role=sessionStorage.getItem('role');
-    if(role=='admin'){
-      this.isadmin=true;
-    }
+
   }
 
   ngOnInit(): void {
     this.analytics.trackPageViews();
     this.seoService.trackCanonicalChanges();
-    // this.router.navigate(['/login']);
-  }
-  ngDoCheck(): void {
-    let role=sessionStorage.getItem('role');
-    if (role == 'admin') {
-      this.isadmin = true;
-    }else{
-      this.isadmin = false;
-    }
   }
 }

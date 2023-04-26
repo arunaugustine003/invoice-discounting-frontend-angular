@@ -18,13 +18,16 @@ import { ActivatedRoute, Router } from "@angular/router";
 import Swal from "sweetalert2";
 import { TooltipPosition } from "@angular/material/tooltip";
 import { FormControl } from "@angular/forms";
-import { ListUniqueOrdersForCorporateUser, ListUniqueOrdersForCorporateUserData } from "../../../interfaces/orderList";
+import {
+  ListUniqueOrdersForCorporateUser,
+  ListUniqueOrdersForCorporateUserData,
+} from "../../../interfaces/orderList";
 import { ViewInvoiceDocument } from "../../../interfaces/invoiceList";
 
 @Component({
-  selector: 'ngx-invoices-l1',
-  templateUrl: './invoices-l1.component.html',
-  styleUrls: ['./invoices-l1.component.scss']
+  selector: "ngx-invoices-l1",
+  templateUrl: "./invoices-l1.component.html",
+  styleUrls: ["./invoices-l1.component.scss"],
 })
 export class InvoicesL1Component implements OnInit, OnDestroy {
   displayedColumns: string[] = [
@@ -49,16 +52,14 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
   currentRoute: string;
   title: string;
 
-
   constructor(
     private menuService: NbMenuService,
     private toastr: ToastrService,
     private service: AuthService,
     public dialog: MatDialog,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
-  ) {
-  }
+    private activatedRoute: ActivatedRoute
+  ) {}
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((val) => {
       this.orderIDFetched = val["id"];
@@ -80,7 +81,9 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
     });
     this.getAllUniqueOrders();
     if (this.router.url.toLowerCase().includes("invoices-l1")) {
-      this.title="Invoices List for L1 User";
+      let user_level = sessionStorage.getItem("user_level");
+      console.log("global_user_level=", user_level);
+      this.title = "Invoices List for Users of User Level " + user_level;
     }
     // if(!this.isadmin){
     //   this.toastr.warning("User not authorized to view this Page", "Warning");
@@ -91,10 +94,10 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
   getAllUniqueOrders() {
     this.service.get("/v1/invoice/list_only_order_user/").subscribe(
       (data: ListUniqueOrdersForCorporateUser) => {
-        console.log("Data=",data);
+        console.log("Data=", data);
         if (data.code === "200") {
           this.OrderData = data.data;
-          console.log("this.OrderData=",this.OrderData);
+          console.log("this.OrderData=", this.OrderData);
           this.dataSource = new MatTableDataSource(this.OrderData);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
@@ -119,20 +122,22 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
     this.router.navigate(["/pages/add-invoice", id]);
   }
   viewInvoice(id: number) {
-    console.log("Clicked on View Invoice", id);    
-    this.service.getInvoiceDocument(id,"/v1/invoice/view_document_invoice/").subscribe(
-      (data: ViewInvoiceDocument) => {
-        console.log("Data=",data);
-        if (data.code === "200") {
-          const presignedURL=data.data;
-          console.log("Data URL=",presignedURL);
-          window.open(presignedURL);
+    console.log("Clicked on View Invoice", id);
+    this.service
+      .getInvoiceDocument(id, "/v1/invoice/view_document_invoice/")
+      .subscribe(
+        (data: ViewInvoiceDocument) => {
+          console.log("Data=", data);
+          if (data.code === "200") {
+            const presignedURL = data.data;
+            console.log("Data URL=", presignedURL);
+            window.open(presignedURL);
+          }
+        },
+        (error) => {
+          console.log(error);
         }
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+      );
     this.router.navigate(["/pages/invoices-l1", id]);
   }
 

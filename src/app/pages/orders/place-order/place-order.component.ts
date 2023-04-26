@@ -57,7 +57,7 @@ export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   VendorData: Vendor[];
   LinkedVendorData: ListCorporateVendorData[];
-  isadmin = false;
+  isAdmin = false;
   corporateIDFromRoute!: number;
 
   constructor(
@@ -68,12 +68,16 @@ export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) {
+
+  }
+  ngDoCheck(): void {
     let role = sessionStorage.getItem("role");
-    if (role == "admin") {
-      this.isadmin = true;
+    if (role == "ADMIN") {
+      this.isAdmin = true;
+    }else{
+      this.isAdmin=false;
     }
   }
-
   async ngOnInit(): Promise<void> {
     // if(!this.isAdmin){
     //   this.toastr.warning("User not authorized to view this Page", "Warning");
@@ -177,12 +181,5 @@ export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
     this.menuService.navigateHome();
     return false;
   }
-  ngDoCheck(): void {
-    let role = sessionStorage.getItem("role");
-    if (role == "admin") {
-      this.isadmin = true;
-    } else {
-      this.isadmin = false;
-    }
-  }
+
 }

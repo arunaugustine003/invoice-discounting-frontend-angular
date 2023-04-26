@@ -76,7 +76,9 @@ export class InvoicesL2Component implements OnInit, OnDestroy {
     });
     this.getAllUniqueOrders();
     if (this.router.url.toLowerCase().includes("invoices-l2")) {
-      this.title="Invoices List for L2 User";
+      let user_level = sessionStorage.getItem("user_level");
+      console.log("global_user_level=", user_level);
+      this.title = "Invoices List for Users of User Level " + user_level;
     }
     // if(!this.isadmin){
     //   this.toastr.warning("User not authorized to view this Page", "Warning");
