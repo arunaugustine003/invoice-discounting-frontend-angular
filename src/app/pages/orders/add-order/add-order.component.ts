@@ -18,11 +18,15 @@ export class AddOrderComponent implements OnInit {
   isDocumentAdded;
   IDToUpdate!: number;
 
-  progress: number = 0;
   selectedFiles: FileList;
   selectedId: string;
   currentFileUpload: File;
   currentRoute: string;
+
+  form: FormGroup;
+  progress: number = 0;
+  percentageGlobal: number = 0;
+  orderIdGlobal: number = 0;
 
   constructor(
     public fb: FormBuilder,
@@ -31,7 +35,12 @@ export class AddOrderComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService
-  ) {}
+  ) {
+    this.form = this.fb.group({
+      vendorID: [""],
+      file: [null],
+    });
+  }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((val) => {
@@ -41,6 +50,7 @@ export class AddOrderComponent implements OnInit {
     this.currentRoute = this.router.url;
     console.log("Current route=", this.currentRoute);
   }
+
   //Change Load Function
   onChangeLoad(event, tp = 0) {
     this.isDocumentAdded = true;
@@ -51,13 +61,16 @@ export class AddOrderComponent implements OnInit {
         ? input.value.split(".").pop().toLowerCase()
         : input[0].name.split(".").pop().toLowerCase();
     if (extension !== "csv") {
-      this.toastr.error("Not a Valid CSV file. Please upload another one", "Error ❌");
+      this.toastr.error(
+        "Not a Valid CSV file. Please upload another one",
+        "Error ❌"
+      );
       return;
     } else {
       var fileReader = new FileReader();
       fileReader.onload = function (e: any) {
         self.toastr.success(
-          "File Uploaded Successfully",
+          "File Loaded to Application Successfully",
           "Success 🐱‍🏍"
         );
       };
@@ -94,7 +107,6 @@ export class AddOrderComponent implements OnInit {
       } else {
         console.log("You Clicked No");
         this.router.navigateByUrl(this.currentRoute);
-
       }
     });
   }
@@ -106,18 +118,75 @@ export class AddOrderComponent implements OnInit {
     console.log("File Present !!,Green Flag to Upload");
     this.onOrderSubmit(this.IDToUpdate, this.files[0]);
   }
+  uploadFile1(event) {
+    const file = (event.target as HTMLInputElement).files[0];
+    this.form.patchValue({
+      file: file,
+    });
+    this.form.get("file").updateValueAndValidity();
+  }
+  submitUser() {
+    this.service
+      .addUser(this.form.value.vendorID, this.form.value.file)
+      .subscribe((event: HttpEvent<any>) => {
+        switch (event.type) {
+          case HttpEventType.Sent:
+            console.log("Request has been made!");
+            break;
+          case HttpEventType.ResponseHeader:
+            console.log("Response header has been received!");
+            break;
+          case HttpEventType.UploadProgress:
+            this.progress = Math.round((event.loaded / event.total) * 100);
+            console.log(`Uploaded! ${this.progress}%`);
+            break;
+          case HttpEventType.Response:
+            console.log("Order successfully created!");
+            console.log(event.body);
+            const responseArray = event.body
+              .split("\n")
+              .map((str) => {
+                if (!str.trim()) return null; // skip empty lines
+                const dataString = str.substring(
+                  str.indexOf("{"),
+                  str.lastIndexOf("}") + 1
+                );
+                return JSON.parse(dataString);
+              })
+              .filter((obj) => obj !== null);
+            console.log("responseArray=", responseArray);
+            responseArray.forEach((obj) => {
+              if (obj.msg === "progress") {
+                this.percentageGlobal = obj.percentage;
+                console.log(`Percentage: ${this.percentageGlobal}`);
+              } else if (obj.msg === "success") {
+                this.percentageGlobal=100;
+                this.orderIdGlobal = obj.order_id;
+                console.log(`Order ID: ${this.orderIdGlobal}`);
+              }
+            });
+
+          // setTimeout(() => {
+          //   this.progress = 0;
+          // }, 1500);
+        }
+      });
+  }
   onOrderSubmit(ID: number, file: File) {
     console.log(this.currentRoute.toLowerCase().includes("add-order"));
     if (this.currentRoute.toLowerCase().includes("add-order")) {
-      console.log("Vendor ID before FormData=", this.IDToUpdate);
+      console.log("Vendor ID before FormData=", ID);
       console.log("File before FormData=", file);
       const formData = new FormData();
+      formData.append("vendorID", ID.toString());
       formData.append("file", file);
-      formData.append("ID", ID.toString());
-      formData.forEach((value, key) => {
-        console.log(key + " " + value);
-      });
-      this.service.createOrder(FormData, "/v1/invoice/create_order/").subscribe(
+      console.log("Vendor ID after FormData=", ID);
+      console.log("File after FormData=", file);
+
+      // formData.forEach((value, key) => {
+      //   console.log(key + " " + value);
+      // });
+      this.service.createOrder(formData, "/v1/invoice/create_order/").subscribe(
         (response) => {
           console.log("Response:", response);
         },
@@ -134,14 +203,16 @@ export class AddOrderComponent implements OnInit {
       formData.forEach((value, key) => {
         console.log(key + " " + value);
       });
-      this.service.createOrder(FormData, "/v1/invoice/upload_document_invoice/").subscribe(
-        (response) => {
-          console.log("Response:", response);
-        },
-        (error) => {
-          console.error("Error:", error);
-        }
-      );
+      this.service
+        .createOrder(FormData, "/v1/invoice/upload_document_invoice/")
+        .subscribe(
+          (response) => {
+            console.log("Response:", response);
+          },
+          (error) => {
+            console.error("Error:", error);
+          }
+        );
     } else {
       return;
     }

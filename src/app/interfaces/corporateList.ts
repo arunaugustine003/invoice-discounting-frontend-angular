@@ -2,6 +2,7 @@ export interface CorporateData {
   msg:             string;
   list_corporates: string;
   code:            string;
+  Total_count:     number;
   count:           number;
   data:            Corporate[];
 }

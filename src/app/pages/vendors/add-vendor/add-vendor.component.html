@@ -21,7 +21,7 @@
     </form>
     </div>
     <div class="btn-parent">
-    <button mat-raised-button color="warn" mat-dialog-close>Close</button>
+    <button mat-raised-button color="warn" (click)="closeVendor()">Close</button>
     <button style="margin-left: 8px" (click)="addVendor()" mat-raised-button color="primary">
         Save
     </button>

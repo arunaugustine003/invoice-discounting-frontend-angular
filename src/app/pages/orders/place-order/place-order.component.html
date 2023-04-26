@@ -49,6 +49,13 @@
               color="primary">
                 Place Order
               </button>
+              <button 
+              [ngStyle]="{marginLeft:'20px'}"
+              mat-raised-button 
+              (click)="viewCorrespondingOrders(row.vendorID)" 
+              color="primary">
+                View Corresponding Orders
+              </button>
             </td>
           </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

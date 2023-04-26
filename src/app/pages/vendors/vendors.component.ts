@@ -1,24 +1,49 @@
-import { Component, DoCheck, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import {
-  NbMenuService,
-} from "@nebular/theme";
+  Component,
+  DoCheck,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
+import { NbMenuService } from "@nebular/theme";
 import { ToastrService } from "ngx-toastr";
 import { Subject } from "rxjs";
 import { AuthService } from "../../services/auth.service";
 import { Vendor, VendorData } from "../../interfaces/vendorList";
 import { MatDialog } from "@angular/material/dialog";
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
 import { Router } from "@angular/router";
 
 @Component({
-  selector: 'ngx-vendors',
-  templateUrl: './vendors.component.html',
-  styleUrls: ['./vendors.component.scss']
+  selector: "ngx-vendors",
+  templateUrl: "./vendors.component.html",
+  styleUrls: ["./vendors.component.scss"],
 })
 export class VendorsComponent implements OnInit, DoCheck, OnDestroy {
-  displayedColumns: string[] = ['vendorID','vendorName','vendorAddress','vendorEmail','vendorContact'];
+  // MatPaginator Inputs
+  totalRecordCount = 0;
+  length = 100;
+  pageSize = 5;
+  pageSizeOptions: number[] = [1, 5, 10, 25, 100];
+
+  // MatPaginator Output
+  pageEvent: PageEvent;
+
+  setPageSizeOptions(setPageSizeOptionsInput: string) {
+    this.pageSizeOptions = setPageSizeOptionsInput
+      .split(",")
+      .map((str) => +str);
+  }
+
+  displayedColumns: string[] = [
+    "vendorID",
+    "vendorName",
+    "vendorAddress",
+    "vendorEmail",
+    "vendorContact",
+  ];
   dataSource: MatTableDataSource<any>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -39,31 +64,39 @@ export class VendorsComponent implements OnInit, DoCheck, OnDestroy {
       this.isadmin = true;
     }
   }
-  ngOnInit(): void {
-    this.getAllVendors();
-
-    // if(!this.isadmin){
+  async ngOnInit(): Promise<void> {
+    // if(!this.isAdmin){
     //   this.toastr.warning("User not authorized to view this Page", "Warning");
     //   this.navigateHome();
     // }
-  }
-  getAllVendors(){
-    this.service.get("/v1/vendor/list_vendors/").subscribe(
-      (data: VendorData) => {
-        if (data.code === "200") {
-          this.VendorData = data.data;
-          console.log("this.VendorData=",this.VendorData); 
-          this.dataSource=new MatTableDataSource(this.VendorData);
-          this.dataSource.paginator=this.paginator;
-          this.dataSource.sort=this.sort;
-        }
-      },
-      (error) => {
-        console.log(error);
+    try {
+      const data = await this.service
+        .getPaginatedList(0, 2, "/v1/vendor/list_vendors/")
+        .toPromise();
+      if (data.code === "200") {
+        this.totalRecordCount = data.Total_count;
+        await this.getAllVendors();
       }
-    );
+    } catch (error) {
+      console.log(error);
+    }
   }
-
+  async getAllVendors(): Promise<void> {
+    try {
+      const data = await this.service
+        .getPaginatedList(0, this.totalRecordCount, "/v1/vendor/list_vendors/")
+        .toPromise();
+      if (data.code === "200") {
+        this.VendorData = data.data;
+        console.log("this.VendorData=", this.VendorData);
+        this.dataSource = new MatTableDataSource(this.VendorData);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   // ngAfterViewInit() {
   //   this.dataSource.paginator = this.paginator;
   //   this.dataSource.sort = this.sort;
@@ -77,8 +110,8 @@ export class VendorsComponent implements OnInit, DoCheck, OnDestroy {
       this.dataSource.paginator.firstPage();
     }
   }
-  routeAddVendor(){
-    this.router.navigate(['/pages/add-vendor']);
+  routeAddVendor() {
+    this.router.navigate(["/pages/add-vendor"]);
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -98,4 +131,3 @@ export class VendorsComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 }
-

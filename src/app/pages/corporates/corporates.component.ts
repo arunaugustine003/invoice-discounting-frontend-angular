@@ -11,7 +11,7 @@ import { Subject } from "rxjs";
 import { AuthService } from "../../services/auth.service";
 import { Corporate, CorporateData } from "../../interfaces/corporateList";
 import { MatDialog } from "@angular/material/dialog";
-import { MatPaginator } from "@angular/material/paginator";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { Router } from "@angular/router";
@@ -24,6 +24,21 @@ import { FormControl } from "@angular/forms";
   styleUrls: ["./corporates.component.scss"],
 })
 export class CorporatesComponent implements OnInit, DoCheck, OnDestroy {
+  // MatPaginator Inputs
+  totalRecordCount = 0;
+  length = 100;
+  pageSize = 5;
+  pageSizeOptions: number[] = [1, 5, 10, 25, 100];
+
+  // MatPaginator Output
+  pageEvent: PageEvent;
+
+  setPageSizeOptions(setPageSizeOptionsInput: string) {
+    this.pageSizeOptions = setPageSizeOptionsInput
+      .split(",")
+      .map((str) => +str);
+  }
+
   displayedColumns: string[] = [
     "corporateID",
     "FullName",
@@ -42,7 +57,7 @@ export class CorporatesComponent implements OnInit, DoCheck, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
   corporateData: Corporate[];
-  isadmin = false;
+  isAdmin = false;
   constructor(
     private menuService: NbMenuService,
     private toastr: ToastrService,
@@ -51,45 +66,57 @@ export class CorporatesComponent implements OnInit, DoCheck, OnDestroy {
     private router: Router
   ) {
     let role = sessionStorage.getItem("role");
-    if (role == "admin") {
-      this.isadmin = true;
+    if (role == "ADMIN") {
+      this.isAdmin = true;
     }
   }
-  ngOnInit(): void {
-    this.getAllCorporates();
-    const token2 = sessionStorage.getItem("token");
-    console.log("token 2=", token2);
-    // if(!this.isadmin){
+  async ngOnInit(): Promise<void> {
+    // if(!this.isAdmin){
     //   this.toastr.warning("User not authorized to view this Page", "Warning");
     //   this.navigateHome();
     // }
-  }
-  
-  getAllCorporates() {
-    this.service.get("/v1/corporate/list_corporates/").subscribe(
-      (data: CorporateData) => {
-        if (data.code === "200") {
-          this.corporateData = data.data;
-          const activeCorporates: any[] = [];
-          const inActiveCorporates: any[] = [];
-          this.corporateData.map((x: Corporate) => {
-            if (x.corporateStatus == 1) {
-              activeCorporates.push(x);
-            } else if (x.corporateStatus == 0) {
-              inActiveCorporates.push(x);
-            }
-          });
-          console.log("activeCorporates", activeCorporates);
-          console.log("InActiveCorporates", inActiveCorporates);
-          this.dataSource = new MatTableDataSource(activeCorporates);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-        }
-      },
-      (error) => {
-        console.log(error);
+    try {
+      const data = await this.service
+        .getPaginatedList(0, 2, "/v1/corporate/list_corporates/")
+        .toPromise();
+      if (data.code === "200") {
+        this.totalRecordCount = data.Total_count;
+        await this.getAllCorporates();
       }
-    );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getAllCorporates(): Promise<void> {
+    try {
+      const data = await this.service
+        .getPaginatedList(
+          0,
+          this.totalRecordCount,
+          "/v1/corporate/list_corporates/"
+        )
+        .toPromise();
+      if (data.code === "200") {
+        this.corporateData = data.data;
+        const activeCorporates: any[] = [];
+        const inActiveCorporates: any[] = [];
+        this.corporateData.map((x: Corporate) => {
+          if (x.corporateStatus == 1) {
+            activeCorporates.push(x);
+          } else if (x.corporateStatus == 0) {
+            inActiveCorporates.push(x);
+          }
+        });
+        console.log("activeCorporates", activeCorporates);
+        console.log("InActiveCorporates", inActiveCorporates);
+        this.dataSource = new MatTableDataSource(activeCorporates);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   applyFilter(event: Event) {
@@ -106,6 +133,10 @@ export class CorporatesComponent implements OnInit, DoCheck, OnDestroy {
   viewCorporateUsers(id: number) {
     console.log("Clicked on Corporate Users", id);
     this.router.navigate(["/pages/corporate-users", id]);
+  }
+  viewLinkedVendors(id: number) {
+    console.log("Clicked on View Linked Vendors", id);
+    this.router.navigate(["/pages/place-order", id]);
   }
   editCorporate(id: number) {
     console.log("Clicked on Edit Corporate", id);
@@ -158,9 +189,9 @@ export class CorporatesComponent implements OnInit, DoCheck, OnDestroy {
   ngDoCheck(): void {
     let role = sessionStorage.getItem("role");
     if (role == "admin") {
-      this.isadmin = true;
+      this.isAdmin = true;
     } else {
-      this.isadmin = false;
+      this.isAdmin = false;
     }
   }
 }

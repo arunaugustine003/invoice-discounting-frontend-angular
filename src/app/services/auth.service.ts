@@ -1,7 +1,12 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpResponse } from "@angular/common/http";
-import { Observable, Subject } from "rxjs";
-import { takeUntil, tap } from "rxjs/operators";
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpResponse,
+} from "@angular/common/http";
+import { Observable, Subject, throwError } from "rxjs";
+import { catchError, takeUntil, tap } from "rxjs/operators";
 @Injectable({
   providedIn: "root",
 })
@@ -9,6 +14,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
   private destroy$ = new Subject<void>();
   isEditClicked: boolean = false;
+
   email: string = "";
   baseURL = "http://localhost:8000";
   // baseURL = "http://54.254.242.153:8000";
@@ -59,8 +65,18 @@ export class AuthService {
         })
       );
   }
+  getPaginatedList(skip: number,limit:number, apiURL: string) {
+    const requestBody = { skip:skip,limit:limit };
+    const url = `${this.baseURL}${apiURL}`;
+    return this.http.post<any>(url, requestBody);
+  }
   getCorporateByID(corporateID: number, apiURL: string) {
     const requestBody = { corporateID: corporateID };
+    const url = `${this.baseURL}${apiURL}`;
+    return this.http.post<any>(url, requestBody);
+  }
+  getCorporateLinked(skip: number,limit:number,corporateID: number, apiURL: string) {
+    const requestBody = { skip:skip,limit:limit,corporateID: corporateID };
     const url = `${this.baseURL}${apiURL}`;
     return this.http.post<any>(url, requestBody);
   }
@@ -113,5 +129,31 @@ export class AuthService {
   createOrder(formdata, apiURL: string) {
     const url = `${this.baseURL}${apiURL}`;
     return this.http.post<any>(url, formdata);
+  }
+  addUser(ID: number, file: File): Observable<any> {
+    var formData: any = new FormData();
+    formData.append("vendorID", ID.toString());
+    formData.append("file", file);
+    return this.http
+      .post("http://localhost:8000/v1/invoice/create_order", formData, {
+        reportProgress: true,
+        observe: "events",
+        responseType: "text",
+      })
+      .pipe(catchError(this.errorMgmt));
+  }
+  errorMgmt(error: HttpErrorResponse) {
+    let errorMessage = "";
+    if (error.error instanceof ErrorEvent) {
+      // Get client-side error
+      errorMessage = error.error.message;
+    } else {
+      // Get server-side error
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    console.log(errorMessage);
+    return throwError(() => {
+      return errorMessage;
+    });
   }
 }

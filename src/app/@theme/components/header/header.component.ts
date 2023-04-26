@@ -12,6 +12,8 @@ import { map, takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 import { MENU_ITEMS } from "../../../pages/pages-menu";
 import { AuthService } from "../../../services/auth.service";
+import { GetCurrentUser } from "../../../interfaces/genericInterface";
+import { ToastrService } from "ngx-toastr";
 @Component({
   selector: "ngx-header",
   styleUrls: ["./header.component.scss"],
@@ -49,35 +51,41 @@ export class HeaderComponent implements OnInit, OnDestroy {
     { title: "Log out", link: "/pages/logout" },
   ];
   selectedItem: string;
-  base64image = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyBAMAAADsEZWCAAAAG1BMVEVEeef///+4zPaKq/ChvPPn7' +
-    'vxymu3Q3flbieqI1HvuAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQUlEQVQ4jWNgGAWjgP6ASdncAEaiAhaGiACmFhCJLsMaIiDAEQEi0WXYEiMC' +
-    'OCJAJIY9KuYGTC0gknpuHwXDGwAA5fsIZw0iYWYAAAAASUVORK5CYII=';
-    
+  base64image =
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyBAMAAADsEZWCAAAAG1BMVEVEeef///+4zPaKq/ChvPPn7" +
+    "vxymu3Q3flbieqI1HvuAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAQUlEQVQ4jWNgGAWjgP6ASdncAEaiAhaGiACmFhCJLsMaIiDAEQEi0WXYEiMC" +
+    "OCJAJIY9KuYGTC0gknpuHwXDGwAA5fsIZw0iYWYAAAAASUVORK5CYII=";
+
   constructor(
     private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private themeService: NbThemeService,
     private userService: UserData,
+    private toastr: ToastrService,
     private layoutService: LayoutService,
     private breakpointService: NbMediaBreakpointsService,
-    private authService: AuthService
+    private service: AuthService
   ) {}
 
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
 
-    this.authService
+    this.service
       .getCurrentUser("v1/current_user/get_current_user/")
       .pipe(takeUntil(this.destroy$))
       .subscribe(
-        (response) => {
-          if (response.code === "200") {
-            console.log("Get Current User", response);
-            this.user = response.data;
+        (res: GetCurrentUser) => {
+          if (res.code === "200") {
+            console.log("Get Current User", res);
+            this.user = res.data;
+          } else if (res.code === "500") {
+            this.toastr.error(res.get_current_user, "Error ❌");
+          } else {
+            this.toastr.error("Contact Admin for more Info", "Error ❌");
           }
         },
         (error) => {
-          console.log(error);
+          this.toastr.error("Something went down", "Error ❌");
         }
       );
 

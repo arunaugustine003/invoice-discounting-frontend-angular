@@ -13,7 +13,7 @@ import {
   CorporateUserDetails,
   CorporateUserList,
 } from "../../interfaces/corporateList";
-import { MatPaginator } from "@angular/material/paginator";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -26,6 +26,20 @@ import { FormControl } from "@angular/forms";
   styleUrls: ["./corporate-users.component.scss"],
 })
 export class CorporateUsersComponent implements OnInit, DoCheck, OnDestroy {
+  // MatPaginator Inputs
+  totalRecordCount = 0;
+  length = 100;
+  pageSize = 5;
+  pageSizeOptions: number[] = [1, 5, 10, 25, 100];
+
+  // MatPaginator Output
+  pageEvent: PageEvent;
+
+  setPageSizeOptions(setPageSizeOptionsInput: string) {
+    this.pageSizeOptions = setPageSizeOptionsInput
+      .split(",")
+      .map((str) => +str);
+  }
   displayedColumns: string[] = [
     "userID",
     "corporateUserGroupID",
@@ -53,44 +67,58 @@ export class CorporateUsersComponent implements OnInit, DoCheck, OnDestroy {
     private toastr: ToastrService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    // if(!this.isAdmin){
+    //   this.toastr.warning("User not authorized to view this Page", "Warning");
+    //   this.navigateHome();
+    // }
     this.activatedRoute.params.subscribe((val) => {
       this.userIdToUpdate = val["id"];
       console.log("this.userIdToUpdate=", this.userIdToUpdate);
       this.getAllCorporateUsers();
     });
-  }
-
-  getAllCorporateUsers() {
-    this.service
-      .getCorporateByID(this.userIdToUpdate, "/v1/users/get_users/")
-      .subscribe(
-        (data: CorporateUserList) => {
-          if (data.code === "200") {
-            this.corporateUserData = data.data;
-            console.log("this.corporateUserData=", this.corporateUserData);
-            const activeCorporateUsers: any[] = [];
-            const inActiveCorporateUsers: any[] = [];
-            this.corporateUserData.map((x: CorporateUserDetails) => {
-              if (x.userStatus == 1) {
-                activeCorporateUsers.push(x);
-              } else if (x.userStatus == 0) {
-                inActiveCorporateUsers.push(x);
-              }
-            });
-            console.log("activeCorporates", activeCorporateUsers);
-            console.log("InActiveCorporates", inActiveCorporateUsers);
-            this.dataSource = new MatTableDataSource(activeCorporateUsers);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
-          }
-        },
-        (error) => {
-          console.log(error);
+    try {
+      if (this.userIdToUpdate !== undefined) {
+        const data = await this.service
+          .getCorporateLinked(0, 5, this.userIdToUpdate, "/v1/users/get_users/")
+          .toPromise();
+        if (data.code === "200") {
+          this.totalRecordCount = data.Total_count;
+          await this.getAllCorporateUsers();
         }
-      );
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
+  async getAllCorporateUsers(): Promise<void> {
+    try {
+      const data = await this.service
+        .getCorporateLinked(0, 5, this.userIdToUpdate, "/v1/users/get_users/")
+        .toPromise();
+      if (data.code === "200") {
+        this.corporateUserData = data.data;
+        console.log("this.corporateUserData=", this.corporateUserData);
+        const activeCorporateUsers: any[] = [];
+        const inActiveCorporateUsers: any[] = [];
+        this.corporateUserData.map((x: CorporateUserDetails) => {
+          if (x.userStatus == 1) {
+            activeCorporateUsers.push(x);
+          } else if (x.userStatus == 0) {
+            inActiveCorporateUsers.push(x);
+          }
+        });
+        console.log("activeCorporates", activeCorporateUsers);
+        console.log("InActiveCorporates", inActiveCorporateUsers);
+        this.dataSource = new MatTableDataSource(activeCorporateUsers);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   // ngAfterViewInit() {
   //   this.dataSource.paginator = this.paginator;
   //   this.dataSource.sort = this.sort;
@@ -145,7 +173,6 @@ export class CorporateUsersComponent implements OnInit, DoCheck, OnDestroy {
       } else {
         console.log("You Clicked No");
         this.router.navigate(["/pages/corporate-users", id]);
-
       }
     });
   }

@@ -47,18 +47,4 @@ export interface CreateCorporateUserData {
   userLastUpdatedOn:    string;
 }
 
-export interface IVerifyGetCorporateByIDResponse {
-  corporateID: number;
-  corporateName: string;
-  corporateAddress: string;
-  corporateEmail: string;
-  corporateContact: string;
-  corporateUserGroupLevels: number;
-  corporateUserGroupNames: string[];
-}
-export interface IVerifyCreateVendorResponse {
-  msg:              string;
-  create_vendor: string;
-  code:             string;
-  data:             string[];
-}
+

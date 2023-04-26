@@ -87,6 +87,10 @@ const routes: Routes = [
         component: PlaceOrderComponent,
       },
       {
+        path: "place-order/:id",
+        component: PlaceOrderComponent,
+      },
+      {
         path: "invoices-l1/:id",
         component: InvoicesL1Component,
       },

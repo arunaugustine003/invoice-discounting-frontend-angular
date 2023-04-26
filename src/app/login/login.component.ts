@@ -47,7 +47,6 @@ export class LoginComponent implements OnInit,OnDestroy {
           this.service.email = data.email;
           this.loginForm.reset();
           sessionStorage.setItem('usermail',this.service.email);
-          sessionStorage.setItem('role','admin');
           this.router.navigate(["/verify-otp"]);
           }
           else if (response.code === "500") {

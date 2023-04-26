@@ -68,6 +68,16 @@
               <mat-icon>supervised_user_circle</mat-icon>
             </button>
             <button 
+            mat-icon-button 
+            matTooltip="View Linked Vendors"
+            [matTooltipPosition]="position.value!"
+            matTooltipHideDelay="100"
+            class="hvr-pulse action-icons" 
+            (click)="viewLinkedVendors(row.corporateID)" 
+            color="primary">
+            <mat-icon>business_center</mat-icon>
+            </button>
+            <button 
             mat-icon-button
             matTooltip="Edit Corporate Details"
             [matTooltipPosition]="position.value!"
@@ -99,7 +109,19 @@
         </tr>
       </table>
     
-      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+      <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator> -->
+      <mat-paginator [length]="length"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="pageEvent = $event">
+</mat-paginator>
+
+<!-- <div *ngIf="pageEvent">
+<h5>Page Change Event Properties</h5>
+<div>List length: {{pageEvent.length}}</div>
+<div>Page size: {{pageEvent.pageSize}}</div>
+<div>Page index: {{pageEvent.pageIndex}}</div>
+</div> -->
     </div>
     
   </div>

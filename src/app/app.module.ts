@@ -26,7 +26,6 @@ import { PagesModule } from "./pages/pages.module";
 import { FormsModule as AppFormsModule } from "../app/pages/forms/forms.module";
 import { CorporateUsersComponent } from "./pages/corporate-users/corporate-users.component";
 import { AddCorporateUserComponent } from "./pages/corporate-users/add-corporate-user/add-corporate-user.component";
-import { AuthService } from "./services/auth.service";
 import { TokenInterceptorService } from "./services/token-interceptor.service";
 import { OrdersComponent } from './pages/orders/orders.component';
 import { AddOrderComponent } from './pages/orders/add-order/add-order.component';
