@@ -77,6 +77,11 @@ export class AuthService {
     const url = `${this.baseURL}${apiURL}`;
     return this.http.post<any>(url, requestBody);
   }
+  getAdminOrdersByID(orderID:number,corporateID: number, apiURL: string) {
+    const requestBody = { orderID:orderID,corporateID: corporateID };
+    const url = `${this.baseURL}${apiURL}`;
+    return this.http.post<any>(url, requestBody);
+  }
   getVendorLinked(
     skip: number,
     limit: number,

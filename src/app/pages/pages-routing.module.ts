@@ -100,6 +100,10 @@ const routes: Routes = [
         component: InvoicesL1Component,
       },
       {
+        path: "invoices-l1/:id/:cid",
+        component: InvoicesL1Component,
+      },
+      {
         path: "add-invoice/:id",
         component: AddOrderComponent,
       },

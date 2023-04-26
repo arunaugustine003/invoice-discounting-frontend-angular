@@ -31,7 +31,6 @@ export class VendorOrdersComponent implements OnInit, OnDestroy {
     length = 100;
     pageSize = 5;
     pageSizeOptions: number[] = [1, 5, 10, 25, 100];
-  
     // MatPaginator Output
     pageEvent: PageEvent;
   
@@ -120,9 +119,9 @@ export class VendorOrdersComponent implements OnInit, OnDestroy {
       this.dataSource.paginator.firstPage();
     }
   }
-  viewOrderDetails(id: number) {
-    console.log("Clicked on Order Details", id);
-    this.router.navigate(["/pages/invoices-l1", id]);
+  viewOrderDetails(id: number,cid:number) {
+    console.log("Clicked on Order Details", id,cid);
+    this.router.navigate(["/pages/invoices-l1", id,cid]);
   }
 
   ngOnDestroy() {
