@@ -170,7 +170,7 @@ export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
   }
   viewCorrespondingOrders(id: number) {
     console.log("Clicked on View Corresponding Orders", id);
-    this.router.navigate(["/pages/add-order", id]);
+    this.router.navigate(["/pages/vendor-orders", id]);
   }
   ngOnDestroy() {
     this.destroy$.next();

@@ -16,8 +16,10 @@ export class AuthService {
   isEditClicked: boolean = false;
 
   email: string = "";
-  // baseURL = "http://localhost:8000";
-  baseURL = "http://54.254.242.153:8000";
+  /*** LOCAL BACKEND ***/
+  baseURL = "http://localhost:8000";
+  /*** PRODUCTION BACKEND ***/
+  // baseURL = "http://54.254.242.153:8000";
 
   //API Methods
 
@@ -65,8 +67,8 @@ export class AuthService {
         })
       );
   }
-  getPaginatedList(skip: number,limit:number, apiURL: string) {
-    const requestBody = { skip:skip,limit:limit };
+  getPaginatedList(skip: number, limit: number, apiURL: string) {
+    const requestBody = { skip: skip, limit: limit };
     const url = `${this.baseURL}${apiURL}`;
     return this.http.post<any>(url, requestBody);
   }
@@ -75,8 +77,23 @@ export class AuthService {
     const url = `${this.baseURL}${apiURL}`;
     return this.http.post<any>(url, requestBody);
   }
-  getCorporateLinked(skip: number,limit:number,corporateID: number, apiURL: string) {
-    const requestBody = { skip:skip,limit:limit,corporateID: corporateID };
+  getVendorLinked(
+    skip: number,
+    limit: number,
+    vendorID: number,
+    apiURL: string
+  ) {
+    const requestBody = { skip: skip, limit: limit, vendorID: vendorID };
+    const url = `${this.baseURL}${apiURL}`;
+    return this.http.post<any>(url, requestBody);
+  }
+  getCorporateLinked(
+    skip: number,
+    limit: number,
+    corporateID: number,
+    apiURL: string
+  ) {
+    const requestBody = { skip: skip, limit: limit, corporateID: corporateID };
     const url = `${this.baseURL}${apiURL}`;
     return this.http.post<any>(url, requestBody);
   }

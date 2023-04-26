@@ -35,6 +35,7 @@ import { InvoicesL1Component } from './pages/invoices/invoices-l1/invoices-l1.co
 import { InvoicesL2Component } from './pages/invoices/invoices-l2/invoices-l2.component';
 import { InvoicesComponent } from './pages/invoices/invoices.component';
 import { InvoicesL3Component } from './pages/invoices/invoices-l3/invoices-l3.component';
+import { VendorOrdersComponent } from './pages/vendor-orders/vendor-orders.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { InvoicesL3Component } from './pages/invoices/invoices-l3/invoices-l3.co
     InvoicesL2Component,
     InvoicesComponent,
     InvoicesL3Component,
+    VendorOrdersComponent,
   ],
   imports: [
     BrowserModule,

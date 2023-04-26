@@ -1,0 +1,73 @@
+<div class="container">
+    <div style="margin-top: 10px;">
+      <mat-form-field appearance="standard">
+        <mat-label>Search whole Table</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+      </mat-form-field>
+      
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+      
+          <!-- Order ID Column -->
+          <ng-container matColumnDef="orderID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Order ID </th>
+            <td mat-cell *matCellDef="let row"> {{row.orderID}} </td>
+          </ng-container>
+  
+          <!-- User ID Column -->
+          <ng-container matColumnDef="userID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> User ID </th>
+            <td mat-cell *matCellDef="let row"> {{row.userID}} </td>
+          </ng-container>
+  
+          <!-- Corporate ID Column -->
+          <ng-container matColumnDef="corporateID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Corporate ID </th>
+            <td mat-cell *matCellDef="let row"> {{row.corporateID}} </td>
+          </ng-container>
+  
+          <!-- Invoice Tracker ID Column -->
+          <ng-container matColumnDef="invoiceTrackerID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Invoice Tracker ID </th>
+            <td mat-cell *matCellDef="let row"> {{row.invoiceTrackerID}} </td>
+          </ng-container>     
+          
+          <!-- Invoice Track Status Column -->
+          <ng-container matColumnDef="invoiceTrackStatus">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Invoice Track Status </th>
+            <td mat-cell *matCellDef="let row"> {{row.invoiceTrackStatus}} </td>
+          </ng-container>     
+  
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+            <td mat-cell *matCellDef="let row"> 
+              <button 
+              mat-raised-button 
+              (click)="viewOrderDetails(row.orderID)" 
+              color="primary">
+                View Order Details
+              </button>
+            </td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+          </tr>
+        </table>
+      
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+      </div>
+      
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  

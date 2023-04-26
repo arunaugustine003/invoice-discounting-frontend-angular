@@ -23,6 +23,7 @@ import { PlaceOrderComponent } from "./orders/place-order/place-order.component"
 import { InvoicesL1Component } from "./invoices/invoices-l1/invoices-l1.component";
 import { InvoicesL2Component } from "./invoices/invoices-l2/invoices-l2.component";
 import { InvoicesL3Component } from "./invoices/invoices-l3/invoices-l3.component";
+import { VendorOrdersComponent } from "./vendor-orders/vendor-orders.component";
 
 const routes: Routes = [
   {
@@ -89,6 +90,10 @@ const routes: Routes = [
       {
         path: "place-order/:id",
         component: PlaceOrderComponent,
+      },
+      {
+        path: "vendor-orders/:id",
+        component: VendorOrdersComponent,
       },
       {
         path: "invoices-l1/:id",
