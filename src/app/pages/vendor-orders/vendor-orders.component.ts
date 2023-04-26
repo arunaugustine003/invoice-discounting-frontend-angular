@@ -14,7 +14,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import Swal from "sweetalert2";
 import { TooltipPosition } from "@angular/material/tooltip";
 import { FormControl } from "@angular/forms";
@@ -57,12 +57,15 @@ export class VendorOrdersComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   OrderData: ListVendorOrderData[];
   isadmin;
+  vendorIDFromRoute!: number;
+
   constructor(
     private menuService: NbMenuService,
     private toastr: ToastrService,
     private service: AuthService,
     public dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
   }
   async ngOnInit(): Promise<void> {
@@ -70,12 +73,16 @@ export class VendorOrdersComponent implements OnInit, OnDestroy {
     //   this.toastr.warning("User not authorized to view this Page", "Warning");
     //   this.navigateHome();
     // }
+    this.activatedRoute.params.subscribe((val) => {
+      this.vendorIDFromRoute = val["id"];
+      console.log("this.vendorIDFromRoute=", this.vendorIDFromRoute);
+    });
     let role=sessionStorage.getItem('role');
     console.log("Role=",role);
     try {
       if (role==="ADMIN") {
         const data = await this.service
-          .getVendorLinked(0, 2,1, "/v1/corporate/list_orders_of_vendores/")
+          .getVendorLinked(0, 2,this.vendorIDFromRoute, "/v1/corporate/list_orders_of_vendores/")
           .toPromise();
         if (data.code === "200") {
           this.totalRecordCount = data.Total_count;
@@ -90,7 +97,7 @@ export class VendorOrdersComponent implements OnInit, OnDestroy {
   async getAllSuperAdminOrders(): Promise<void> {
     try {
       const data = await this.service
-      .getVendorLinked(0, this.totalRecordCount,1, "/v1/corporate/list_orders_of_vendores/")
+      .getVendorLinked(0, this.totalRecordCount,this.vendorIDFromRoute, "/v1/corporate/list_orders_of_vendores/")
         .toPromise();
         console.log("Data=",data);
         if (data.code === "200") {
