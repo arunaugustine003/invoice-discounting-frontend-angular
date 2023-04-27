@@ -51,6 +51,7 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
             <td mat-cell *matCellDef="let row"> 
               <button 
+              *ngIf="!superAdminView"
               mat-icon-button 
               matTooltip="Upload Document for this Invoice"
               [matTooltipPosition]="position.value!"

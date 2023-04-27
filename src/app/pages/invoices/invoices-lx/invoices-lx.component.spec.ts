@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InvoicesL3Component } from './invoices-l3.component';
+import { InvoicesLxComponent } from './invoices-lx.component';
 
-describe('InvoicesL3Component', () => {
-  let component: InvoicesL3Component;
-  let fixture: ComponentFixture<InvoicesL3Component>;
+describe('InvoicesLxComponent', () => {
+  let component: InvoicesLxComponent;
+  let fixture: ComponentFixture<InvoicesLxComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InvoicesL3Component ]
+      declarations: [ InvoicesLxComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(InvoicesL3Component);
+    fixture = TestBed.createComponent(InvoicesLxComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -73,7 +73,7 @@ export class PagesComponent {
       );
     } else
       console.log(
-        "Corporate L2 User is Currently Logged In (True / False)  =",
+        "Corporate LX User is Currently Logged In (True / False)  =",
         this.isCorporateUserLX
       );
   }

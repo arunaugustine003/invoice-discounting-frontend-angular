@@ -77,6 +77,11 @@ export class AuthService {
     const url = `${this.baseURL}${apiURL}`;
     return this.http.post<any>(url, requestBody);
   }
+  getAdminOrdersByID(orderID: number, corporateID: number, apiURL: string) {
+    const requestBody = { orderID: orderID, corporateID: corporateID };
+    const url = `${this.baseURL}${apiURL}`;
+    return this.http.post<any>(url, requestBody);
+  }
   getVendorLinked(
     skip: number,
     limit: number,
@@ -143,16 +148,21 @@ export class AuthService {
     const body = { userID: id };
     return this.http.put(url, body);
   }
-  createOrder(formdata, apiURL: string) {
-    const url = `${this.baseURL}${apiURL}`;
-    return this.http.post<any>(url, formdata);
-  }
-  addUser(ID: number, file: File): Observable<any> {
+  createOrderorInvoice(
+    ID: number,
+    file: File,
+    apiURL: string
+  ): Observable<any> {
     var formData: any = new FormData();
-    formData.append("vendorID", ID.toString());
+    if (apiURL === "/v1/invoice/create_order/") {
+      formData.append("vendorID", ID.toString());
+    } else {
+      formData.append("invoiceID", ID.toString());
+    }
     formData.append("file", file);
+    const url = `${this.baseURL}${apiURL}`;
     return this.http
-      .post("http://localhost:8000/v1/invoice/create_order", formData, {
+      .post(url, formData, {
         reportProgress: true,
         observe: "events",
         responseType: "text",

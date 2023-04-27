@@ -32,10 +32,9 @@ import { AddOrderComponent } from './pages/orders/add-order/add-order.component'
 import { DndDirective } from "./directives/dnd.directive";
 import { PlaceOrderComponent } from './pages/orders/place-order/place-order.component';
 import { InvoicesL1Component } from './pages/invoices/invoices-l1/invoices-l1.component';
-import { InvoicesL2Component } from './pages/invoices/invoices-l2/invoices-l2.component';
 import { InvoicesComponent } from './pages/invoices/invoices.component';
-import { InvoicesL3Component } from './pages/invoices/invoices-l3/invoices-l3.component';
 import { VendorOrdersComponent } from './pages/vendor-orders/vendor-orders.component';
+import { InvoicesLxComponent } from './pages/invoices/invoices-lx/invoices-lx.component';
 
 @NgModule({
   declarations: [
@@ -50,10 +49,10 @@ import { VendorOrdersComponent } from './pages/vendor-orders/vendor-orders.compo
     AddOrderComponent,
     PlaceOrderComponent,
     InvoicesL1Component,
-    InvoicesL2Component,
+    InvoicesLxComponent,
     InvoicesComponent,
-    InvoicesL3Component,
     VendorOrdersComponent,
+  
   ],
   imports: [
     BrowserModule,

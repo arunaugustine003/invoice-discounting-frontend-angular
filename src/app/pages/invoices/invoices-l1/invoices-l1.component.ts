@@ -21,6 +21,7 @@ import { FormControl } from "@angular/forms";
 import {
   ListUniqueOrdersForCorporateUser,
   ListUniqueOrdersForCorporateUserData,
+  ListUniqueOrdersForSuperAdmin,
 } from "../../../interfaces/orderList";
 import { ViewInvoiceDocument } from "../../../interfaces/invoiceList";
 
@@ -40,6 +41,7 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
     "action",
   ];
   orderIDFetched;
+  corporateIDFetched;
   dataSource: MatTableDataSource<any>;
   positionOptions: TooltipPosition[] = ["below", "above", "left", "right"];
   position = new FormControl(this.positionOptions[1]);
@@ -51,7 +53,7 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
   isadmin;
   currentRoute: string;
   title: string;
-
+  superAdminView: boolean = false;
   constructor(
     private menuService: NbMenuService,
     private toastr: ToastrService,
@@ -63,23 +65,20 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((val) => {
       this.orderIDFetched = val["id"];
-      if (this.orderIDFetched) {
-        this.service
-          .getInvoicesByID(
-            this.orderIDFetched,
-            "/v1/invoice/filter_order_by_orderID/"
-          )
-          .subscribe({
-            next: (res) => {
-              console.log("res.data[0]=", res.data[0]);
-            },
-            error: (err) => {
-              console.log(err);
-            },
-          });
+      this.corporateIDFetched = val["cid"];
+      console.log("this.orderIDFetched=", this.orderIDFetched);
+      console.log("this.corporateIDFetched=", this.corporateIDFetched);
+      if (!this.corporateIDFetched) {
+        this.superAdminView=false;
+        this.getAllUniqueOrders();
+      } else if (this.corporateIDFetched) {
+        this.superAdminView = true;
+        this.getAllUniqueOrdersSuperAdmin(
+          this.orderIDFetched,
+          this.corporateIDFetched
+        );
       }
     });
-    this.getAllUniqueOrders();
     if (this.router.url.toLowerCase().includes("invoices-l1")) {
       let user_level = sessionStorage.getItem("user_level");
       console.log("global_user_level=", user_level);
@@ -108,6 +107,32 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
       }
     );
   }
+  getAllUniqueOrdersSuperAdmin(
+    orderIDFetched: number,
+    corporateIDFetched: number
+  ) {
+    this.service
+      .getAdminOrdersByID(
+        orderIDFetched,
+        corporateIDFetched,
+        "/v1/invoice/filter_order_by_orderID_admin/"
+      )
+      .subscribe(
+        (data: ListUniqueOrdersForSuperAdmin) => {
+          console.log("Data=", data);
+          if (data.code === "200") {
+            this.OrderData = data.data;
+            console.log("this.OrderData=", this.OrderData);
+            this.dataSource = new MatTableDataSource(this.OrderData);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -132,13 +157,23 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
             const presignedURL = data.data;
             console.log("Data URL=", presignedURL);
             window.open(presignedURL);
+            this.toastr.success(
+              "Invoice Downloaded Successfully",
+              "Success 🐱‍🏍"
+            );
           }
         },
         (error) => {
           console.log(error);
+          this.toastr.error("No File Available for Viewing", "Error ❌");
         }
       );
-    this.router.navigate(["/pages/invoices-l1", id]);
+      if(this.superAdminView){
+        this.router.navigate(["/pages/invoices-l1", this.orderIDFetched,this.corporateIDFetched]);
+      }
+      else{
+        this.router.navigate(["/pages/invoices-l1",this.orderIDFetched]);
+      }
   }
 
   ngOnDestroy() {

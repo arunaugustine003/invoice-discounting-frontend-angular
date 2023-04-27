@@ -27,20 +27,15 @@ export class AddOrderComponent implements OnInit {
   progress: number = 0;
   percentageGlobal: number = 0;
   orderIdGlobal: number = 0;
+  orderCreationPage: boolean = false;
+  displayProgressBar: boolean = false;
 
   constructor(
-    public fb: FormBuilder,
     private service: AuthService,
-    private menuService: NbMenuService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService
-  ) {
-    this.form = this.fb.group({
-      vendorID: [""],
-      file: [null],
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((val) => {
@@ -116,18 +111,27 @@ export class AddOrderComponent implements OnInit {
       return;
     }
     console.log("File Present !!,Green Flag to Upload");
+    this.displayProgressBar = true;
     this.onOrderSubmit(this.IDToUpdate, this.files[0]);
   }
-  uploadFile1(event) {
-    const file = (event.target as HTMLInputElement).files[0];
-    this.form.patchValue({
-      file: file,
-    });
-    this.form.get("file").updateValueAndValidity();
+  onOrderSubmit(id: number, file: File) {
+    if (this.currentRoute.toLowerCase().includes("add-order")) {
+      this.orderCreationPage = true;
+      this.callCreateOrderorInvoice(id, file, "/v1/invoice/create_order/");
+    } else if (this.currentRoute.toLowerCase().includes("add-invoice")) {
+      this.orderCreationPage = false;
+      this.callCreateOrderorInvoice(
+        id,
+        file,
+        "/v1/invoice/upload_document_invoice/"
+      );
+    } else {
+      return;
+    }
   }
-  submitUser() {
+  callCreateOrderorInvoice(id: number, file: File, apiURL: string) {
     this.service
-      .addUser(this.form.value.vendorID, this.form.value.file)
+      .createOrderorInvoice(id, file, apiURL)
       .subscribe((event: HttpEvent<any>) => {
         switch (event.type) {
           case HttpEventType.Sent:
@@ -141,7 +145,15 @@ export class AddOrderComponent implements OnInit {
             console.log(`Uploaded! ${this.progress}%`);
             break;
           case HttpEventType.Response:
-            console.log("Order successfully created!");
+            this.orderCreationPage === true
+              ? this.toastr.success(
+                  "Order Created Successfully",
+                  "Success 🐱‍🏍"
+                )
+              : this.toastr.success(
+                  "Invoice Uploaded Successfully",
+                  "Success 🐱‍🏍"
+                );
             console.log(event.body);
             const responseArray = event.body
               .split("\n")
@@ -160,61 +172,31 @@ export class AddOrderComponent implements OnInit {
                 this.percentageGlobal = obj.percentage;
                 console.log(`Percentage: ${this.percentageGlobal}`);
               } else if (obj.msg === "success") {
-                this.percentageGlobal=100;
+                this.percentageGlobal = 100;
                 this.orderIdGlobal = obj.order_id;
                 console.log(`Order ID: ${this.orderIdGlobal}`);
+                this.orderCreationPage === true
+                  ? this.toastr.success(
+                      "Newly created Order ID will be " + this.orderIdGlobal,
+                      "Success 🐱‍🏍"
+                    )
+                  : this.toastr.success(
+                      "Invoice moved to next User Level Stage",
+                      "Success 🐱‍🏍"
+                    );
               }
             });
 
-          // setTimeout(() => {
-          //   this.progress = 0;
-          // }, 1500);
+            setTimeout(() => {
+              if (this.orderCreationPage) {
+                this.toastr.success(
+                  "Click on Orders to View the newly created Order",
+                  "Success 🐱‍🏍"
+                );
+              }
+              this.router.navigate(["/pages/orders"]);
+            }, 1500);
         }
       });
-  }
-  onOrderSubmit(ID: number, file: File) {
-    console.log(this.currentRoute.toLowerCase().includes("add-order"));
-    if (this.currentRoute.toLowerCase().includes("add-order")) {
-      console.log("Vendor ID before FormData=", ID);
-      console.log("File before FormData=", file);
-      const formData = new FormData();
-      formData.append("vendorID", ID.toString());
-      formData.append("file", file);
-      console.log("Vendor ID after FormData=", ID);
-      console.log("File after FormData=", file);
-
-      // formData.forEach((value, key) => {
-      //   console.log(key + " " + value);
-      // });
-      this.service.createOrder(formData, "/v1/invoice/create_order/").subscribe(
-        (response) => {
-          console.log("Response:", response);
-        },
-        (error) => {
-          console.error("Error:", error);
-        }
-      );
-    } else if (this.currentRoute.toLowerCase().includes("add-invoice")) {
-      console.log("Invoice ID before FormData=", this.IDToUpdate);
-      console.log("File before FormData=", file);
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("ID", ID.toString());
-      formData.forEach((value, key) => {
-        console.log(key + " " + value);
-      });
-      this.service
-        .createOrder(FormData, "/v1/invoice/upload_document_invoice/")
-        .subscribe(
-          (response) => {
-            console.log("Response:", response);
-          },
-          (error) => {
-            console.error("Error:", error);
-          }
-        );
-    } else {
-      return;
-    }
   }
 }

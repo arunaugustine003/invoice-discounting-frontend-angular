@@ -13,11 +13,6 @@ export const CORPORATE_USER_LX_MENU_ITEMS: NbMenuItem[] = [
     link: "/pages/orders",
   }, 
   {
-    title: "Place Order",
-    icon: { icon: "layers-outline" },
-    link: "/pages/place-order",
-  }, 
-  {
     title: "Reports ",
     icon: { icon: "file-text-outline", pack: "eva" },
     link: "/pages/reports",
