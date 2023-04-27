@@ -35,12 +35,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: "Invoices L2",
     icon: { icon: "layers-outline" },
-    link: "/pages/invoices-l2/1",
-  },
-  {
-    title: "Invoices L3",
-    icon: { icon: "layers-outline" },
-    link: "/pages/invoices-l3/1",
+    link: "/pages/invoices-lx/1",
   },
   {
     title: "Reports ",

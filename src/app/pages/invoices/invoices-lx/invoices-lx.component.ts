@@ -21,11 +21,11 @@ import { ListUniqueOrdersForCorporateUser, ListUniqueOrdersForCorporateUserData 
 import { ApproveInvoice, RejectInvoice, ViewInvoiceDocument } from "../../../interfaces/invoiceList";
 
 @Component({
-  selector: 'ngx-invoices-l2',
-  templateUrl: './invoices-l2.component.html',
-  styleUrls: ['./invoices-l2.component.scss']
+  selector: 'ngx-invoices-lx',
+  templateUrl: './invoices-lx.component.html',
+  styleUrls: ['./invoices-lx.component.scss']
 })
-export class InvoicesL2Component implements OnInit, OnDestroy {
+export class InvoicesLxComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [
     "invoiceID",
     "invoiceNO",
@@ -58,21 +58,6 @@ export class InvoicesL2Component implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((val) => {
       this.orderIDFetched = val["id"];
-      if (this.orderIDFetched) {
-        this.service
-          .getInvoicesByID(
-            this.orderIDFetched,
-            "/v1/invoice/filter_order_by_orderID/"
-          )
-          .subscribe({
-            next: (res) => {
-              console.log("res.data[0]=", res.data[0]);
-            },
-            error: (err) => {
-              console.log(err);
-            },
-          });
-      }
     });
     this.getAllUniqueOrders();
     if (this.router.url.toLowerCase().includes("invoices-l2")) {
@@ -128,7 +113,6 @@ export class InvoicesL2Component implements OnInit, OnDestroy {
         console.log(error);
       }
     );
-    this.router.navigate(["/pages/invoices-l2", 1]);
   }
   approveInvoice(id: number) {
     console.log("Clicked on Approve Invoice", id);
@@ -140,7 +124,11 @@ export class InvoicesL2Component implements OnInit, OnDestroy {
             "Invoice Approved Successfully",
             "Success 🐱‍🏍"
           );
-          this.router.navigate(["/pages/invoices-l2", 1]);
+          this.router.navigate(["/pages/dashboard"]);
+          this.toastr.success(
+            "Invoice pushed to Next Level for processing",
+            "Success 🐱‍🏍"
+          );
         } else if (res.code === "500") {
           this.toastr.error(res.approve_document_invoice, "Error ❌");
         } else {
@@ -152,7 +140,7 @@ export class InvoicesL2Component implements OnInit, OnDestroy {
         this.toastr.error("Something went down", "Error ❌");
       }
     );
-    this.router.navigate(["/pages/invoices-l2", 1]);
+    this.router.navigate(["/pages/dashboard"]);
   }
   rejectInvoice(id: number) {
     console.log("Clicked on Reject Invoice", id);
@@ -164,7 +152,11 @@ export class InvoicesL2Component implements OnInit, OnDestroy {
             "Invoice Rejected Successfully",
             "Success 🐱‍🏍"
           );
-          this.router.navigate(["/pages/invoices-l2", 1]);
+          this.router.navigate(["/pages/dashboard"]);
+          this.toastr.success(
+            "Invoice passed to Previous Level for Re-processing",
+            "Success 🐱‍🏍"
+          );
         } else if (res.code === "500") {
           this.toastr.error(res.reject_document_invoice, "Error ❌");
         } else {
@@ -176,7 +168,7 @@ export class InvoicesL2Component implements OnInit, OnDestroy {
         this.toastr.error("Something went down", "Error ❌");
       }
     );
-    this.router.navigate(["/pages/invoices-l2", 1]);
+    this.router.navigate(["/pages/dashboard"]);
   }
   ngOnDestroy() {
     this.destroy$.next();

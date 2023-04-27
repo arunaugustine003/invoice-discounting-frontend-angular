@@ -188,10 +188,12 @@ export class AddOrderComponent implements OnInit {
             });
 
             setTimeout(() => {
-              this.toastr.success(
-                "Click on Orders to View the newly created Order",
-                "Success 🐱‍🏍"
-              );
+              if (this.orderCreationPage) {
+                this.toastr.success(
+                  "Click on Orders to View the newly created Order",
+                  "Success 🐱‍🏍"
+                );
+              }
               this.router.navigate(["/pages/orders"]);
             }, 1500);
         }

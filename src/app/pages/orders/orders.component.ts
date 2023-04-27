@@ -59,6 +59,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   OrderData: ListUniqueOrdersForCorporateUserData[];
   isadmin;
+  userLevelGlobal;
   constructor(
     private menuService: NbMenuService,
     private toastr: ToastrService,
@@ -74,6 +75,8 @@ export class OrdersComponent implements OnInit, OnDestroy {
     // }
     let role=sessionStorage.getItem('role');
     console.log("Role=",role);
+    this.userLevelGlobal=sessionStorage.getItem('user_level');
+    console.log("User Level=",this.userLevelGlobal);  
     try {
       if (role==="ADMIN") {
         const data = await this.service
@@ -85,7 +88,8 @@ export class OrdersComponent implements OnInit, OnDestroy {
           await this.getAllSuperAdminOrders();
         }
       } else {
-    this.getAllUniqueOrders();       
+    this.getAllUniqueOrders();
+     
       }
     } catch (error) {
       console.log(error);
@@ -137,6 +141,9 @@ export class OrdersComponent implements OnInit, OnDestroy {
   viewOrderDetails(id: number) {
     console.log("Clicked on Order Details", id);
     this.router.navigate(["/pages/invoices-l1", id]);
+    if(this.userLevelGlobal!=0 && this.userLevelGlobal!=1 && this.userLevelGlobal>1){
+    this.router.navigate(["/pages/invoices-lx", id]);
+    }
   }
 
   ngOnDestroy() {

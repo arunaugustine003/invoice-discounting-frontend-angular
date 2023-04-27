@@ -148,10 +148,6 @@ export class AuthService {
     const body = { userID: id };
     return this.http.put(url, body);
   }
-  createOrder1(formdata, apiURL: string) {
-    const url = `${this.baseURL}${apiURL}`;
-    return this.http.post<any>(url, formdata);
-  }
   createOrderorInvoice(
     ID: number,
     file: File,
