@@ -91,6 +91,7 @@ export class VerifyOtpComponent implements OnInit, OnDestroy {
               const token = response.data.token;
               sessionStorage.setItem("token", token);
               sessionStorage.setItem("role", response.data.user_type);
+              sessionStorage.setItem("corporateID", response.data.user_id.toString());
               let user_level: number = 0;
               if (response.data.user_level === null) {
                 user_level = 0;
