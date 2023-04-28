@@ -95,6 +95,10 @@ const routes: Routes = [
         component: VendorOrdersComponent,
       },
       {
+        path: "vendor-orders/:id/:cid",
+        component: VendorOrdersComponent,
+      },
+      {
         path: "invoices-l1/:id",
         component: InvoicesL1Component,
       },

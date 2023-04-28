@@ -86,9 +86,10 @@ export class AuthService {
     skip: number,
     limit: number,
     vendorID: number,
+    corporateID: number,
     apiURL: string
   ) {
-    const requestBody = { skip: skip, limit: limit, vendorID: vendorID };
+    const requestBody = { skip: skip, limit: limit, vendorID: vendorID , corporateID: corporateID };
     const url = `${this.baseURL}${apiURL}`;
     return this.http.post<any>(url, requestBody);
   }

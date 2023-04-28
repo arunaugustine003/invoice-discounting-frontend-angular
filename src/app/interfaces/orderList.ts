@@ -11,6 +11,34 @@ export interface ListUniqueOrdersForSuperAdmin {
 export interface ListUniqueOrdersForSuperAdminData {
     orderID:                number;
     vendorID:               number;
+    vendorName:             string;
+    invoiceAmount:          string;
+    invoiceUploadedbyType:  string;
+    invoiceUploadedby:      number;
+    invoiceStatus:          string;
+    Status:                 number;
+    invoiceNO:              string;
+    financeAmount:          string;
+    invoiceCreatedOn:       string;
+    rejectedUser:           number;
+    invoiceID:              number;
+    corporateID:            number;
+    user_level:             number;
+    corporateUserGroupName: string;
+    invoiceFile:            string;
+}
+export interface ListUniqueOrdersForCorporateAdmin {
+    msg:                           string;
+    filter_order_by_orderID_admin: string;
+    code:                          string;
+    count:                         number;
+    data:                          ListUniqueOrdersForCorporateAdminData[];
+}
+
+export interface ListUniqueOrdersForCorporateAdminData {
+    orderID:                number;
+    vendorID:               number;
+    vendorName:             string;
     invoiceAmount:          string;
     invoiceUploadedbyType:  string;
     invoiceUploadedby:      number;
@@ -27,7 +55,6 @@ export interface ListUniqueOrdersForSuperAdminData {
     invoiceFile:            string;
 }
 
-
 export interface ListUniqueOrdersForCorporateUser {
     msg:                  string;
     list_only_order_user: string;
@@ -38,10 +65,10 @@ export interface ListUniqueOrdersForCorporateUser {
 
 export interface ListUniqueOrdersForCorporateUserData {
     orderID:               number;
-    vendorID:              number;
+    vendorID:            number;
+    vendorName:            string;
     invoiceAmount:         string;
     invoiceUploadedbyType: string;
-    invoiceUploadedby:     number;
     invoiceStatus:         string;
     Status:                number;
     invoiceNO:             string;
@@ -63,13 +90,10 @@ export interface ListVendorOrder {
 }
 
 export interface ListVendorOrderData {
-    corporateID:           number;
+    
     orderID:               number;
-    userID:                number;
-    invoiceTrackerID:      number;
+    corporateID:               number;
     invoiceTrackStatus:    string;
-    corporateUserGroupID:  number;
-    vendorID:              number;
-    invoiceTrackCreatedOn: string;
+    vendorName:              string;
     Status:                number;
 }

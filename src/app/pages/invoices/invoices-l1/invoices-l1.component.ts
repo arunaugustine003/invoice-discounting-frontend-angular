@@ -22,6 +22,7 @@ import {
   ListUniqueOrdersForCorporateUser,
   ListUniqueOrdersForCorporateUserData,
   ListUniqueOrdersForSuperAdmin,
+  ListUniqueOrdersForCorporateAdmin,
 } from "../../../interfaces/orderList";
 import { ViewInvoiceDocument } from "../../../interfaces/invoiceList";
 
@@ -34,9 +35,6 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
   displayedColumns: string[] = [
     "invoiceID",
     "invoiceNO",
-    "vendorID",
-    "invoiceAmount",
-    "invoiceUploadedby",
     "invoiceStatus",
     "action",
   ];
@@ -66,12 +64,20 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
     this.activatedRoute.params.subscribe((val) => {
       this.orderIDFetched = val["id"];
       this.corporateIDFetched = val["cid"];
+      let role = sessionStorage.getItem("role");
+      
       console.log("this.orderIDFetched=", this.orderIDFetched);
       console.log("this.corporateIDFetched=", this.corporateIDFetched);
       if (!this.corporateIDFetched) {
         this.superAdminView=false;
         this.getAllUniqueOrders();
-      } else if (this.corporateIDFetched) {
+      } else if (this.corporateIDFetched && role == 'CORPORATE') {
+        this.superAdminView = true;
+        this.getAllUniqueOrdersCorporateAdmin(
+          this.orderIDFetched,
+          this.corporateIDFetched
+        );
+      }else if (this.corporateIDFetched) {
         this.superAdminView = true;
         this.getAllUniqueOrdersSuperAdmin(
           this.orderIDFetched,
@@ -82,7 +88,8 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
     if (this.router.url.toLowerCase().includes("invoices-l1")) {
       let user_level = sessionStorage.getItem("user_level");
       console.log("global_user_level=", user_level);
-      this.title = "Invoices List for Users of User Level " + user_level;
+      // this.title = "Invoices List for Users of User Level " + user_level;
+      this.title = "Invoices";
     }
     // if(!this.isadmin){
     //   this.toastr.warning("User not authorized to view this Page", "Warning");
@@ -119,6 +126,32 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
       )
       .subscribe(
         (data: ListUniqueOrdersForSuperAdmin) => {
+          console.log("Data=", data);
+          if (data.code === "200") {
+            this.OrderData = data.data;
+            console.log("this.OrderData=", this.OrderData);
+            this.dataSource = new MatTableDataSource(this.OrderData);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
+  getAllUniqueOrdersCorporateAdmin(
+    orderIDFetched: number,
+    corporateIDFetched: number
+  ) {
+    this.service
+      .getAdminOrdersByID(
+        orderIDFetched,
+        corporateIDFetched,
+        "/v1/invoice/filter_order_by_orderID/"
+      )
+      .subscribe(
+        (data: ListUniqueOrdersForCorporateAdmin) => {
           console.log("Data=", data);
           if (data.code === "200") {
             this.OrderData = data.data;

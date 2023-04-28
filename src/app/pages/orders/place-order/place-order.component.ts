@@ -175,8 +175,12 @@ export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
     this.router.navigate(["/pages/add-order", id]);
   }
   viewCorrespondingOrders(id: number) {
+    console.log(this.corporateIDFromRoute);
+    const param_id = id + '/' + this.corporateIDFromRoute;
+    let i = `/pages/vendor-orders/${param_id}`;
+    i= decodeURIComponent(i);
     console.log("Clicked on View Corresponding Orders", id);
-    this.router.navigate(["/pages/vendor-orders", id]);
+    this.router.navigate([i]);
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -186,6 +190,9 @@ export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
   navigateHome() {
     this.menuService.navigateHome();
     return false;
+  }
+  routeAddCorporateVendor() {
+    this.router.navigate(["/pages/add-vendor"]);
   }
 
 }

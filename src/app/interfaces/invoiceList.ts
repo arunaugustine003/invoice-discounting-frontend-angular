@@ -9,6 +9,7 @@ export interface ListAllInvoicesForUniqueOrderData {
     orderID:               number;
     invoiceNO:             string;
     vendorID:              number;
+    vendorName:            string;
     invoiceUploadedbyType: string;
     invoiceAmount:         string;
     invoiceStatus:         string;

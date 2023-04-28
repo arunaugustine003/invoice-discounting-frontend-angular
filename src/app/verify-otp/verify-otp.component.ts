@@ -108,9 +108,8 @@ export class VerifyOtpComponent implements OnInit, OnDestroy {
                 s_corporateID = response.data.user_id;
               }
               sessionStorage.setItem("corporateID", s_corporateID.toString());
-
-              let corporateID = sessionStorage.getItem("corporateID");
-              console.log(corporateID);
+              console.log(sessionStorage.getItem("corporateID")) ;
+              
               this.router.navigate(["pages/dashboard"]);
             } else if (response.code === "500") {
               this.showOTPLoader = false;

@@ -11,14 +11,14 @@
         
         <!-- User ID Column -->
         <ng-container matColumnDef="userID">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> User ID </th>
-          <td mat-cell *matCellDef="let row"> {{row.userID}} </td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> NO </th>
+          <td mat-cell *matCellDef="let row"> {{$index}} </td>
         </ng-container>
 
         <!-- Corporate User Group ID  Column -->
-        <ng-container matColumnDef="corporateUserGroupID">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Corporate User Group ID </th>
-          <td mat-cell *matCellDef="let row"> {{row.corporateUserGroupID}} </td>
+        <ng-container matColumnDef="corporateUserGroupName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Corporate User Group </th>
+          <td mat-cell *matCellDef="let row"> {{row.corporateUserGroupName}} </td>
         </ng-container>
     
         <!-- Name Column -->

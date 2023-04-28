@@ -42,7 +42,7 @@ export class CorporateUsersComponent implements OnInit, DoCheck, OnDestroy {
   }
   displayedColumns: string[] = [
     "userID",
-    "corporateUserGroupID",
+    "corporateUserGroupName",
     "userName",
     "userContact",
     "userEmail",

@@ -42,12 +42,8 @@ export class OrdersComponent implements OnInit, OnDestroy {
     }
   displayedColumns: string[] = [
     "orderID",
-    "vendorID",
-    "invoiceAmount",
-    "invoiceUploadedbyType",
-    "invoiceUploadedby",
+    "vendorName",
     "invoiceStatus",
-    "Status",
     "action",
   ];
   dataSource: MatTableDataSource<any>;

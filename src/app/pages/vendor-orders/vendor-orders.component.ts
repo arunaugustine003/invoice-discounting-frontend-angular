@@ -33,6 +33,7 @@ export class VendorOrdersComponent implements OnInit, OnDestroy {
     pageSizeOptions: number[] = [1, 5, 10, 25, 100];
     // MatPaginator Output
     pageEvent: PageEvent;
+    corporateIDFromRoute: number;
   
     setPageSizeOptions(setPageSizeOptionsInput: string) {
       this.pageSizeOptions = setPageSizeOptionsInput
@@ -41,9 +42,7 @@ export class VendorOrdersComponent implements OnInit, OnDestroy {
     }
   displayedColumns: string[] = [
     "orderID",
-    "userID",
-    "corporateID",
-    "invoiceTrackerID",
+    "vendorName",
     "invoiceTrackStatus",
     "action",
   ];
@@ -74,14 +73,16 @@ export class VendorOrdersComponent implements OnInit, OnDestroy {
     // }
     this.activatedRoute.params.subscribe((val) => {
       this.vendorIDFromRoute = val["id"];
+      this.corporateIDFromRoute = val["cid"];
       console.log("this.vendorIDFromRoute=", this.vendorIDFromRoute);
+      console.log("this.corporateIDFromRoute=", this.corporateIDFromRoute);
     });
     let role=sessionStorage.getItem('role');
     console.log("Role=",role);
     try {
       if (role ==="ADMIN" || role ==="CORPORATE") {
         const data = await this.service
-          .getVendorLinked(0, 2,this.vendorIDFromRoute, "/v1/corporate/list_orders_of_vendores/")
+          .getVendorLinked(0, 2,this.vendorIDFromRoute,this.corporateIDFromRoute,"/v1/corporate/list_orders_of_vendores/")
           .toPromise();
         if (data.code === "200") {
           this.totalRecordCount = data.Total_count;
@@ -93,10 +94,11 @@ export class VendorOrdersComponent implements OnInit, OnDestroy {
       console.log(error);
     }
   }
+ 
   async getAllSuperAdminOrders(): Promise<void> {
     try {
       const data = await this.service
-      .getVendorLinked(0, this.totalRecordCount,this.vendorIDFromRoute, "/v1/corporate/list_orders_of_vendores/")
+      .getVendorLinked(0, this.totalRecordCount,this.vendorIDFromRoute,this.corporateIDFromRoute,"/v1/corporate/list_orders_of_vendores/")
         .toPromise();
         console.log("Data=",data);
         if (data.code === "200") {

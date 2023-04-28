@@ -39,13 +39,16 @@ export class PagesComponent {
   isCorporate = false;
   isCorporateUserL1 = false;
   isCorporateUserLX = false;
+  currCorp = null;
   constructor() {
     let role = sessionStorage.getItem("role");
     let user_level = sessionStorage.getItem("user_level");
+    let cur_corporateID = sessionStorage.getItem("corporateID");
     if (role == "ADMIN") {
       this.isAdmin = true;
     } else if (role == "CORPORATE") {
       this.isCorporate = true;
+      this.currCorp = cur_corporateID.toString();
     } else if (role == "USER") {
       console.log("user_level=",user_level);
       if (user_level == "1") {
