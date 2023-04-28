@@ -91,14 +91,26 @@ export class VerifyOtpComponent implements OnInit, OnDestroy {
               const token = response.data.token;
               sessionStorage.setItem("token", token);
               sessionStorage.setItem("role", response.data.user_type);
-              sessionStorage.setItem("corporateID", response.data.user_id.toString());
+              
               let user_level: number = 0;
+              let s_corporateID: number = 0;
+             
               if (response.data.user_level === null) {
                 user_level = 0;
               } else {
                 user_level = response.data.user_level;
               }
               sessionStorage.setItem("user_level", user_level.toString());
+
+              if (response.data.user_id === null) {
+                s_corporateID = 0;
+              } else {
+                s_corporateID = response.data.user_id;
+              }
+              sessionStorage.setItem("corporateID", s_corporateID.toString());
+
+              let corporateID = sessionStorage.getItem("corporateID");
+              console.log(corporateID);
               this.router.navigate(["pages/dashboard"]);
             } else if (response.code === "500") {
               this.showOTPLoader = false;

@@ -58,6 +58,7 @@ export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
   VendorData: Vendor[];
   LinkedVendorData: ListCorporateVendorData[];
   isAdmin = false;
+  isCorporate = false;
   corporateIDFromRoute!: number;
 
   constructor(
@@ -76,6 +77,11 @@ export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
       this.isAdmin = true;
     }else{
       this.isAdmin=false;
+    }
+    if (role == "CORPORATE") {
+      this.isCorporate = true;
+    }else{
+      this.isCorporate = false;
     }
   }
   async ngOnInit(): Promise<void> {

@@ -79,7 +79,7 @@ export class VendorOrdersComponent implements OnInit, OnDestroy {
     let role=sessionStorage.getItem('role');
     console.log("Role=",role);
     try {
-      if (role==="ADMIN") {
+      if (role ==="ADMIN" || role ==="CORPORATE") {
         const data = await this.service
           .getVendorLinked(0, 2,this.vendorIDFromRoute, "/v1/corporate/list_orders_of_vendores/")
           .toPromise();

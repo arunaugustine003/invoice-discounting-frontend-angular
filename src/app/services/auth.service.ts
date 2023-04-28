@@ -42,7 +42,7 @@ export class AuthService {
   getToken() {
     return sessionStorage.getItem("token") || "";
   }
-  // 4. Custom API Methods
+// 4. Custom API Methods
   getCurrentUser(apiURL: string): Observable<any> {
     const url = `${this.baseURL}${
       apiURL.startsWith("/") ? apiURL : `/${apiURL}`
