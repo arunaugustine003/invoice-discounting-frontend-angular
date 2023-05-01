@@ -107,7 +107,7 @@ export class VerifyOtpComponent implements OnInit, OnDestroy {
               } else {
                 s_corporateID = response.data.user_id;
               }
-              sessionStorage.setItem("corporateID", s_corporateID.toString());
+              sessionStorage.setItem("corporateID", JSON.stringify(s_corporateID));
               console.log(sessionStorage.getItem("corporateID")) ;
               
               this.router.navigate(["pages/dashboard"]);

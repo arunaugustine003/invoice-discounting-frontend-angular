@@ -31,6 +31,7 @@ export class LogoutComponent implements OnInit {
         confirmButtonText: "Yes, Logout !",
       }).then((result) => {
         if (result.isConfirmed) {
+          sessionStorage.removeItem('corporateID');
           sessionStorage.clear();
           this.router.navigate(["/login"]);
         } else {

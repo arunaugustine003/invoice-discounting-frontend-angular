@@ -70,7 +70,7 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
       console.log("this.corporateIDFetched=", this.corporateIDFetched);
       if (!this.corporateIDFetched) {
         this.superAdminView=false;
-        this.getAllUniqueOrders();
+        this.getAllUniqueOrders(this.orderIDFetched);
       } else if (this.corporateIDFetched && role == 'CORPORATE') {
         this.superAdminView = true;
         this.getAllUniqueOrdersCorporateAdmin(
@@ -97,22 +97,46 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
     // }
   }
 
-  getAllUniqueOrders() {
-    this.service.get("/v1/invoice/list_only_order_user/").subscribe(
-      (data: ListUniqueOrdersForCorporateUser) => {
-        console.log("Data=", data);
-        if (data.code === "200") {
-          this.OrderData = data.data;
-          console.log("this.OrderData=", this.OrderData);
-          this.dataSource = new MatTableDataSource(this.OrderData);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
+  // getAllUniqueOrders() {
+  //   this.service.post("/v1/invoice/filter_order_by_orderID/").subscribe(
+  //     (data: ListUniqueOrdersForCorporateUser) => {
+  //       console.log("Data=", data);
+  //       if (data.code === "200") {
+  //         this.OrderData = data.data;
+  //         console.log("this.OrderData=", this.OrderData);
+  //         this.dataSource = new MatTableDataSource(this.OrderData);
+  //         this.dataSource.paginator = this.paginator;
+  //         this.dataSource.sort = this.sort;
+  //       }
+  //     },
+  //     (error) => {
+  //       console.log(error);
+  //     }
+  //   );
+  // }
+  getAllUniqueOrders(
+    orderIDFetched: number
+  ) {
+    this.service
+      .getOrdersByID(
+        orderIDFetched,
+        "/v1/invoice/filter_order_by_orderID/"
+      )
+      .subscribe(
+        (data: ListUniqueOrdersForSuperAdmin) => {
+          console.log("Data=", data);
+          if (data.code === "200") {
+            this.OrderData = data.data;
+            console.log("this.OrderData=", this.OrderData);
+            this.dataSource = new MatTableDataSource(this.OrderData);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+          }
+        },
+        (error) => {
+          console.log(error);
         }
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+      );
   }
   getAllUniqueOrdersSuperAdmin(
     orderIDFetched: number,

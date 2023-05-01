@@ -78,6 +78,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
           if (res.code === "200") {
             console.log("Get Current User", res);
             this.user = res.data;
+            let s_corporateID: number = 0;
+            if (res.data.user_id === null) {
+              s_corporateID = 0;
+            } else {
+              s_corporateID = res.data.user_id;
+            }
+            sessionStorage.setItem("corporateID", JSON.stringify(s_corporateID));
           } else if (res.code === "500") {
             this.toastr.error(res.get_current_user, "Error ❌");
           } else {

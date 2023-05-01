@@ -82,6 +82,11 @@ export class AuthService {
     const url = `${this.baseURL}${apiURL}`;
     return this.http.post<any>(url, requestBody);
   }
+  getOrdersByID(orderID: number, apiURL: string) {
+    const requestBody = { orderID: orderID };
+    const url = `${this.baseURL}${apiURL}`;
+    return this.http.post<any>(url, requestBody);
+  }
   getVendorLinked(
     skip: number,
     limit: number,

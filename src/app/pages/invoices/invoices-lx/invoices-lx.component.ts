@@ -59,7 +59,7 @@ export class InvoicesLxComponent implements OnInit, OnDestroy {
     this.activatedRoute.params.subscribe((val) => {
       this.orderIDFetched = val["id"];
     });
-    this.getAllUniqueOrders();
+    this.getAllUniqueOrders(this.orderIDFetched);
     if (this.router.url.toLowerCase().includes("invoices-l2")) {
       let user_level = sessionStorage.getItem("user_level");
       console.log("global_user_level=", user_level);
@@ -71,22 +71,46 @@ export class InvoicesLxComponent implements OnInit, OnDestroy {
     // }
   }
 
-  getAllUniqueOrders() {
-    this.service.get("/v1/invoice/list_only_order_user/").subscribe(
-      (data: ListUniqueOrdersForCorporateUser) => {
-        console.log("Data=",data);
-        if (data.code === "200") {
-          this.OrderData = data.data;
-          console.log("this.OrderData=",this.OrderData);
-          this.dataSource = new MatTableDataSource(this.OrderData);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
+  // getAllUniqueOrders() {
+  //   this.service.get("/v1/invoice/list_only_order_user/").subscribe(
+  //     (data: ListUniqueOrdersForCorporateUser) => {
+  //       console.log("Data=",data);
+  //       if (data.code === "200") {
+  //         this.OrderData = data.data;
+  //         console.log("this.OrderData=",this.OrderData);
+  //         this.dataSource = new MatTableDataSource(this.OrderData);
+  //         this.dataSource.paginator = this.paginator;
+  //         this.dataSource.sort = this.sort;
+  //       }
+  //     },
+  //     (error) => {
+  //       console.log(error);
+  //     }
+  //   );
+  // }
+  getAllUniqueOrders(
+    orderIDFetched: number
+  ) {
+    this.service
+      .getOrdersByID(
+        orderIDFetched,
+        "/v1/invoice/filter_order_by_orderID/"
+      )
+      .subscribe(
+        (data: ListUniqueOrdersForCorporateUser) => {
+          console.log("Data=", data);
+          if (data.code === "200") {
+            this.OrderData = data.data;
+            console.log("this.OrderData=", this.OrderData);
+            this.dataSource = new MatTableDataSource(this.OrderData);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+          }
+        },
+        (error) => {
+          console.log(error);
         }
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+      );
   }
 
   applyFilter(event: Event) {

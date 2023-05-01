@@ -77,6 +77,7 @@ export class AddCorporateComponent implements OnInit {
   }
   addCorporate() {
     this.userGroupNamesGlobal.push(...this.corporateForm.value.userGroupNames);
+    console.log(this.corporateForm.value.userGroupLevels);
     this.levels.clear();
     const data = {
       ShortName: "",
@@ -211,7 +212,7 @@ export class AddCorporateComponent implements OnInit {
       "Existing Levels this.existingUserGroupLevelsGlobal=",
       this.existingUserGroupLevelsGlobal
     );
-    this.corporateForm.get('userGroupLevels').disable();
+    // this.corporateForm.get('userGroupLevels').disable();
     if (this.existingUserGroupLevelsGlobal !== undefined) {
       if (currentNumberOfLevels === 0) {
         this.toastr.warning("Please enter atleast one Level", "Warning");

@@ -44,6 +44,7 @@ export class PagesComponent {
     let role = sessionStorage.getItem("role");
     let user_level = sessionStorage.getItem("user_level");
     let cur_corporateID = sessionStorage.getItem("corporateID");
+    console.log(cur_corporateID);
     if (role == "ADMIN") {
       this.isAdmin = true;
     } else if (role == "CORPORATE") {
