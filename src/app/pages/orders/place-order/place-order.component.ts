@@ -59,6 +59,8 @@ export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
   LinkedVendorData: ListCorporateVendorData[];
   isAdmin = false;
   isCorporate = false;
+  isCorporateUserL1 = false;
+  isCorporateUserLX = false;
   corporateIDFromRoute!: number;
 
   constructor(
@@ -68,22 +70,15 @@ export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
     public dialog: MatDialog,
     private activatedRoute: ActivatedRoute,
     private router: Router
-  ) {
-
-  }
+  ) {}
   ngDoCheck(): void {
     let role = sessionStorage.getItem("role");
+    let user_level = sessionStorage.getItem("user_level");
     console.log(role);
-    if (role == "ADMIN") {
-      this.isAdmin = true;
-    }else{
-      this.isAdmin=false;
-    }
-    if (role == "CORPORATE") {
-      this.isCorporate = true;
-    }else{
-      this.isCorporate = false;
-    }
+    this.isAdmin = role === "ADMIN";
+    this.isCorporate = role === "CORPORATE";
+    this.isCorporateUserL1 = role === "USER" && user_level === "1";
+    this.isCorporateUserLX = role === "USER" && user_level !== "1";
   }
   async ngOnInit(): Promise<void> {
     // if(!this.isAdmin){
@@ -95,44 +90,60 @@ export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
       console.log("this.corporateIDFromRoute=", this.corporateIDFromRoute);
     });
     try {
-
       console.log(this.isCorporate);
-      if(this.isCorporate === true)
-      {
+      if (this.isCorporate === true) {
         const data = await this.service
-              .getCorporateLinkedVendors(
-                0,
-                5,
-                "/v1/vendor/list_vendors_onlycorporate/"
-              ).toPromise();
-              if (data.code === "200") {
-                this.totalRecordCount = data.Total_count;
-                await this.getLinkedVendors();
-              }
+          .getCorporateLinkedVendors(
+            0,
+            5,
+            "/v1/vendor/list_vendors_onlycorporate/"
+          )
+          .toPromise();
+        if (data.code === "200") {
+          this.totalRecordCount = data.Total_count;
+          await this.getLinkedVendors();
+        }
+      } else {
+        if (this.corporateIDFromRoute === undefined &&
+          this.isCorporate) {
+          const data = await this.service
+            .getPaginatedList(0, 2, "/v1/vendor/list_vendors/")
+            .toPromise();
+          if (data.code === "200") {
+            this.totalRecordCount = data.Total_count;
+            await this.getAllVendors();
+          }
+        } else if (
+          this.corporateIDFromRoute === undefined &&
+          this.isCorporateUserL1
+        ) {
+          const data = await this.service
+            .getCorporateLinked(
+              0,
+              5,
+              this.corporateIDFromRoute,
+              "/v1/vendor/list_corporate_vendors/"
+            )
+            .toPromise();
+          if (data.code === "200") {
+            this.totalRecordCount = data.Total_count;
+            await this.getLinkedVendors();
+          }
+        } else {
+          const data = await this.service
+            .getCorporateLinked(
+              0,
+              5,
+              this.corporateIDFromRoute,
+              "/v1/vendor/list_corporate_vendors/"
+            )
+            .toPromise();
+          if (data.code === "200") {
+            this.totalRecordCount = data.Total_count;
+            await this.getLinkedVendors();
+          }
+        }
       }
-      else{
-            if (this.corporateIDFromRoute === undefined) {
-              const data = await this.service
-                .getPaginatedList(0, 2, "/v1/vendor/list_vendors/")
-                .toPromise();
-              if (data.code === "200") {
-                this.totalRecordCount = data.Total_count;
-                await this.getAllVendors();
-              }
-            } else {
-              const data = await this.service
-              .getCorporateLinked(
-                0,
-                5,
-                this.corporateIDFromRoute,
-                "/v1/vendor/list_corporate_vendors/"
-              ).toPromise();
-              if (data.code === "200") {
-                this.totalRecordCount = data.Total_count;
-                await this.getLinkedVendors();
-              }
-            }
-      }  
     } catch (error) {
       console.log(error);
     }
@@ -194,9 +205,9 @@ export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
   }
   viewCorrespondingOrders(id: number) {
     console.log(this.corporateIDFromRoute);
-    const param_id = id + '/' + this.corporateIDFromRoute;
+    const param_id = id + "/" + this.corporateIDFromRoute;
     let i = `/pages/vendor-orders/${param_id}`;
-    i= decodeURIComponent(i);
+    i = decodeURIComponent(i);
     console.log("Clicked on View Corresponding Orders", id);
     this.router.navigate([i]);
   }
@@ -212,5 +223,4 @@ export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
   routeAddCorporateVendor() {
     this.router.navigate(["/pages/add-vendor"]);
   }
-
 }
