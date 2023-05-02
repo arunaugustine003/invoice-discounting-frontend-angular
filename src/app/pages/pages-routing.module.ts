@@ -20,6 +20,7 @@ import { AddCorporateUserComponent } from "./corporate-users/add-corporate-user/
 import { OrdersComponent } from "./orders/orders.component";
 import { AddOrderComponent } from "./orders/add-order/add-order.component";
 import { PlaceOrderComponent } from "./orders/place-order/place-order.component";
+import { PlaceOrderCorporateComponent } from "./orders/place-order-corporate/place-order-corporate.component";
 import { InvoicesL1Component } from "./invoices/invoices-l1/invoices-l1.component";
 import { VendorOrdersComponent } from "./vendor-orders/vendor-orders.component";
 import { InvoicesLxComponent } from "./invoices/invoices-lx/invoices-lx.component";
@@ -89,6 +90,10 @@ const routes: Routes = [
       {
         path: "place-order/:id",
         component: PlaceOrderComponent,
+      },
+      {
+        path: "place-order-corporate",
+        component: PlaceOrderCorporateComponent,
       },
       {
         path: "vendor-orders/:id",

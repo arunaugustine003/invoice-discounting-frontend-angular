@@ -108,6 +108,15 @@ export class AuthService {
     const url = `${this.baseURL}${apiURL}`;
     return this.http.post<any>(url, requestBody);
   }
+  getCorporateLinkedVendors(
+    skip: number,
+    limit: number,
+    apiURL: string
+  ) {
+    const requestBody = { skip: skip, limit: limit };
+    const url = `${this.baseURL}${apiURL}`;
+    return this.http.post<any>(url, requestBody);
+  }
   getUserByID(id: number, apiURL: string) {
     const body = { userID: id };
     const url = `${this.baseURL}${apiURL}`;

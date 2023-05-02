@@ -31,6 +31,7 @@ import { OrdersComponent } from './pages/orders/orders.component';
 import { AddOrderComponent } from './pages/orders/add-order/add-order.component';
 import { DndDirective } from "./directives/dnd.directive";
 import { PlaceOrderComponent } from './pages/orders/place-order/place-order.component';
+import { PlaceOrderCorporateComponent } from './pages/orders/place-order-corporate/place-order-corporate.component';
 import { InvoicesL1Component } from './pages/invoices/invoices-l1/invoices-l1.component';
 import { InvoicesComponent } from './pages/invoices/invoices.component';
 import { VendorOrdersComponent } from './pages/vendor-orders/vendor-orders.component';
@@ -48,6 +49,7 @@ import { InvoicesLxComponent } from './pages/invoices/invoices-lx/invoices-lx.co
     OrdersComponent,
     AddOrderComponent,
     PlaceOrderComponent,
+    PlaceOrderCorporateComponent,
     InvoicesL1Component,
     InvoicesLxComponent,
     InvoicesComponent,

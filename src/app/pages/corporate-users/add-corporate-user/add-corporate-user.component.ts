@@ -147,7 +147,8 @@ export class AddCorporateUserComponent implements OnInit {
       this.corporateUserForm.value.corporateUserGroupID
     );
     const data = {
-      corporateUserGroupID: this.corporateUserGroupIDResData,
+      // corporateUserGroupID: this.corporateUserGroupIDResData,
+      corporateUserGroupID:this.corporateUserForm.value.corporateUserGroupID,
       userName: this.corporateUserForm.value.name,
       userContact: this.corporateUserForm.value.contactNo,
       userEmail: this.corporateUserForm.value.email,

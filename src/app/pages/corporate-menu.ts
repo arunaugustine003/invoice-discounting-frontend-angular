@@ -12,12 +12,12 @@ export const CORPORATE_MENU_ITEMS: NbMenuItem[] = [
   {
     title: "Vendors",
     icon: { icon: "settings-outline" },
-    link: "/pages/place-order/"+ corporateID,
+    link: "/pages/place-order-corporate/",
   },
   {
     title: "Users",
     icon: { icon: "settings-outline" },
-    link: "/pages/corporate-users/"+ corporateID,
+    link: "/pages/corporate-users/",
   },
   {
     title: "Settings",

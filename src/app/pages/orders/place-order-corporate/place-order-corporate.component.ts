@@ -22,11 +22,11 @@ import { MatTableDataSource } from "@angular/material/table";
 import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
-  selector: "ngx-place-order",
-  templateUrl: "./place-order.component.html",
-  styleUrls: ["./place-order.component.scss"],
+  selector: "ngx-place-order-corporate",
+  templateUrl: "./place-order-corporate.component.html",
+  styleUrls: ["./place-order-corporate.component.scss"],
 })
-export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
+export class PlaceOrderCorporateComponent implements OnInit, DoCheck, OnDestroy {
   // MatPaginator Inputs
   totalRecordCount = 0;
   length = 100;
@@ -96,9 +96,7 @@ export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
     });
     try {
 
-      console.log(this.isCorporate);
-      if(this.isCorporate === true)
-      {
+      
         const data = await this.service
               .getCorporateLinkedVendors(
                 0,
@@ -109,30 +107,8 @@ export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
                 this.totalRecordCount = data.Total_count;
                 await this.getLinkedVendors();
               }
-      }
-      else{
-            if (this.corporateIDFromRoute === undefined) {
-              const data = await this.service
-                .getPaginatedList(0, 2, "/v1/vendor/list_vendors/")
-                .toPromise();
-              if (data.code === "200") {
-                this.totalRecordCount = data.Total_count;
-                await this.getAllVendors();
-              }
-            } else {
-              const data = await this.service
-              .getCorporateLinked(
-                0,
-                5,
-                this.corporateIDFromRoute,
-                "/v1/vendor/list_corporate_vendors/"
-              ).toPromise();
-              if (data.code === "200") {
-                this.totalRecordCount = data.Total_count;
-                await this.getLinkedVendors();
-              }
-            }
-      }  
+      
+    
     } catch (error) {
       console.log(error);
     }
@@ -141,7 +117,7 @@ export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
   async getAllVendors(): Promise<void> {
     try {
       const data = await this.service
-        .getPaginatedList(0, this.totalRecordCount, "/v1/vendor/list_vendors/")
+        .getPaginatedList(0, this.totalRecordCount, "/v1/vendor/list_vendors_onlycorporate/")
         .toPromise();
       if (data.code === "200") {
         this.VendorData = data.data;
@@ -161,7 +137,7 @@ export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
           0,
           this.totalRecordCount,
           this.corporateIDFromRoute,
-          "/v1/vendor/list_corporate_vendors/"
+          "/v1/vendor/list_vendors_onlycorporate/"
         )
         .toPromise();
       if (data.code === "200") {
@@ -192,9 +168,9 @@ export class PlaceOrderComponent implements OnInit, DoCheck, OnDestroy {
     console.log("Clicked on Place Order", id);
     this.router.navigate(["/pages/add-order", id]);
   }
-  viewCorrespondingOrders(id: number) {
-    console.log(this.corporateIDFromRoute);
-    const param_id = id + '/' + this.corporateIDFromRoute;
+  viewCorrespondingOrders(id: number,cid :number) {
+    console.log(cid);
+    const param_id = id + '/' + cid;
     let i = `/pages/vendor-orders/${param_id}`;
     i= decodeURIComponent(i);
     console.log("Clicked on View Corresponding Orders", id);

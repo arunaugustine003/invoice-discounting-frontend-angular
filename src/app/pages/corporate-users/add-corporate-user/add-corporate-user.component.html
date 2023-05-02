@@ -5,7 +5,7 @@
         <mat-form-field appearance="outline">
         <mat-label>Corporate User Group ID</mat-label>
           <mat-select formControlName="corporateUserGroupID" name="select">
-          <mat-option *ngFor="let select of corporateUserGroupIDArrays" [value]="select.corporateUserGroupName">
+          <mat-option *ngFor="let select of corporateUserGroupIDArrays" [value]="select.corporateUserGroupID">
             {{select.corporateUserGroupName}}
           </mat-option>
           </mat-select>
