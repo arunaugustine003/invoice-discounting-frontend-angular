@@ -133,7 +133,8 @@ export class AddCorporateUserComponent implements OnInit {
       } else if (response.code === "500") {
         this.toastr.error(response.list_corporate_user_group, "Error ❌");
       } else {
-        this.toastr.error("Contact Admin for more Info", "Error ❌");
+          // this.toastr.error("Contact Admin for more Info", "Error ❌");
+          return;
       }
     } catch (error) {
       console.error("error:", error);

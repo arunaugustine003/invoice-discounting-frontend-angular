@@ -95,7 +95,7 @@ export class CorporateUsersComponent implements OnInit, DoCheck, OnDestroy {
   async getAllCorporateUsers(): Promise<void> {
     try {
       const data = await this.service
-        .getCorporateLinked(0, 5, this.userIdToUpdate, "/v1/users/get_users/")
+        .getCorporateLinked(0, this.totalRecordCount, this.userIdToUpdate, "/v1/users/get_users/")
         .toPromise();
       if (data.code === "200") {
         this.corporateUserData = data.data;
@@ -109,8 +109,8 @@ export class CorporateUsersComponent implements OnInit, DoCheck, OnDestroy {
             inActiveCorporateUsers.push(x);
           }
         });
-        console.log("activeCorporates", activeCorporateUsers);
-        console.log("InActiveCorporates", inActiveCorporateUsers);
+        console.log("activeCorporate Users", activeCorporateUsers);
+        console.log("InActiveCorporate Users", inActiveCorporateUsers);
         this.dataSource = new MatTableDataSource(activeCorporateUsers);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
