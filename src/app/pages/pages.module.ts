@@ -17,6 +17,7 @@ import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddCorporateComponent } from './corporates/add-corporate/add-corporate.component';
 import { AddVendorComponent } from './vendors/add-vendor/add-vendor.component';
+import { VendorCorporatesComponent } from './vendors/vendor-corporates/vendor-corporates.component';
 @NgModule({
   imports: [
     PagesRoutingModule,
@@ -39,6 +40,7 @@ import { AddVendorComponent } from './vendors/add-vendor/add-vendor.component';
     LogoutComponent,    
     AddCorporateComponent,
     AddVendorComponent,
+    VendorCorporatesComponent,
   ],
   exports:[MaterialModule]
 })

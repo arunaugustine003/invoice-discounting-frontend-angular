@@ -43,6 +43,7 @@ export class VendorsComponent implements OnInit, DoCheck, OnDestroy {
     "vendorAddress",
     "vendorEmail",
     "vendorContact",
+    "action" 
   ];
   dataSource: MatTableDataSource<any>;
 
@@ -109,6 +110,10 @@ export class VendorsComponent implements OnInit, DoCheck, OnDestroy {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+  vendorCorporate(id: number) {
+    console.log("Clicked on vendor corporates", id);
+    this.router.navigate(["/pages/vendor-corporates", id]);
   }
   routeAddVendor() {
     this.router.navigate(["/pages/add-vendor"]);

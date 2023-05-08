@@ -23,6 +23,7 @@ import { PlaceOrderComponent } from "./orders/place-order/place-order.component"
 import { PlaceOrderCorporateComponent } from "./orders/place-order-corporate/place-order-corporate.component";
 import { InvoicesL1Component } from "./invoices/invoices-l1/invoices-l1.component";
 import { VendorOrdersComponent } from "./vendor-orders/vendor-orders.component";
+import { VendorCorporatesComponent } from "./vendors/vendor-corporates/vendor-corporates.component";
 import { InvoicesLxComponent } from "./invoices/invoices-lx/invoices-lx.component";
 
 const routes: Routes = [
@@ -142,6 +143,10 @@ const routes: Routes = [
       {
         path: "buttons",
         component: ButtonsComponent,
+      },
+      {
+        path: "vendor-corporates/:id",
+        component: VendorCorporatesComponent,
       },
       {
         path: "layout",

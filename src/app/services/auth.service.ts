@@ -198,4 +198,14 @@ export class AuthService {
       return errorMessage;
     });
   }
+  getVendorLinkedcorporates(
+    skip: number,
+    limit: number,
+    vendorID: number,
+    apiURL: string
+  ) {
+    const requestBody = { skip: skip, limit: limit, vendorID: vendorID };
+    const url = `${this.baseURL}${apiURL}`;
+    return this.http.post<any>(url, requestBody);
+  }
 }
