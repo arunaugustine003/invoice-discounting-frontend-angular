@@ -35,6 +35,9 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
   displayedColumns: string[] = [
     "invoiceID",
     "invoiceNO",
+    "invoiceDate",
+    "invoiceAmount",
+    "financeAmount",
     "invoiceStatus",
     "action",
   ];

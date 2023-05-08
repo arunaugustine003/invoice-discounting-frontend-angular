@@ -21,23 +21,22 @@
             <td mat-cell *matCellDef="let row"> {{row.invoiceNO}} </td>
           </ng-container>
           
-          <!-- Vendor ID Column -->
-          <!-- <ng-container matColumnDef="vendorName">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Vendor </th>
-            <td mat-cell *matCellDef="let row"> {{row.vendorName}} </td>
-          </ng-container>   -->
+          <ng-container matColumnDef="invoiceDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Invoice Date</th>
+            <td mat-cell *matCellDef="let row"> {{row.invoiceDate}} </td>
+          </ng-container>  
           
-          <!-- Invoice Amount Column -->
+          Invoice Amount Column -->
           <!-- <ng-container matColumnDef="invoiceAmount">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Invoice Amount </th>
             <td mat-cell *matCellDef="let row"> {{row.invoiceAmount}} </td>
-          </ng-container> -->
+          </ng-container>-->
       
-          <!-- Invoice Uploaded By Column -->
-          <!-- <ng-container matColumnDef="invoiceUploadedby">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Invoice Uploaded By </th>
-            <td mat-cell *matCellDef="let row"> {{row.invoiceUploadedby}} </td>
-          </ng-container> -->
+         <!-- Invoice Uploaded By Column -->
+         <ng-container matColumnDef="financeAmount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Finance Amount </th>
+          <td mat-cell *matCellDef="let row"> {{row.financeAmount}} </td>
+        </ng-container>
           
           <!-- Invoice Status Column -->
           <ng-container matColumnDef="invoiceStatus">
