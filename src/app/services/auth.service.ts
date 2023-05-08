@@ -122,6 +122,11 @@ export class AuthService {
     const url = `${this.baseURL}${apiURL}`;
     return this.http.post<any>(url, body);
   }
+  getInvoiceByID(id: number, apiURL: string) {
+    const body = { invoiceID: id };
+    const url = `${this.baseURL}${apiURL}`;
+    return this.http.post<any>(url, body);
+  }
   getCorporateUserIDByName(id: number, username: string, apiURL: string) {
     const body = {
       corporateID: id,

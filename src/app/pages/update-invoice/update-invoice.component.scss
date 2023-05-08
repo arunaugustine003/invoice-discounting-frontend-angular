@@ -1,0 +1,17 @@
+.wrapper {
+    background-color: white;
+    padding: 20px;
+  }
+  mat-form-field {
+    display: block;
+    margin-bottom: 1rem;
+  }
+  .btn-parent > * {
+    flex: 1 1 50%;
+  }
+  .btn-parent {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+  

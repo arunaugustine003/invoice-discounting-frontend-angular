@@ -199,4 +199,10 @@ export class AddOrderComponent implements OnInit {
         }
       });
   }
+  downloadSampleDocument() {
+    console.log("Clicked on Download Sample Document");    
+    const presignedURL="https://drive.google.com/uc?export=download&id=1rNP4H3Em6vuUTvAboQDFDTCfRLZyd8Uc";
+    console.log("Data URL=",presignedURL);
+    window.open(presignedURL);
+  }
 }

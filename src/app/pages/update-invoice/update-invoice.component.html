@@ -1,0 +1,29 @@
+<div class="wrapper">
+    <h1>{{message}}</h1>
+    <div>
+    <form [formGroup]="invoiceForm">
+        <mat-form-field appearance="outline">
+        <mat-label>Invoice Number</mat-label>
+        <input formControlName="invoiceNO" matInput placeholder="Invoice Number" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+        <mat-label>Invoice Amount</mat-label>
+        <input formControlName="invoiceAmount" matInput type="text" placeholder="Invoice Amount" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+        <mat-label>Invoice Date</mat-label>
+        <input formControlName="invoiceDate" matInput type="text" placeholder="Invoice Date" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+        <mat-label>Finance Amount</mat-label>
+        <input formControlName="financeAmount" matInput type="text" placeholder="Finance Amount" />
+        </mat-form-field>
+    </form>
+    </div>
+    <div class="btn-parent">
+    <button mat-raised-button color="warn" (click)="closeInvoice()">Close</button>  
+    <button style="margin-left: 8px" (click)="updateInvoice()" mat-raised-button color="primary">
+      Update
+    </button>
+    </div>
+</div>

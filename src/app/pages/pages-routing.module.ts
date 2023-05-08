@@ -25,6 +25,7 @@ import { InvoicesL1Component } from "./invoices/invoices-l1/invoices-l1.componen
 import { VendorOrdersComponent } from "./vendor-orders/vendor-orders.component";
 import { VendorCorporatesComponent } from "./vendors/vendor-corporates/vendor-corporates.component";
 import { InvoicesLxComponent } from "./invoices/invoices-lx/invoices-lx.component";
+import { UpdateInvoiceComponent } from "./update-invoice/update-invoice.component";
 
 const routes: Routes = [
   {
@@ -107,6 +108,10 @@ const routes: Routes = [
       {
         path: "invoices-l1/:id",
         component: InvoicesL1Component,
+      },
+      {
+        path: "update-invoice/:id",
+        component: UpdateInvoiceComponent,
       },
       {
         path: "invoices-l1/:id/:cid",

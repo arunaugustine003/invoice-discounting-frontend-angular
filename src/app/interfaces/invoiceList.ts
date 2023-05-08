@@ -1,3 +1,29 @@
+export interface ListUniqueInvoiceDetailsByInvoiceID {
+    msg:                       string;
+    view_invoice_by_invoiceID: string;
+    code:                      string;
+    count:                     number;
+    data:                      ListUniqueInvoiceDetailsByInvoiceIDData;
+}
+
+export interface ListUniqueInvoiceDetailsByInvoiceIDData {
+    invoiceID:             number;
+    corporateID:           number;
+    invoiceUploadedby:     number;
+    user_level:            number;
+    financeAmount:         string;
+    invoiceFile:           string;
+    Status:                number;
+    orderID:               number;
+    vendorID:              number;
+    invoiceNO:             string;
+    invoiceUploadedbyType: string;
+    invoiceAmount:         string;
+    invoiceCreatedOn:      string;
+    invoiceStatus:         string;
+    rejectedUser:          number;
+}
+
 export interface ListAllInvoicesForUniqueOrder {
     msg:                     string;
     filter_order_by_orderID: string;
