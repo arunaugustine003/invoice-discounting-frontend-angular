@@ -3,6 +3,10 @@
       border: 1px solid #edf1f7;
       text-align: center !important;
     }
+    .matTable {
+  table-layout: auto;
+  width: 100%;
+}
   </style>
 <div class="container">
     <div style="margin-top: 10px;">
@@ -12,47 +16,30 @@
             <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
           </mat-form-field>
       <div class="mat-elevation-z8">
-        <table mat-table [dataSource]="dataSource" matSort  >
-      
-          <!-- ID Column -->
-          <!-- <ng-container matColumnDef="corporateID"  >
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
-            <td mat-cell *matCellDef="let row" > {{row.corporateID}} </td>
-          </ng-container> -->
-          <ng-container matColumnDef="corporateID"  >
-            <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> ID </th>
-            <td mat-cell *matCellDef="let row" > {{row.corporateID}} </td>
+        <table mat-table [dataSource]="dataSource" matSort class="matTable">
+          <ng-container matColumnDef="corporateID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">ID</th>
+            <td mat-cell *matCellDef="let row">{{row.corporateID}}</td>
           </ng-container>
-      
-          <!-- Name Column -->
-          <ng-container matColumnDef="FullName"  >
-            <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Name </th>
-            <td mat-cell *matCellDef="let row"  > {{row.FullName}} </td>
+          <ng-container matColumnDef="FullName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">Name</th>
+            <td mat-cell *matCellDef="let row">{{row.FullName}}</td>
           </ng-container>
-  
-          <!-- Email Column -->
           <ng-container matColumnDef="corporateEmail">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
-            <td mat-cell *matCellDef="let row"> {{row.corporateEmail}} </td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+            <td mat-cell *matCellDef="let row">{{row.corporateEmail}}</td>
           </ng-container> 
-        
-          <!-- Address Column -->
           <ng-container matColumnDef="corporateAddress">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
-            <td mat-cell *matCellDef="let row"> {{row.corporateAddress}} </td>
-          </ng-container>       
-          
-          <!-- Contact Column -->
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Address</th>
+            <td mat-cell *matCellDef="let row">{{row.corporateAddress}}</td>
+          </ng-container> 
           <ng-container matColumnDef="corporateContact">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Contact </th>
-            <td mat-cell *matCellDef="let row"> {{row.corporateContact}} </td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Contact</th>
+            <td mat-cell *matCellDef="let row">{{row.corporateContact}}</td>
           </ng-container>   
-              
-            
-  
+          
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      
           <!-- Row shown when there is no matching data. -->
           <tr class="mat-row" *matNoDataRow>
             <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>

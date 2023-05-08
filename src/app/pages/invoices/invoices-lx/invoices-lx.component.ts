@@ -29,9 +29,9 @@ export class InvoicesLxComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [
     "invoiceID",
     "invoiceNO",
-    "vendorID",
+    "invoiceDate",
     "invoiceAmount",
-    "invoiceUploadedby",
+    "financeAmount",
     "invoiceStatus",
     "action",
   ];
