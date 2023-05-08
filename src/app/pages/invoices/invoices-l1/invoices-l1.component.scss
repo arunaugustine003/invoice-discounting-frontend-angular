@@ -1,15 +1,20 @@
 table {
-    width: 100%;
-  }
-  
-  .mat-form-field {
-    font-size: 14px;
-    width: 100%;
-  }
-  .action-icons{
-    outline: none !important;
-  }
-  .corporateUserGroupNames {
-    display: block;
-    margin-bottom: 8px; 
-  }
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+.action-icons {
+  outline: none !important;
+}
+.corporateUserGroupNames {
+  display: block;
+  margin-bottom: 8px;
+}
+.bulk-upload-btn {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}

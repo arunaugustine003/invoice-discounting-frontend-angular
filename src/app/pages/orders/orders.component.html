@@ -19,37 +19,12 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Vendor ID </th>
           <td mat-cell *matCellDef="let row"> {{row.vendorName}} </td>
         </ng-container>
-
-        <!-- Invoice Amount Column -->
-        <!-- <ng-container matColumnDef="invoiceAmount">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Invoice Amount </th>
-          <td mat-cell *matCellDef="let row"> {{row.invoiceAmount}} </td>
-        </ng-container> -->
-    
-        <!-- Invoice Uploaded By Column -->
-        <!-- <ng-container matColumnDef="invoiceUploadedby">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Invoice Uploaded By </th>
-          <td mat-cell *matCellDef="let row"> {{row.invoiceUploadedby}} </td>
-        </ng-container> -->
-    
-        <!-- Invoice Uploaded By Type Column -->
-        <!-- <ng-container matColumnDef="invoiceUploadedbyType">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Invoice Uploaded By Type </th>
-          <td mat-cell *matCellDef="let row"> {{row.invoiceUploadedbyType}} </td>
-        </ng-container>      -->
         
         <!-- Invoice Status Column -->
         <ng-container matColumnDef="invoiceStatus">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Invoice Status </th>
           <td mat-cell *matCellDef="let row"> {{row.invoiceStatus}} </td>
         </ng-container>    
-
-        <!-- Status Column -->
-        <!-- <ng-container matColumnDef="Status">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-          <td mat-cell *matCellDef="let row"> {{row.Status}} </td>
-        </ng-container>     -->
-
 
         <!-- Action Column -->
         <ng-container matColumnDef="action">

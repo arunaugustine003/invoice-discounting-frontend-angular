@@ -1,10 +1,18 @@
+<div class="bulk-upload-btn">
+    <button 
+    mat-raised-button 
+    (click)="downloadSampleDocument()" 
+    color="primary">
+    Download Sample CSV Format for Bulk Upload
+    </button>
+</div>
 <div class="content" style="display: contents;">
     <div class="" style="margin-top: 20px;">
         <div class="containernew" appDnd (fileDropped)="onChangeLoad($event,1)"
             *ngIf="files?.length==0">
             <input accept=".csv" type="file" #fileDropRef id="fileDropRef"
                 id="upload_file" (change)="onChangeLoad($event)"
-                (click)="$event.target.value=null" />
+                (click)="$event.target.value=null" multiple/>
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="35" viewBox="0 0 63 64">
                 <g fill="#3B454F" fill-rule="nonzero">
                     <path

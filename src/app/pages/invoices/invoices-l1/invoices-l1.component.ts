@@ -35,7 +35,11 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
   displayedColumns: string[] = [
     "invoiceID",
     "invoiceNO",
+    "invoiceAmount",
+    "invoiceDate",
+    "financeAmount",
     "invoiceStatus",
+    "user_level",
     "action",
   ];
   orderIDFetched;
@@ -65,19 +69,19 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
       this.orderIDFetched = val["id"];
       this.corporateIDFetched = val["cid"];
       let role = sessionStorage.getItem("role");
-      
+
       console.log("this.orderIDFetched=", this.orderIDFetched);
       console.log("this.corporateIDFetched=", this.corporateIDFetched);
       if (!this.corporateIDFetched) {
-        this.superAdminView=false;
+        this.superAdminView = false;
         this.getAllUniqueOrders(this.orderIDFetched);
-      } else if (this.corporateIDFetched && role == 'CORPORATE') {
+      } else if (this.corporateIDFetched && role == "CORPORATE") {
         this.superAdminView = true;
         this.getAllUniqueOrdersCorporateAdmin(
           this.orderIDFetched,
           this.corporateIDFetched
         );
-      }else if (this.corporateIDFetched) {
+      } else if (this.corporateIDFetched) {
         this.superAdminView = true;
         this.getAllUniqueOrdersSuperAdmin(
           this.orderIDFetched,
@@ -97,31 +101,9 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
     // }
   }
 
-  // getAllUniqueOrders() {
-  //   this.service.post("/v1/invoice/filter_order_by_orderID/").subscribe(
-  //     (data: ListUniqueOrdersForCorporateUser) => {
-  //       console.log("Data=", data);
-  //       if (data.code === "200") {
-  //         this.OrderData = data.data;
-  //         console.log("this.OrderData=", this.OrderData);
-  //         this.dataSource = new MatTableDataSource(this.OrderData);
-  //         this.dataSource.paginator = this.paginator;
-  //         this.dataSource.sort = this.sort;
-  //       }
-  //     },
-  //     (error) => {
-  //       console.log(error);
-  //     }
-  //   );
-  // }
-  getAllUniqueOrders(
-    orderIDFetched: number
-  ) {
+  getAllUniqueOrders(orderIDFetched: number) {
     this.service
-      .getOrdersByID(
-        orderIDFetched,
-        "/v1/invoice/filter_order_by_orderID/"
-      )
+      .getOrdersByID(orderIDFetched, "/v1/invoice/filter_order_by_orderID/")
       .subscribe(
         (data: ListUniqueOrdersForSuperAdmin) => {
           console.log("Data=", data);
@@ -203,6 +185,10 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
     console.log("Clicked on Upload Invoice", id);
     this.router.navigate(["/pages/add-invoice", id]);
   }
+  editInvoice(id: number) {
+    console.log("Clicked on Edit Invoice", id);
+    this.router.navigate(["/pages/update-invoice", id]);
+  }
   viewInvoice(id: number) {
     console.log("Clicked on View Invoice", id);
     this.service
@@ -225,14 +211,20 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
           this.toastr.error("No File Available for Viewing", "Error ❌");
         }
       );
-      if(this.superAdminView){
-        this.router.navigate(["/pages/invoices-l1", this.orderIDFetched,this.corporateIDFetched]);
-      }
-      else{
-        this.router.navigate(["/pages/invoices-l1",this.orderIDFetched]);
-      }
+    if (this.superAdminView) {
+      this.router.navigate([
+        "/pages/invoices-l1",
+        this.orderIDFetched,
+        this.corporateIDFetched,
+      ]);
+    } else {
+      this.router.navigate(["/pages/invoices-l1", this.orderIDFetched]);
+    }
   }
-
+  bulkUpload() {
+    console.log("Clicked on Bulk Upload Functionality");    
+    this.router.navigate(["/pages/place-order"]);
+  }
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();

@@ -36,6 +36,7 @@ import { InvoicesL1Component } from './pages/invoices/invoices-l1/invoices-l1.co
 import { InvoicesComponent } from './pages/invoices/invoices.component';
 import { VendorOrdersComponent } from './pages/vendor-orders/vendor-orders.component';
 import { InvoicesLxComponent } from './pages/invoices/invoices-lx/invoices-lx.component';
+import { UpdateInvoiceComponent } from './pages/update-invoice/update-invoice.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { InvoicesLxComponent } from './pages/invoices/invoices-lx/invoices-lx.co
     InvoicesLxComponent,
     InvoicesComponent,
     VendorOrdersComponent,
+    UpdateInvoiceComponent,
   
   ],
   imports: [
