@@ -159,6 +159,9 @@ export class AuthService {
   updateCorporate(corporate: any, apiURL: string) {
     return this.http.put<any>(`${this.baseURL}${apiURL}`, corporate);
   }
+  updateInvoice(invoice: any, apiURL: string) {
+    return this.http.put<any>(`${this.baseURL}${apiURL}`, invoice);
+  }
   deleteCorporate(id: number, apiURL: string) {
     const url = `${this.baseURL}${apiURL}`;
     const body = { corporateID: id };

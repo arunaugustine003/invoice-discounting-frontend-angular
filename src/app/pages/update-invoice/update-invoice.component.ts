@@ -2,23 +2,15 @@ import { Component, OnInit } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
-  FormArray,
-  FormControl,
   Validators,
 } from "@angular/forms";
 import { AuthService } from "../../services/auth.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import {
-  IVerifyCreateCorporateResponse,
-  IVerifyCreateCorporateUserResponse,
+  IVerifyUpdateInvoiceResponse,
 } from "../../interfaces/verifyResponse";
-import {
-  Corporate,
-  CorporateUserDetails,
-  ListCorporateUserGroupBynameResponse,
-} from "../../interfaces/corporateList";
-import { ListAllInvoicesForUniqueOrderData, ListUniqueInvoiceDetailsByInvoiceIDData } from "../../interfaces/invoiceList";
+import { ListUniqueInvoiceDetailsByInvoiceIDData } from "../../interfaces/invoiceList";
 
 @Component({
   selector: "ngx-update-invoice",
@@ -44,7 +36,8 @@ export class UpdateInvoiceComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.invoiceForm = this.formBuilder.group({
-      invoiceNO: ["", Validators.required],
+      invoiceID: ["", Validators.required],
+      // invoiceNO: ["", Validators.required],
       invoiceAmount: ["", Validators.required],
       invoiceDate: ["", Validators.required],
       financeAmount: ["", [Validators.required, Validators.email]],
@@ -68,7 +61,8 @@ export class UpdateInvoiceComponent implements OnInit {
 
   fillFormToUpdate(invoice:ListUniqueInvoiceDetailsByInvoiceIDData) {
     this.invoiceForm.setValue({
-      invoiceNO:invoice.invoiceNO,
+      // invoiceNO:invoice.invoiceNO,
+      invoiceID:invoice.invoiceID,
       invoiceAmount: invoice.invoiceAmount,
       invoiceDate: invoice.invoiceCreatedOn,
       financeAmount: invoice.financeAmount,
@@ -76,31 +70,28 @@ export class UpdateInvoiceComponent implements OnInit {
   }
   async updateInvoice() {
     const data = {
-      invoiceNO: this.invoiceForm.value.invoiceNO,
+      // invoiceNO: this.invoiceForm.value.invoiceNO,
+      invoiceID: this.invoiceForm.value.invoiceID,
       invoiceAmount: this.invoiceForm.value.invoiceAmount,
-      invoiceDate: this.invoiceForm.value.invoiceDate,
-      financeAmount: this.invoiceForm.value.financeAmount,
+      Invoice_Date: this.invoiceForm.value.invoiceDate,
+      Finance_Amount: this.invoiceForm.value.financeAmount,
     };
-    if (this.invoiceForm.valid) {
       console.log("Data=", data);
       try {
         const response = (await this.service
-          .updateCorporate(data, "/v1/users/update_single_user/")
-          .toPromise()) as IVerifyCreateCorporateUserResponse;
+          .updateInvoice(data, "/v1/invoice/update_document_invoice/")
+          .toPromise()) as IVerifyUpdateInvoiceResponse;
         console.log("Response:", response);
         if (response.code === "200") {
           this.toastr.success(
-            "Corporate User Updated Successfully",
+            "Invoice Updated Successfully",
             "Success 🐱‍🏍"
           );
           this.invoiceForm.reset();
-          console.log("this.corporateIDGlobal=", this.corporateIDGlobal);
           this.router.navigate([
-            "/pages/corporate-users",
-            this.corporateIDGlobal,
-          ]);
+            "/pages/orders"]);
         } else if (response.code === "500") {
-          this.toastr.error(response.create_user, "Error ❌");
+          this.toastr.error(response.update_document_invoice, "Error ❌");
         } else {
           this.toastr.error("Contact Admin for more Info", "Error ❌");
         }
@@ -108,9 +99,7 @@ export class UpdateInvoiceComponent implements OnInit {
         console.error("error:", error);
         this.toastr.error("Something went down", "Error ❌");
       }
-    } else {
-      this.toastr.warning("Please enter Valid Data", "Warning");
-    }
+  
   }
   showReadOnlyMessage(){
     this.toastr.warning("This is a Read-Only Field", "Warning");

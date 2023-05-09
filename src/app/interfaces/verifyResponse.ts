@@ -49,4 +49,30 @@ export interface CreateCorporateUserData {
   userLastUpdatedOn:    string;
 }
 
+export interface IVerifyUpdateInvoiceResponse {
+  msg:                     string;
+  update_document_invoice: string;
+  code:                    string;
+  data:                    IVerifyUpdateInvoiceResponseData;
+}
+
+export interface IVerifyUpdateInvoiceResponseData {
+  Finance_Amount:        string;
+  invoiceID:             number;
+  corporateID:           number;
+  invoiceUploadedby:     number;
+  user_level:            number;
+  financeAmount:         string;
+  invoiceCreatedOn:      string;
+  invoiceStatus:         string;
+  rejectedUser:          number;
+  orderID:               number;
+  vendorID:              number;
+  invoiceNO:             string;
+  invoiceUploadedbyType: string;
+  invoiceAmount:         string;
+  Invoice_Date:          string;
+  invoiceFile:           string;
+  Status:                number;
+}
 
