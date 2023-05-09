@@ -42,7 +42,7 @@ export class AuthService {
   getToken() {
     return sessionStorage.getItem("token") || "";
   }
-// 4. Custom API Methods
+  // 4. Custom API Methods
   getCurrentUser(apiURL: string): Observable<any> {
     const url = `${this.baseURL}${
       apiURL.startsWith("/") ? apiURL : `/${apiURL}`
@@ -94,7 +94,12 @@ export class AuthService {
     corporateID: number,
     apiURL: string
   ) {
-    const requestBody = { skip: skip, limit: limit, vendorID: vendorID , corporateID: corporateID };
+    const requestBody = {
+      skip: skip,
+      limit: limit,
+      vendorID: vendorID,
+      corporateID: corporateID,
+    };
     const url = `${this.baseURL}${apiURL}`;
     return this.http.post<any>(url, requestBody);
   }
@@ -108,11 +113,7 @@ export class AuthService {
     const url = `${this.baseURL}${apiURL}`;
     return this.http.post<any>(url, requestBody);
   }
-  getCorporateLinkedVendors(
-    skip: number,
-    limit: number,
-    apiURL: string
-  ) {
+  getCorporateLinkedVendors(skip: number, limit: number, apiURL: string) {
     const requestBody = { skip: skip, limit: limit };
     const url = `${this.baseURL}${apiURL}`;
     return this.http.post<any>(url, requestBody);
@@ -168,7 +169,20 @@ export class AuthService {
     const body = { userID: id };
     return this.http.put(url, body);
   }
-  createOrderorInvoice(
+  uploadDocumentInvoice(
+    id: string,
+    files: File[],
+    apiURL: string
+  ): Observable<any> {
+    const formData = new FormData();
+    formData.append("orderID", id);
+    for (let i = 0; i < files.length; i++) {
+      formData.append("files", files[i], files[i].name);
+    }
+    const url = `${this.baseURL}${apiURL}`;
+    return this.http.post(url, formData);
+  }
+  createOrder(
     ID: number,
     file: File,
     apiURL: string

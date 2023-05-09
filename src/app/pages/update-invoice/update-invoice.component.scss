@@ -14,4 +14,18 @@
     justify-content: space-evenly;
     align-items: center;
   }
+  mat-form-field[readonly] {
+    pointer-events: none !important;
+  }
+  
+  mat-form-field[readonly] .mat-form-field-wrapper:hover,
+  mat-form-field[readonly] .mat-form-field-wrapper:focus {
+    background-color: transparent !important;
+    border-color: transparent !important;
+  }
+  
+  mat-form-field[readonly] .mat-form-field-infix {
+    color: gray !important;
+    border-bottom-style: none !important;
+  }
   

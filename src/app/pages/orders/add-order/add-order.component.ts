@@ -7,6 +7,7 @@ import { NbMenuService } from "@nebular/theme";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import Swal from "sweetalert2";
+import { UploadBulkInvoiceResponse } from "../../../interfaces/invoiceList";
 
 @Component({
   selector: "ngx-add-order",
@@ -15,6 +16,7 @@ import Swal from "sweetalert2";
 })
 export class AddOrderComponent implements OnInit {
   files: any[] = [];
+  notUploadedFiles: string[] = [];
   isDocumentAdded;
   IDToUpdate!: number;
 
@@ -44,6 +46,11 @@ export class AddOrderComponent implements OnInit {
     });
     this.currentRoute = this.router.url;
     console.log("Current route=", this.currentRoute);
+    if (this.currentRoute.toLowerCase().includes("add-order")) {
+      this.orderCreationPage = true;
+    } else {
+      this.orderCreationPage = false;
+    }
   }
 
   //Change Load Function
@@ -98,6 +105,7 @@ export class AddOrderComponent implements OnInit {
       if (result.isConfirmed) {
         //your logic if Yes clicked
         this.files = [];
+        this.notUploadedFiles = [];
         this.isDocumentAdded = false;
       } else {
         console.log("You Clicked No");
@@ -112,26 +120,57 @@ export class AddOrderComponent implements OnInit {
     }
     console.log("File Present !!,Green Flag to Upload");
     this.displayProgressBar = true;
-    this.onOrderSubmit(this.IDToUpdate, this.files[0]);
-  }
-  onOrderSubmit(id: number, file: File) {
     if (this.currentRoute.toLowerCase().includes("add-order")) {
-      this.orderCreationPage = true;
-      this.callCreateOrderorInvoice(id, file, "/v1/invoice/create_order/");
+      this.createOrder(
+        this.IDToUpdate,
+        this.files[0],
+        "/v1/invoice/create_order/"
+      );
     } else if (this.currentRoute.toLowerCase().includes("add-invoice")) {
-      this.orderCreationPage = false;
-      this.callCreateOrderorInvoice(
-        id,
-        file,
+      this.createInvoice(
+        this.IDToUpdate.toString(),
+        this.files,
         "/v1/invoice/upload_document_invoice/"
       );
     } else {
       return;
     }
   }
-  callCreateOrderorInvoice(id: number, file: File, apiURL: string) {
+  createInvoice(id: string, files: File[], apiURL: string) {
+    this.service.uploadDocumentInvoice(id, files, apiURL).subscribe(
+      (response: UploadBulkInvoiceResponse) => {
+        if (response.code === "200") {
+          console.log("Upload success:", response);
+          if (response.notUploded.length > 0) {
+            this.toastr.warning(
+              "Please upload files with filename matching the invoice name",
+              "Warning ⚠"
+            );
+            this.notUploadedFiles = response.notUploded;
+          } else {
+            this.toastr.success("Files uploaded Successfully", "Success 🐱‍🏍");
+            this.files = [];
+          }
+        } else {
+          this.toastr.error(
+            "Uploading files Failed. Please try again",
+            "Error ❌"
+          );
+        }
+      },
+      (error) => {
+        console.error("Upload error:", error);
+        this.toastr.error(
+          "Uploading files Failed. Please try again",
+          "Error ❌"
+        );
+      }
+    );
+  }
+
+  createOrder(id: number, file: File, apiURL: string) {
     this.service
-      .createOrderorInvoice(id, file, apiURL)
+      .createOrder(id, file, apiURL)
       .subscribe((event: HttpEvent<any>) => {
         switch (event.type) {
           case HttpEventType.Sent:
@@ -200,9 +239,10 @@ export class AddOrderComponent implements OnInit {
       });
   }
   downloadSampleDocument() {
-    console.log("Clicked on Download Sample Document");    
-    const presignedURL="https://drive.google.com/uc?export=download&id=1rNP4H3Em6vuUTvAboQDFDTCfRLZyd8Uc";
-    console.log("Data URL=",presignedURL);
+    console.log("Clicked on Download Sample Document");
+    const presignedURL =
+      "https://drive.google.com/uc?export=download&id=1rNP4H3Em6vuUTvAboQDFDTCfRLZyd8Uc";
+    console.log("Data URL=", presignedURL);
     window.open(presignedURL);
   }
 }

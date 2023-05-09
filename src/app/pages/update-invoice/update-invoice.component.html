@@ -4,7 +4,7 @@
     <form [formGroup]="invoiceForm">
         <mat-form-field appearance="outline">
         <mat-label>Invoice Number</mat-label>
-        <input formControlName="invoiceNO" matInput placeholder="Invoice Number" />
+        <input formControlName="invoiceNO" matInput placeholder="Invoice Number" readonly (click)="showReadOnlyMessage()" />
         </mat-form-field>
         <mat-form-field appearance="outline">
         <mat-label>Invoice Amount</mat-label>

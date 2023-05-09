@@ -55,6 +55,7 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
   isadmin;
   currentRoute: string;
   title: string;
+  isCorporateUserL1 = false;
   superAdminView: boolean = false;
   constructor(
     private menuService: NbMenuService,
@@ -94,6 +95,11 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
       console.log("global_user_level=", user_level);
       // this.title = "Invoices List for Users of User Level " + user_level;
       this.title = "Invoices";
+      if (user_level == "1") {
+        this.isCorporateUserL1 = true;
+      } else{
+        this.isCorporateUserL1 = false;
+      }
     }
     // if(!this.isadmin){
     //   this.toastr.warning("User not authorized to view this Page", "Warning");
@@ -181,9 +187,9 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
       this.dataSource.paginator.firstPage();
     }
   }
-  uploadInvoice(id: number) {
-    console.log("Clicked on Upload Invoice", id);
-    this.router.navigate(["/pages/add-invoice", id]);
+  uploadInvoice() {
+    console.log("Clicked on Upload Invoice", this.orderIDFetched);
+    this.router.navigate(["/pages/add-invoice", this.orderIDFetched]);
   }
   editInvoice(id: number) {
     console.log("Clicked on Edit Invoice", id);
@@ -223,7 +229,7 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
   }
   bulkUpload() {
     console.log("Clicked on Bulk Upload Functionality");    
-    this.router.navigate(["/pages/place-order"]);
+    this.router.navigate(["/pages/add-invoice", this.orderIDFetched]);
   }
   ngOnDestroy() {
     this.destroy$.next();

@@ -112,7 +112,9 @@ export class UpdateInvoiceComponent implements OnInit {
       this.toastr.warning("Please enter Valid Data", "Warning");
     }
   }
-
+  showReadOnlyMessage(){
+    this.toastr.warning("This is a Read-Only Field", "Warning");
+  }
   closeInvoice() {
     this.router.navigate(["/pages/orders"]);
   }

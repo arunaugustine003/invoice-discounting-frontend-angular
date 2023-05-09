@@ -1,11 +1,18 @@
-<div class="bulk-upload-btn">
+<div class="bulk-upload-btn" *ngIf="orderCreationPage">
     <button 
     mat-raised-button 
     (click)="downloadSampleDocument()" 
     color="primary">
-    Download Sample CSV Format for Bulk Upload
+    Download Sample CSV Format for Order Upload
     </button>
 </div>
+<div *ngIf="notUploadedFiles.length > 0">
+    <p>The following files were not uploaded:</p>
+    <ul>
+      <li *ngFor="let file of notUploadedFiles">{{ file }}</li>
+    </ul>
+  </div>
+  
 <div class="content" style="display: contents;">
     <div class="" style="margin-top: 20px;">
         <div class="containernew" appDnd (fileDropped)="onChangeLoad($event,1)"
