@@ -63,19 +63,19 @@ export class AddVendorComponent implements OnInit {
     const currentVendorName = data.vendorName; // change this to your current vendor name
    
     let vendorExists = false;
-    for (const vendor of this.VendorData) {
-      if (vendor.vendorName === currentVendorName) {
-        vendorExists = true;
-        break;
-      }
-    }
-    if (vendorExists === true) {
-      this.toastr.error(
-        "Vendor Already Exists, Please add another Vendor Name",
-        "Error ❌"
-      );
+    // for (const vendor of this.VendorData) {
+    //   if (vendor.vendorName === currentVendorName) {
+    //     vendorExists = true;
+    //     break;
+    //   }
+    // }
+    // if (vendorExists === true) {
+    //   this.toastr.error(
+    //     "Vendor Already Exists, Please add another Vendor Name",
+    //     "Error ❌"
+    //   );
     this.router.navigate(["/pages/add-vendor"]);
-    } else if (this.vendorForm.valid && vendorExists === false) {
+    if (this.vendorForm.valid && vendorExists === false) {
       console.log("Data=", data);
       this.service.post(data, "/v1/vendor/add_vendor/").subscribe({
         next: (response: CreateVendorResponse) => {
