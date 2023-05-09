@@ -1,3 +1,13 @@
+export interface UploadBulkInvoiceResponse {
+    msg:                     string;
+    upload_document_invoice: string;
+    code:                    string;
+    success_count:           number;
+    error_count:             number;
+    notUploded:              any[];
+}
+
+
 export interface ListUniqueInvoiceDetailsByInvoiceID {
     msg:                       string;
     view_invoice_by_invoiceID: string;
