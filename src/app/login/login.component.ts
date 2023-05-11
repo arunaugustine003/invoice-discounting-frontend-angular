@@ -43,22 +43,22 @@ export class LoginComponent implements OnInit,OnDestroy {
         next: (response:IVerifyLoginResponse) => {
           console.log("Login response:", response);
           if (response.code === "200") {
-          this.toastr.success("Login Successful", "Success 🐱‍🏍");
+          this.toastr.success("Login Successful", "Success");
           this.service.email = data.email;
           this.loginForm.reset();
           sessionStorage.setItem('usermail',this.service.email);
           this.router.navigate(["/verify-otp"]);
           }
           else if (response.code === "500") {
-          this.toastr.error(response.txt, "Error ❌");
+          this.toastr.error(response.txt, "Error");
           }
            else{
-          this.toastr.error("Contact Admin for more Info", "Error ❌");
+          this.toastr.error("Contact Admin for more Info", "Error");
           }
         },
         error: (error) => {
           console.error("Login error:", error);
-          this.toastr.error("Something went down", "Error ❌");
+          this.toastr.error("Something went down", "Error");
         },
       });
     } else {

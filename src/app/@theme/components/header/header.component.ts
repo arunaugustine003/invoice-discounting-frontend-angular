@@ -86,13 +86,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
             }
             sessionStorage.setItem("corporateID", JSON.stringify(s_corporateID));
           } else if (res.code === "500") {
-            this.toastr.error(res.get_current_user, "Error ❌");
+            this.toastr.error(res.get_current_user, "Error");
           } else {
-            this.toastr.error("Contact Admin for more Info", "Error ❌");
+            this.toastr.error("Contact Admin for more Info", "Error");
           }
         },
         (error) => {
-          this.toastr.error("Something went down", "Error ❌");
+          this.toastr.error("Something went down", "Error");
         }
       );
 

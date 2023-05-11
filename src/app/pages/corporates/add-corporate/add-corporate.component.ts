@@ -101,18 +101,18 @@ export class AddCorporateComponent implements OnInit {
         next: (response: IVerifyCreateCorporateResponse) => {
           console.log("Response:", response);
           if (response.code === "200") {
-            this.toastr.success("Corporate Added Successfully", "Success 🐱‍🏍");
+            this.toastr.success("Corporate Added Successfully", "Success");
             this.corporateForm.reset();
             this.router.navigate(["/pages/corporates"]);
           } else if (response.code === "500") {
-            this.toastr.error(response.create_corporate, "Error ❌");
+            this.toastr.error(response.create_corporate, "Error");
           } else {
-            this.toastr.error("Contact Admin for more Info", "Error ❌");
+            this.toastr.error("Contact Admin for more Info", "Error");
           }
         },
         error: (error) => {
           console.error("error:", error);
-          this.toastr.error("Something went down", "Error ❌");
+          this.toastr.error("Something went down", "Error");
         },
       });
     } else {
@@ -176,19 +176,19 @@ export class AddCorporateComponent implements OnInit {
             if (response.code === "200") {
               this.toastr.success(
                 "Corporate Updated Successfully",
-                "Success 🐱‍🏍"
+                "Success"
               );
               this.corporateForm.reset();
               this.router.navigate(["/pages/corporates"]);
             } else if (response.code === "500") {
-              this.toastr.error(response.create_corporate, "Error ❌");
+              this.toastr.error(response.create_corporate, "Error");
             } else {
-              this.toastr.error("Contact Admin for more Info", "Error ❌");
+              this.toastr.error("Contact Admin for more Info", "Error");
             }
           },
           error: (error) => {
             console.error("error:", error);
-            this.toastr.error("Something went down", "Error ❌");
+            this.toastr.error("Something went down", "Error");
           },
         });
     } else {
@@ -225,7 +225,7 @@ export class AddCorporateComponent implements OnInit {
         if (levelsToRemove > this.levels.length) {
           this.toastr.error(
             "Negative Values are strictly not Accepted",
-            "Error ❌"
+            "Error"
           );
           this.levels.clear();
           this.router.navigate(["/pages/corporates"]);
@@ -257,7 +257,7 @@ export class AddCorporateComponent implements OnInit {
       } else if (currentNumberOfLevels < 0) {
         this.toastr.error(
           "Negative Values are strictly not Accepted",
-          "Error ❌"
+          "Error"
         );
         this.levels.clear();
         this.router.navigate(["/pages/corporates"]);

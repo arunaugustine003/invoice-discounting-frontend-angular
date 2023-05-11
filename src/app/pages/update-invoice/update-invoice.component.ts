@@ -85,19 +85,19 @@ export class UpdateInvoiceComponent implements OnInit {
         if (response.code === "200") {
           this.toastr.success(
             "Invoice Updated Successfully",
-            "Success 🐱‍🏍"
+            "Success"
           );
           this.invoiceForm.reset();
           this.router.navigate([
             "/pages/orders"]);
         } else if (response.code === "500") {
-          this.toastr.error(response.update_document_invoice, "Error ❌");
+          this.toastr.error(response.update_document_invoice, "Error");
         } else {
-          this.toastr.error("Contact Admin for more Info", "Error ❌");
+          this.toastr.error("Contact Admin for more Info", "Error");
         }
       } catch (error) {
         console.error("error:", error);
-        this.toastr.error("Something went down", "Error ❌");
+        this.toastr.error("Something went down", "Error");
       }
   
   }

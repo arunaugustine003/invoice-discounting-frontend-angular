@@ -72,7 +72,7 @@ export class AddVendorComponent implements OnInit {
     if (vendorExists === true) {
       this.toastr.error(
         "Vendor Already Exists, Please add another Vendor Name",
-        "Error ❌"
+        "Error"
       );
     this.router.navigate(["/pages/add-vendor"]);
     } else if (this.vendorForm.valid && vendorExists === false) {
@@ -81,13 +81,13 @@ export class AddVendorComponent implements OnInit {
         next: (response: CreateVendorResponse) => {
           console.log("Response:", response);
           if (response.code === "200") {
-            this.toastr.success("Vendor Added Successfully", "Success 🐱‍🏍");
+            this.toastr.success("Vendor Added Successfully", "Success");
             this.vendorForm.reset();
             this.router.navigate(["/pages/vendors"]);
           } else if (response.code === "500") {
-            this.toastr.error(response.add_vendor, "Error ❌");
+            this.toastr.error(response.add_vendor, "Error");
           } else {
-            this.toastr.error("Contact Admin for more Info", "Error ❌");
+            this.toastr.error("Contact Admin for more Info", "Error");
           }
         },
         error: (err) => {

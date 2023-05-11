@@ -146,22 +146,22 @@ export class InvoicesLxComponent implements OnInit, OnDestroy {
         if (res.code === "200") {
           this.toastr.success(
             "Invoice Approved Successfully",
-            "Success 🐱‍🏍"
+            "Success"
           );
           this.router.navigate(["/pages/dashboard"]);
           this.toastr.success(
             "Invoice pushed to Next Level for processing",
-            "Success 🐱‍🏍"
+            "Success"
           );
         } else if (res.code === "500") {
-          this.toastr.error(res.approve_document_invoice, "Error ❌");
+          this.toastr.error(res.approve_document_invoice, "Error");
         } else {
-          this.toastr.error("Contact Admin for more Info", "Error ❌");
+          this.toastr.error("Contact Admin for more Info", "Error");
         }
       },
       (error) => {
         console.log(error);
-        this.toastr.error("Something went down", "Error ❌");
+        this.toastr.error("Something went down", "Error");
       }
     );
     this.router.navigate(["/pages/dashboard"]);
@@ -174,22 +174,22 @@ export class InvoicesLxComponent implements OnInit, OnDestroy {
         if (res.code === "200") {
           this.toastr.success(
             "Invoice Rejected Successfully",
-            "Success 🐱‍🏍"
+            "Success"
           );
           this.router.navigate(["/pages/dashboard"]);
           this.toastr.success(
             "Invoice passed to Previous Level for Re-processing",
-            "Success 🐱‍🏍"
+            "Success"
           );
         } else if (res.code === "500") {
-          this.toastr.error(res.reject_document_invoice, "Error ❌");
+          this.toastr.error(res.reject_document_invoice, "Error");
         } else {
-          this.toastr.error("Contact Admin for more Info", "Error ❌");
+          this.toastr.error("Contact Admin for more Info", "Error");
         }
       },
       (error) => {
         console.log(error);
-        this.toastr.error("Something went down", "Error ❌");
+        this.toastr.error("Something went down", "Error");
       }
     );
     this.router.navigate(["/pages/dashboard"]);

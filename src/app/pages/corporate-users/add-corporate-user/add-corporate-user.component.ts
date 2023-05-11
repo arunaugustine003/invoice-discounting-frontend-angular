@@ -127,18 +127,18 @@ export class AddCorporateUserComponent implements OnInit {
       if (response.code === "200") {
         this.toastr.success(
           "Corporate User ID Got Successfully",
-          "Success 🐱‍🏍"
+          "Success"
         );
         this.corporateUserGroupIDResData = response.data.corporateUserGroupID;
       } else if (response.code === "500") {
-        this.toastr.error(response.list_corporate_user_group, "Error ❌");
+        this.toastr.error(response.list_corporate_user_group, "Error");
       } else {
-          // this.toastr.error("Contact Admin for more Info", "Error ❌");
+          // this.toastr.error("Contact Admin for more Info", "Error");
           return;
       }
     } catch (error) {
       console.error("error:", error);
-      this.toastr.error("Something went down", "Error ❌");
+      this.toastr.error("Something went down", "Error");
     }
   }
 
@@ -164,18 +164,18 @@ export class AddCorporateUserComponent implements OnInit {
         if (response.code === "200") {
           this.toastr.success(
             "Corporate User Added Successfully",
-            "Success 🐱‍🏍"
+            "Success"
           );
           this.corporateUserForm.reset();
           this.router.navigate(["/pages/corporate-users", this.userIdToUpdate]);
         } else if (response.code === "500") {
-          this.toastr.error(response.create_user, "Error ❌");
+          this.toastr.error(response.create_user, "Error");
         } else {
-          this.toastr.error("Contact Admin for more Info", "Error ❌");
+          this.toastr.error("Contact Admin for more Info", "Error");
         }
       } catch (error) {
         console.error("error:", error);
-        this.toastr.error("Something went down", "Error ❌");
+        this.toastr.error("Something went down", "Error");
       }
     } else {
       this.toastr.warning("Please enter Valid Data", "Warning");
@@ -203,19 +203,19 @@ export class AddCorporateUserComponent implements OnInit {
         if (response.code === "200") {
           this.toastr.success(
             "Corporate User Updated Successfully",
-            "Success 🐱‍🏍"
+            "Success"
           );
           this.corporateUserForm.reset();
           console.log("this.corporateIDGlobal=",this.corporateIDGlobal);
           this.router.navigate(["/pages/corporate-users", this.corporateIDGlobal]);
         } else if (response.code === "500") {
-          this.toastr.error(response.create_user, "Error ❌");
+          this.toastr.error(response.create_user, "Error");
         } else {
-          this.toastr.error("Contact Admin for more Info", "Error ❌");
+          this.toastr.error("Contact Admin for more Info", "Error");
         }
       } catch (error) {
         console.error("error:", error);
-        this.toastr.error("Something went down", "Error ❌");
+        this.toastr.error("Something went down", "Error");
       }
     } else {
       this.toastr.warning("Please enter Valid Data", "Warning");

@@ -1,3 +1,10 @@
+export interface ApproveBulkUploadResponse {
+    msg:                   string;
+    approove_bulk_invoice: string;
+    code:                  string;
+    count:                 number;
+    data:                  any[];
+}
 export interface UploadBulkInvoiceResponse {
     msg:                     string;
     upload_document_invoice: string;

@@ -24,7 +24,8 @@ import {
   ListUniqueOrdersForSuperAdmin,
   ListUniqueOrdersForCorporateAdmin,
 } from "../../../interfaces/orderList";
-import { ViewInvoiceDocument } from "../../../interfaces/invoiceList";
+import { ApproveBulkUploadResponse, ViewInvoiceDocument } from "../../../interfaces/invoiceList";
+import { DatePipe } from "@angular/common";
 
 @Component({
   selector: "ngx-invoices-l1",
@@ -36,7 +37,7 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
     "invoiceID",
     "invoiceNO",
     "invoiceAmount",
-    "invoiceDate",
+    "Invoice_Date",
     "financeAmount",
     "invoiceStatus",
     "user_level",
@@ -58,6 +59,7 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
   isCorporateUserL1 = false;
   superAdminView: boolean = false;
   constructor(
+    private datePipe: DatePipe,
     private menuService: NbMenuService,
     private toastr: ToastrService,
     private service: AuthService,
@@ -65,6 +67,9 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) {}
+  formatDate(date: string): string {
+    return this.datePipe.transform(date, 'dd/MM/yyyy') || '';
+  }
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((val) => {
       this.orderIDFetched = val["id"];
@@ -208,13 +213,13 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
             window.open(presignedURL);
             this.toastr.success(
               "Invoice Downloaded Successfully",
-              "Success 🐱‍🏍"
+              "Success"
             );
           }
         },
         (error) => {
           console.log(error);
-          this.toastr.error("No File Available for Viewing", "Error ❌");
+          this.toastr.error("No File Available for Viewing", "Error");
         }
       );
     if (this.superAdminView) {
@@ -230,6 +235,27 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
   bulkUpload() {
     console.log("Clicked on Bulk Upload Functionality");    
     this.router.navigate(["/pages/add-invoice", this.orderIDFetched]);
+  }
+  approveBulkUpload(){
+    this.service.approveBulkInvoice(this.orderIDFetched,"/v1/invoice/approove_bulk_invoice/")
+    .subscribe({
+      next: (response: ApproveBulkUploadResponse) => {
+        console.log("Response:", response);
+        if (response.code === "200") {
+          this.toastr.success(
+            "Bulk Upload Approved Successfully",
+          );
+        } else if (response.code === "500") {
+          this.toastr.error(response.approove_bulk_invoice, "Error");
+        } else {
+          this.toastr.error("Bulk Upload Approval Failed", "Error");
+        }
+      },
+      error: (error) => {
+        console.error("error:", error);
+        this.toastr.error("Something went down", "Error");
+      },
+    });
   }
   ngOnDestroy() {
     this.destroy$.next();

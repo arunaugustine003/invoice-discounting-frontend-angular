@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import Swal from "sweetalert2";
 import { UploadBulkInvoiceResponse } from "../../../interfaces/invoiceList";
+import { DownloadSampleDataResponse } from "../../../interfaces/orderList";
 
 @Component({
   selector: "ngx-add-order",
@@ -65,7 +66,7 @@ export class AddOrderComponent implements OnInit {
     if (extension !== "csv") {
       this.toastr.error(
         "Not a Valid CSV file. Please upload another one",
-        "Error ❌"
+        "Error"
       );
       return;
     } else {
@@ -73,7 +74,7 @@ export class AddOrderComponent implements OnInit {
       fileReader.onload = function (e: any) {
         self.toastr.success(
           "File Loaded to Application Successfully",
-          "Success 🐱‍🏍"
+          "Success"
         );
       };
       if (tp == 0) {
@@ -144,17 +145,17 @@ export class AddOrderComponent implements OnInit {
           if (response.notUploded.length > 0) {
             this.toastr.warning(
               "Please upload files with filename matching the invoice name",
-              "Warning ⚠"
+              "Warning"
             );
             this.notUploadedFiles = response.notUploded;
           } else {
-            this.toastr.success("Files uploaded Successfully", "Success 🐱‍🏍");
+            this.toastr.success("Files uploaded Successfully", "Success");
             this.files = [];
           }
         } else {
           this.toastr.error(
             "Uploading files Failed. Please try again",
-            "Error ❌"
+            "Error"
           );
         }
       },
@@ -162,7 +163,7 @@ export class AddOrderComponent implements OnInit {
         console.error("Upload error:", error);
         this.toastr.error(
           "Uploading files Failed. Please try again",
-          "Error ❌"
+          "Error"
         );
       }
     );
@@ -187,11 +188,11 @@ export class AddOrderComponent implements OnInit {
             this.orderCreationPage === true
               ? this.toastr.success(
                   "Order Created Successfully",
-                  "Success 🐱‍🏍"
+                  "Success"
                 )
               : this.toastr.success(
                   "Invoice Uploaded Successfully",
-                  "Success 🐱‍🏍"
+                  "Success"
                 );
             console.log(event.body);
             const responseArray = event.body
@@ -217,11 +218,11 @@ export class AddOrderComponent implements OnInit {
                 this.orderCreationPage === true
                   ? this.toastr.success(
                       "Newly created Order ID will be " + this.orderIdGlobal,
-                      "Success 🐱‍🏍"
+                      "Success"
                     )
                   : this.toastr.success(
                       "Invoice moved to next User Level Stage",
-                      "Success 🐱‍🏍"
+                      "Success"
                     );
               }
             });
@@ -230,7 +231,7 @@ export class AddOrderComponent implements OnInit {
               if (this.orderCreationPage) {
                 this.toastr.success(
                   "Click on Orders to View the newly created Order",
-                  "Success 🐱‍🏍"
+                  "Success"
                 );
               }
               this.router.navigate(["/pages/orders"]);
@@ -239,10 +240,27 @@ export class AddOrderComponent implements OnInit {
       });
   }
   downloadSampleDocument() {
-    console.log("Clicked on Download Sample Document");
-    const presignedURL =
-      "https://drive.google.com/uc?export=download&id=1rNP4H3Em6vuUTvAboQDFDTCfRLZyd8Uc";
-    console.log("Data URL=", presignedURL);
-    window.open(presignedURL);
+    this.service
+      .getDocumentSample("/v1/invoice/view_document_sample/")
+      .subscribe({
+        next: (response: DownloadSampleDataResponse) => {
+          console.log("Response:", response);
+          if (response.code === "200") {
+            window.open(response.data);
+            this.toastr.success(
+              "Document Downloaded Successfully",
+              "Success"
+            );
+          } else if (response.code === "500") {
+            this.toastr.error(response.view_document_sample, "Error");
+          } else {
+            this.toastr.error("Document Download Failed", "Error");
+          }
+        },
+        error: (error) => {
+          console.error("error:", error);
+          this.toastr.error("Something went down", "Error");
+        },
+      });
   }
 }

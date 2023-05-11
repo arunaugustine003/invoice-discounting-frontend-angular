@@ -141,6 +141,15 @@ export class AuthService {
     const url = `${this.baseURL}${apiURL}`;
     return this.http.post<any>(url, body);
   }
+  public approveBulkInvoice(id: number, apiURL: string): Observable<any> {
+    const body = { orderID: id };
+    const url = `${this.baseURL}${apiURL}`;
+    return this.http.post(url, body);
+  }
+  getDocumentSample(apiURL: string): Observable<any> {
+    const url = `${this.baseURL}${apiURL}`;
+    return this.http.get<any>(url);
+  }
   getInvoiceDocument(id: number, apiURL: string) {
     const body = {
       invoiceID: id,
@@ -185,11 +194,7 @@ export class AuthService {
     const url = `${this.baseURL}${apiURL}`;
     return this.http.post(url, formData);
   }
-  createOrder(
-    ID: number,
-    file: File,
-    apiURL: string
-  ): Observable<any> {
+  createOrder(ID: number, file: File, apiURL: string): Observable<any> {
     var formData: any = new FormData();
     if (apiURL === "/v1/invoice/create_order/") {
       formData.append("vendorID", ID.toString());

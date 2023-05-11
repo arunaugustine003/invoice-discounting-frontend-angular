@@ -114,18 +114,18 @@ export class VerifyOtpComponent implements OnInit, OnDestroy {
             } else if (response.code === "500") {
               this.showOTPLoader = false;
               this.otpBtnText = "Verify OTP";
-              this.toastr.error(response.msg, "Error ❌");
+              this.toastr.error(response.msg, "Error");
             } else {
               this.showOTPLoader = false;
               this.otpBtnText = "Verify OTP";
-              this.toastr.error("Contact Admin for more Info", "Error ❌");
+              this.toastr.error("Contact Admin for more Info", "Error");
             }
           },
           (error) => {
             this.showOTPLoader = false;
             this.otpBtnText = "Verify OTP";
             console.error("Login error:", error);
-            this.toastr.error("Something went down", "Error ❌");
+            this.toastr.error("Something went down", "Error");
           }
         );
       } else {
@@ -151,16 +151,16 @@ export class VerifyOtpComponent implements OnInit, OnDestroy {
       next: (response: IVerifyLoginResponse) => {
         console.log("Login response:", response);
         if (response.code === "200") {
-          this.toastr.success("OTP resent successfully", "Success 🐱‍🏍");
+          this.toastr.success("OTP resent successfully", "Success");
           this.otpBtnText = "Verify OTP";
         }
         if (response.code === "500") {
-          this.toastr.error(response.txt, "Error ❌");
+          this.toastr.error(response.txt, "Error");
         }
       },
       error: (error) => {
         console.error("Login error:", error);
-        this.toastr.error("Please contact Admin", "Error ❌");
+        this.toastr.error("Please contact Admin", "Error");
       },
     });
     // Call the displayRemainingTime function to update the remaining time

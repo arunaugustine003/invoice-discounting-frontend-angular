@@ -167,7 +167,7 @@ export class CorporateUsersComponent implements OnInit, DoCheck, OnDestroy {
               this.getAllCorporateUsers();
             },
             error: (err) => {
-              this.toastr.error(err, "Error ❌");
+              this.toastr.error(err, "Error");
             },
           });
       } else {

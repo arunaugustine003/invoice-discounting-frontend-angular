@@ -15,6 +15,9 @@ table {
 }
 .bulk-upload-btn {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
+  &--approve-btn {
+    margin-left: 10px;
+  }
 }

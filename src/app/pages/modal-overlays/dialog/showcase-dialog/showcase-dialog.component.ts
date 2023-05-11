@@ -26,7 +26,7 @@ export class ShowcaseDialogComponent {
   async logoutAndRedirect(): Promise<void> {
     try {
       await this.service.logout().toPromise();
-      this.toastr.success("Logout Successful", "Success 🐱‍🏍");
+      this.toastr.success("Logout Successful", "Success");
       this.router.navigate(["/login"]);
       await new Promise((resolve) => setTimeout(resolve, 100));
       window.location.reload();

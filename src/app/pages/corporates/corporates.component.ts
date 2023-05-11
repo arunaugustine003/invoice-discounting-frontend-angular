@@ -168,7 +168,7 @@ export class CorporatesComponent implements OnInit, DoCheck, OnDestroy {
               this.getAllCorporates();
             },
             error: (err) => {
-              this.toastr.error(err, "Error ❌");
+              this.toastr.error(err, "Error");
             },
           });
       } else {
