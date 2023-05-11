@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit  } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { HttpEvent, HttpEventType } from "@angular/common/http";
 
@@ -32,7 +32,6 @@ export class AddOrderComponent implements OnInit {
   orderIdGlobal: number = 0;
   orderCreationPage: boolean = false;
   displayProgressBar: boolean = false;
-
   constructor(
     private service: AuthService,
     private activatedRoute: ActivatedRoute,

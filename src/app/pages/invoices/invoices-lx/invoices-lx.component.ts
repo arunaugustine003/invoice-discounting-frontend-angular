@@ -33,6 +33,7 @@ export class InvoicesLxComponent implements OnInit, OnDestroy {
     "invoiceAmount",
     "invoiceUploadedby",
     "invoiceStatus",
+    "user_level",
     "action",
   ];
   orderIDFetched;
@@ -70,24 +71,7 @@ export class InvoicesLxComponent implements OnInit, OnDestroy {
     //   this.navigateHome();
     // }
   }
-
-  // getAllUniqueOrders() {
-  //   this.service.get("/v1/invoice/list_only_order_user/").subscribe(
-  //     (data: ListUniqueOrdersForCorporateUser) => {
-  //       console.log("Data=",data);
-  //       if (data.code === "200") {
-  //         this.OrderData = data.data;
-  //         console.log("this.OrderData=",this.OrderData);
-  //         this.dataSource = new MatTableDataSource(this.OrderData);
-  //         this.dataSource.paginator = this.paginator;
-  //         this.dataSource.sort = this.sort;
-  //       }
-  //     },
-  //     (error) => {
-  //       console.log(error);
-  //     }
-  //   );
-  // }
+ 
   getAllUniqueOrders(
     orderIDFetched: number
   ) {

@@ -26,7 +26,7 @@ import {
 } from "../../../interfaces/orderList";
 import { ApproveBulkUploadResponse, ViewInvoiceDocument } from "../../../interfaces/invoiceList";
 import { DatePipe } from "@angular/common";
-
+import { MatTable } from '@angular/material/table';
 @Component({
   selector: "ngx-invoices-l1",
   templateUrl: "./invoices-l1.component.html",
@@ -50,6 +50,7 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
   position = new FormControl(this.positionOptions[1]);
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatTable) table: MatTable<any>;
 
   private destroy$: Subject<void> = new Subject<void>();
   OrderData: ListUniqueOrdersForCorporateUserData[];
@@ -58,6 +59,8 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
   title: string;
   isCorporateUserL1 = false;
   superAdminView: boolean = false;
+  user_level;
+
   constructor(
     private datePipe: DatePipe,
     private menuService: NbMenuService,
@@ -75,7 +78,9 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
       this.orderIDFetched = val["id"];
       this.corporateIDFetched = val["cid"];
       let role = sessionStorage.getItem("role");
+      this.user_level = sessionStorage.getItem("user_level");
 
+      console.log("user_level from session=",this.user_level);
       console.log("this.orderIDFetched=", this.orderIDFetched);
       console.log("this.corporateIDFetched=", this.corporateIDFetched);
       if (!this.corporateIDFetched) {
@@ -245,6 +250,7 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
           this.toastr.success(
             "Bulk Upload Approved Successfully",
           );
+          this.getAllUniqueOrders(this.orderIDFetched);
         } else if (response.code === "500") {
           this.toastr.error(response.approove_bulk_invoice, "Error");
         } else {

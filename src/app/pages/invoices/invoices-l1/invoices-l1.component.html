@@ -71,12 +71,14 @@
             <td mat-cell *matCellDef="let row">               
               <button 
               *ngIf="isCorporateUserL1"
+              [disabled]="row.user_level === '2'"
               mat-icon-button 
               matTooltip="Upload Document for this Invoice"
               [matTooltipPosition]="position.value!"
               matTooltipHideDelay="100"
               class="hvr-pulse action-icons" 
               (click)="uploadInvoice()" 
+              [disabled]="row.status == 'Approve'"
               color="primary">
                 <mat-icon>cloud_upload</mat-icon>
               </button>             
@@ -92,12 +94,13 @@
               </button>
               <button 
               *ngIf="isCorporateUserL1"
+              [disabled]="row.user_level === '2'"
               mat-icon-button
               matTooltip="Edit Invoice Details"
               [matTooltipPosition]="position.value!"
               matTooltipHideDelay="100" 
               class="hvr-pulse action-icons" 
-              (click)="editInvoice(row.invoiceID)" 
+              (click)="editInvoice(row.invoiceID)"
               color="accent">
                 <mat-icon>edit</mat-icon>
               </button>
