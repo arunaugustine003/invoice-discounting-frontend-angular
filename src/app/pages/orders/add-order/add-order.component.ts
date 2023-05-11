@@ -1,4 +1,4 @@
-import { Component, OnInit  } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { HttpEvent, HttpEventType } from "@angular/common/http";
 
@@ -150,6 +150,7 @@ export class AddOrderComponent implements OnInit {
           } else {
             this.toastr.success("Files uploaded Successfully", "Success");
             this.files = [];
+            this.router.navigate(["/pages/invoices-l1", this.IDToUpdate]);
           }
         } else {
           this.toastr.error(
@@ -160,10 +161,7 @@ export class AddOrderComponent implements OnInit {
       },
       (error) => {
         console.error("Upload error:", error);
-        this.toastr.error(
-          "Uploading files Failed. Please try again",
-          "Error"
-        );
+        this.toastr.error("Uploading files Failed. Please try again", "Error");
       }
     );
   }
@@ -185,14 +183,8 @@ export class AddOrderComponent implements OnInit {
             break;
           case HttpEventType.Response:
             this.orderCreationPage === true
-              ? this.toastr.success(
-                  "Order Created Successfully",
-                  "Success"
-                )
-              : this.toastr.success(
-                  "Invoice Uploaded Successfully",
-                  "Success"
-                );
+              ? this.toastr.success("Order Created Successfully", "Success")
+              : this.toastr.success("Invoice Uploaded Successfully", "Success");
             console.log(event.body);
             const responseArray = event.body
               .split("\n")
@@ -246,10 +238,7 @@ export class AddOrderComponent implements OnInit {
           console.log("Response:", response);
           if (response.code === "200") {
             window.open(response.data);
-            this.toastr.success(
-              "Document Downloaded Successfully",
-              "Success"
-            );
+            this.toastr.success("Document Downloaded Successfully", "Success");
           } else if (response.code === "500") {
             this.toastr.error(response.view_document_sample, "Error");
           } else {

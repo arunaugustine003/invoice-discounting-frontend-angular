@@ -62,23 +62,21 @@
           <!-- Current Level Column -->
           <ng-container matColumnDef="user_level">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Current Level </th>
-            <td mat-cell *matCellDef="let row"> {{row.user_level}} </td>
+            <td mat-cell *matCellDef="let row"> {{row.user_level}}</td>
           </ng-container>      
-  
           <!-- Action Column -->
           <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
             <td mat-cell *matCellDef="let row">               
               <button 
               *ngIf="isCorporateUserL1"
-              [disabled]="row.user_level === '2'"
+              [disabled]="row.user_level !== +user_level || row.invoiceStatus == 'REJECTED'"
               mat-icon-button 
               matTooltip="Upload Document for this Invoice"
               [matTooltipPosition]="position.value!"
               matTooltipHideDelay="100"
               class="hvr-pulse action-icons" 
               (click)="uploadInvoice()" 
-              [disabled]="row.status == 'Approve'"
               color="primary">
                 <mat-icon>cloud_upload</mat-icon>
               </button>             
@@ -93,8 +91,19 @@
                 <mat-icon>visibility</mat-icon>
               </button>
               <button 
+              mat-icon-button
+              matTooltip="Approve Uploaded Document for this Invoice"
+              [disabled]="row.user_level !== +user_level || row.invoiceStatus == 'PENDING_DOCUMENT' || row.invoiceStatus == 'REJECTED'"
+              [matTooltipPosition]="position.value!"
+              matTooltipHideDelay="100" 
+              class="hvr-pulse action-icons" 
+              (click)="approveInvoice(row.invoiceID)" 
+              color="primary">
+                <mat-icon>check</mat-icon>
+              </button>
+              <button 
               *ngIf="isCorporateUserL1"
-              [disabled]="row.user_level === '2'"
+              [disabled]="row.user_level !== +user_level || row.invoiceStatus == 'REJECTED'"
               mat-icon-button
               matTooltip="Edit Invoice Details"
               [matTooltipPosition]="position.value!"

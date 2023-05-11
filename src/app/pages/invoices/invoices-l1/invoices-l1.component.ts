@@ -24,9 +24,10 @@ import {
   ListUniqueOrdersForSuperAdmin,
   ListUniqueOrdersForCorporateAdmin,
 } from "../../../interfaces/orderList";
-import { ApproveBulkUploadResponse, ViewInvoiceDocument } from "../../../interfaces/invoiceList";
+import { ApproveBulkUploadResponse, ApproveInvoice, ViewInvoiceDocument } from "../../../interfaces/invoiceList";
 import { DatePipe } from "@angular/common";
 import { MatTable } from '@angular/material/table';
+
 @Component({
   selector: "ngx-invoices-l1",
   templateUrl: "./invoices-l1.component.html",
@@ -116,7 +117,9 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
     //   this.navigateHome();
     // }
   }
-
+  refreshPage(): void {
+    location.reload();
+  }
   getAllUniqueOrders(orderIDFetched: number) {
     this.service
       .getOrdersByID(orderIDFetched, "/v1/invoice/filter_order_by_orderID/")
@@ -262,6 +265,29 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
         this.toastr.error("Something went down", "Error");
       },
     });
+  }
+  approveInvoice(id: number) {
+    console.log("Clicked on Approve Invoice", id);
+    this.service.approveOrRejectInvoice(id,"/v1/invoice/approove_document_invoice/").subscribe(
+      (res: ApproveInvoice) => {
+        console.log("Data=",res);
+        if (res.code === "200") {
+          this.toastr.success(
+            "Invoice Approved Successfully",
+            "Success"
+          );
+          this.getAllUniqueOrders(this.orderIDFetched);
+        } else if (res.code === "500") {
+          this.toastr.error(res.approve_document_invoice, "Error");
+        } else {
+          this.toastr.error("Contact Admin for more Info", "Error");
+        }
+      },
+      (error) => {
+        console.log(error);
+        this.toastr.error("Something went down", "Error");
+      }
+    );
   }
   ngOnDestroy() {
     this.destroy$.next();
