@@ -135,7 +135,7 @@ export class InvoicesLxComponent implements OnInit, OnDestroy {
           console.log("Data=", res);
           if (res.code === "200") {
             this.toastr.success("Invoice Approved Successfully", "Success");
-            location.reload();
+               this.getAllUniqueOrders(this.orderIDFetched);
           } else if (res.code === "500") {
             this.toastr.error(res.approve_document_invoice, "Error");
           } else {
@@ -157,7 +157,7 @@ export class InvoicesLxComponent implements OnInit, OnDestroy {
           console.log("Data=", res);
           if (res.code === "200") {
             this.toastr.success("Invoice Rejected Successfully", "Success");
-            location.reload();
+               this.getAllUniqueOrders(this.orderIDFetched);
           } else if (res.code === "500") {
             this.toastr.error(res.reject_document_invoice, "Error");
           } else {

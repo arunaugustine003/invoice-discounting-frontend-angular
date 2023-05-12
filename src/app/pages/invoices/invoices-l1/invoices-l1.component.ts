@@ -117,9 +117,6 @@ export class InvoicesL1Component implements OnInit, OnDestroy {
     //   this.navigateHome();
     // }
   }
-  refreshPage(): void {
-    location.reload();
-  }
   getAllUniqueOrders(orderIDFetched: number) {
     this.service
       .getOrdersByID(orderIDFetched, "/v1/invoice/filter_order_by_orderID/")
